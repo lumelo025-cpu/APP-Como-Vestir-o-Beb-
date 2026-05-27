@@ -1,0 +1,6 @@
+{
+  "name": "Como Vestir o Bebê",
+  "description": "Calculadora inteligente e acolhedora para escolher a combinação ideal de roupas para seu bebê conforme a temperatura e o ambiente.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
