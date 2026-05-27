@@ -41,6 +41,7 @@ import {
 } from 'lucide-react';
 import { QuestionnaireAnswers, RecommendationResult, BabyAge, BabyState, PeriodOfDay, ThermalSensitivity, EnvironmentLocation } from './types.ts';
 import { calculateClothing } from './babyLogic.ts';
+import menuClothesLogo from './assets/images/menu_clothes_logo_1779899134603.png';
 
 // Illustrative baby clothes catalog with exact premium image assets and heating levels
 const CLOTHING_DATABASE: Record<string, { name: string; desc: string; url: string; heatingLevel: string }> = {
@@ -347,8 +348,13 @@ export default function App() {
           whileHover={{ scale: 1.02 }}
           whileTap={{ scale: 0.98 }}
         >
-          <div className="p-1 bg-brand-rose/15 text-brand-rose rounded-full flex items-center justify-center">
-            <Baby className="w-3.5 h-3.5" />
+          <div className="w-6 h-6 rounded-full overflow-hidden flex items-center justify-center border border-brand-rose/20 shrink-0">
+            <img 
+              src={menuClothesLogo} 
+              alt="Logo Como Vestir o Bebê" 
+              className="w-full h-full object-cover"
+              referrerPolicy="no-referrer"
+            />
           </div>
           <span className="font-display font-medium text-xs sm:text-sm text-brand-charcoal select-none tracking-tight">
             Como Vestir o Bebê
@@ -388,15 +394,17 @@ export default function App() {
                 {/* Visual Avatar Cover */}
                 <div className="relative mb-6">
                   <div className="absolute inset-0 bg-[#FFF9F2] rounded-full scale-125 blur-sm"></div>
-                  <div className="relative w-28 h-28 mx-auto bg-gradient-to-tr from-brand-pink to-[#F2EEFC] rounded-full flex items-center justify-center shadow-inner">
-                    <motion.div
-                      animate={{ y: [0, -5, 0] }}
+                  <div className="relative w-28 h-28 mx-auto bg-white rounded-full flex items-center justify-center overflow-hidden border border-[#FAEDE2] shadow-md z-1">
+                    <motion.img
+                      animate={{ y: [0, -3, 0] }}
                       transition={{ repeat: Infinity, duration: 4, ease: 'easeInOut' }}
-                    >
-                      <Shirt className="w-14 h-14 text-brand-rose" />
-                    </motion.div>
+                      src={menuClothesLogo}
+                      alt="Logo Como Vestir o Bebê"
+                      className="w-full h-full object-cover"
+                      referrerPolicy="no-referrer"
+                    />
                   </div>
-                  <div className="absolute right-0 bottom-0 bg-white p-1.5 rounded-full shadow-md text-yellow-500">
+                  <div className="absolute right-0 bottom-0 bg-white p-1.5 rounded-full shadow-md text-yellow-500 z-2">
                     <Sparkles className="w-4 h-4 fill-yellow-500" />
                   </div>
                 </div>
@@ -516,9 +524,7 @@ export default function App() {
                   </motion.button>
                 </div>
 
-                <p className="text-center text-xs text-gray-500 mt-3 font-light">
-                  Aviso: Nenhuma resposta é salva no servidor. Privacidade 100% garantida.
-                </p>
+
               </div>
             </motion.div>
           )}
@@ -1313,7 +1319,7 @@ export default function App() {
       {/* Footer Details */}
       <footer className="w-full max-w-xl text-center mt-5 text-[11px] text-[#A69799] font-light space-y-1 select-none z-10 pb-6">
         <p>Criado com amor para simplificar o cuidado com seu bebê. 🧸</p>
-        <p>© 2026 Como Vestir o Bebê • Prático, higiênico e offline • Lógica inteligente baseada em guias de neonatologia.</p>
+        <p>© 2026 Como Vestir o Bebê</p>
       </footer>
 
       {/* OVERLAY SYSTEM (DRAWER, ABOUT, INSTALL MODALS) */}
@@ -1342,8 +1348,13 @@ export default function App() {
                 {/* Header of Drawer */}
                 <div className="flex justify-between items-center pb-5 border-b border-[#FAEDE2] mb-6">
                   <div className="flex items-center gap-2">
-                    <div className="w-8 h-8 bg-brand-rose text-white rounded-xl flex items-center justify-center">
-                      <Baby className="w-4 h-4" />
+                    <div className="w-8 h-8 rounded-full overflow-hidden flex items-center justify-center border border-brand-rose/20 shrink-0">
+                      <img 
+                        src={menuClothesLogo} 
+                        alt="Logo Como Vestir o Bebê" 
+                        className="w-full h-full object-cover"
+                        referrerPolicy="no-referrer"
+                      />
                     </div>
                     <div>
                       <h4 className="font-display font-semibold text-sm text-brand-charcoal">BebêClima 💛</h4>
