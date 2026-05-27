@@ -1,13 +1,53 @@
 <!doctype html>
-<html lang="en">
+<html lang="pt-BR">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>My Google AI Studio App</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+    <title>Como Vestir o Bebê • BebêClima</title>
+    
+    <!-- PWA Configuration -->
+    <link rel="manifest" href="/manifest.json" />
+    <meta name="theme-color" content="#D48C80" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="BebêClima" />
+    <link rel="apple-touch-icon" href="/icon.svg" />
+    
+    <link rel="icon" type="image/svg+xml" href="/icon.svg" />
   </head>
-  <body>
+  <body class="bg-brand-beige">
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
+    
+    <!-- PWA Service Worker Registration -->
+    <script>
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+          navigator.serviceWorker.register('/service-worker.js')
+            .then((registration) => {
+              console.log('BebêClima PWA Service Worker registrado com sucesso:', registration.scope);
+              
+              // Automatically check for updates on reload or periodically
+              registration.onupdatefound = () => {
+                const installingWorker = registration.installing;
+                if (installingWorker) {
+                  installingWorker.onstatechange = () => {
+                    if (installingWorker.state === 'installed') {
+                      if (navigator.serviceWorker.controller) {
+                        console.log('Nova versão disponível! Reiniciando para atualizar...');
+                        // Self-reloads when update is ready to reflect newest changes immediately
+                        window.location.reload();
+                      }
+                    }
+                  };
+                }
+              };
+            })
+            .catch((error) => {
+              console.log('Falha ao registrar Service Worker do PWA:', error);
+            });
+        });
+      }
+    </script>
   </body>
 </html>
-

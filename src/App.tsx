@@ -31,7 +31,13 @@ import {
   Minus,
   CheckCircle,
   VolumeX,
-  Footprints
+  Footprints,
+  Menu,
+  X,
+  Gift,
+  Download,
+  Share2,
+  Smartphone
 } from 'lucide-react';
 import { QuestionnaireAnswers, RecommendationResult, BabyAge, BabyState, PeriodOfDay, ThermalSensitivity, EnvironmentLocation } from './types.ts';
 import { calculateClothing } from './babyLogic.ts';
@@ -143,6 +149,46 @@ export default function App() {
 
   // Quick Check states
   const [quickTemp, setQuickTemp] = useState<number>(22);
+
+  // PWA & Navigation Menu States
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isAboutOpen, setIsAboutOpen] = useState(false);
+  const [isPwaInstructionOpen, setIsPwaInstructionOpen] = useState(false);
+  const [deferredPrompt, setDeferredPrompt] = useState<any>(null);
+  const [isInstallable, setIsInstallable] = useState(true); // Default to true so iOS instruction button always shows in menu
+
+  // Hook to handle PWA installation eligibility
+  useEffect(() => {
+    const handleBeforeInstallPrompt = (e: any) => {
+      e.preventDefault();
+      setDeferredPrompt(e);
+      setIsInstallable(true);
+    };
+
+    window.addEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
+
+    // If already standalone, we hide button
+    if (window.matchMedia('(display-mode: standalone)').matches || (navigator as any).standalone) {
+      setIsInstallable(false);
+    }
+
+    return () => {
+      window.removeEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
+    };
+  }, []);
+
+  const handleInstallApp = async () => {
+    if (deferredPrompt) {
+      deferredPrompt.prompt();
+      const { outcome } = await deferredPrompt.userChoice;
+      if (outcome === 'accepted') {
+        setDeferredPrompt(null);
+        setIsInstallable(false);
+      }
+    } else {
+      setIsPwaInstructionOpen(true);
+    }
+  };
   const [quickPeriod, setQuickPeriod] = useState<PeriodOfDay>('dia');
 
   // Loading text cycling effect state
@@ -203,7 +249,7 @@ export default function App() {
   };
 
   const handleNextStep = () => {
-    if (step < 4) {
+    if (step < 3) {
       setStep(step + 1);
     } else {
       setScreen('loading');
@@ -280,21 +326,47 @@ export default function App() {
         <div className="absolute -top-10 left-[35%] w-72 h-72 rounded-full bg-[#EAF0EC] opacity-50 blur-3xl"></div>
       </div>
 
-      {/* Header Area */}
-      <header className="w-full max-w-xl text-center mb-4 z-10 flex flex-col items-center">
+      {/* Modern App Header with Hamburger & PWA install shortcuts */}
+      <header className="w-full max-w-xl flex items-center justify-between py-1 mb-3.5 z-20">
+        <div className="flex items-center gap-2">
+          {/* Menu Trigger Button */}
+          <motion.button 
+            id="btn-open-menu"
+            whileTap={{ scale: 0.9 }}
+            onClick={() => setIsMenuOpen(true)}
+            className="p-2.5 bg-white border border-[#FAEDE2] hover:bg-[#FAF6F0] text-brand-charcoal rounded-full shadow-2xs hover:shadow-xs transition-all cursor-pointer flex items-center justify-center relative"
+          >
+            <Menu className="w-5 h-5 text-brand-charcoal" />
+          </motion.button>
+        </div>
+
+        {/* Center application branding */}
         <motion.div 
           onClick={() => { setScreen('welcome'); setStep(1); }}
-          className="cursor-pointer flex items-center justify-center gap-2 mb-1 group"
+          className="cursor-pointer flex items-center justify-center gap-1.5 px-3 py-1.5 bg-white border border-[#FAEDE2] rounded-full shadow-3xs group hover:border-[#F2D7CD] transition-all"
           whileHover={{ scale: 1.02 }}
+          whileTap={{ scale: 0.98 }}
         >
-          <div className="p-2 bg-gradient-to-tr from-brand-rose/20 to-brand-rose/30 text-brand-rose rounded-full shadow-xs">
-            <Baby className="w-6 h-6 transition-transform group-hover:rotate-12" />
+          <div className="p-1 bg-brand-rose/15 text-brand-rose rounded-full flex items-center justify-center">
+            <Baby className="w-3.5 h-3.5" />
           </div>
-          <span className="font-display font-medium text-lg text-brand-charcoal/80 tracking-tight">
+          <span className="font-display font-medium text-xs sm:text-sm text-brand-charcoal select-none tracking-tight">
             Como Vestir o Bebê
           </span>
         </motion.div>
-        <div className="h-[1px] w-12 bg-brand-rose/30 mt-1"></div>
+
+        {/* Right download PWA icon shortcut */}
+        <div className="flex items-center">
+          <motion.button 
+            id="header-btn-install"
+            whileTap={{ scale: 0.9 }}
+            onClick={handleInstallApp}
+            className="p-2.5 bg-brand-rose/10 text-brand-rose border border-brand-rose/10 hover:bg-brand-rose/20 rounded-full shadow-3xs hover:shadow-2xs transition-all cursor-pointer flex items-center justify-center"
+            title="Instalar Aplicativo"
+          >
+            <Download className="w-4 h-4" />
+          </motion.button>
+        </div>
       </header>
 
       {/* Primary Card Viewport */}
@@ -464,20 +536,19 @@ export default function App() {
               {/* Steppers Header */}
               <div className="mb-6">
                 <div className="flex justify-between items-center text-xs text-gray-500 mb-2">
-                  <span className="font-display font-medium text-brand-rose">Passo {step} de 4</span>
+                  <span className="font-display font-medium text-brand-rose">Passo {step} de 3</span>
                   <span className="font-light">
                     {step === 1 && 'Sobre o bebê'}
                     {step === 2 && 'Momento & Lugar'}
                     {step === 3 && 'O Clima atual'}
-                    {step === 4 && 'Prevenção & Cuidado'}
                   </span>
                 </div>
                 {/* Custom animated progress bar */}
                 <div className="w-full h-1.5 bg-[#FAF6F0] rounded-full overflow-hidden">
                   <motion.div 
                     className="h-full bg-brand-rose" 
-                    initial={{ width: '25%' }}
-                    animate={{ width: `${step * 25}%` }}
+                    initial={{ width: '33.3%' }}
+                    animate={{ width: `${step * 33.3}%` }}
                     transition={{ duration: 0.3 }}
                   ></motion.div>
                 </div>
@@ -790,83 +861,6 @@ export default function App() {
                     </motion.div>
                   )}
 
-                  {/* STEP 4: EXTRAS & VERIFY */}
-                  {step === 4 && (
-                    <motion.div
-                      key="step4"
-                      initial={{ opacity: 0, y: 10 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      exit={{ opacity: 0, y: -10 }}
-                      className="space-y-6"
-                    >
-                      <div className="text-center py-2">
-                        <div className="w-16 h-16 bg-brand-pink text-brand-rose rounded-full flex items-center justify-center mx-auto mb-3">
-                          <Sparkles className="w-8 h-8" />
-                        </div>
-                        <h3 className="font-display text-lg font-medium text-brand-charcoal">Prevenção e Dicas Úteis 🧼</h3>
-                        <p className="text-xs text-gray-500 font-light mt-1 max-w-sm mx-auto">
-                          Deseja que incluamos conselhos adicionais sobre lavagem de roupas de bebê, prevenção de dermatite de etiqueta e choque térmico em banhos frios ou quentes?
-                        </p>
-                      </div>
-
-                      <div className="space-y-3 max-w-md mx-auto">
-                        <button
-                          id="extras-opt-yes"
-                          onClick={() => setAnswers(prev => ({ ...prev, wantsExtras: true }))}
-                          className={`w-full p-4 rounded-2xl border text-left transition-all duration-200 cursor-pointer flex items-center gap-4 ${
-                            answers.wantsExtras === true
-                              ? 'bg-brand-pink/30 border-brand-rose/60 ring-2 ring-brand-rose/10 shadow-xs'
-                              : 'bg-white hover:bg-gray-50 border-[#EEDBCD]/50'
-                          }`}
-                        >
-                          <div className={`w-6 h-6 rounded-full border flex items-center justify-center p-0.5 text-xs ${answers.wantsExtras === true ? 'bg-brand-rose border-brand-rose text-white' : 'border-[#CBD5E1]'}`}>
-                            <Check className="w-4 h-4 stroke-[3]" />
-                          </div>
-                          <div>
-                            <span className="font-medium text-sm sm:text-base text-brand-charcoal block">Quero recomendações extras</span>
-                            <span className="text-xs text-brand-charcoal/50 font-light block">Bônus: Lavagem de tecidos sensíveis, precauções no banho e etiquetas.</span>
-                          </div>
-                        </button>
-
-                        <button
-                          id="extras-opt-no"
-                          onClick={() => setAnswers(prev => ({ ...prev, wantsExtras: false }))}
-                          className={`w-full p-4 rounded-2xl border text-left transition-all duration-200 cursor-pointer flex items-center gap-4 ${
-                            answers.wantsExtras === false
-                              ? 'bg-brand-sage text-emerald-800 border-emerald-300 ring-2 ring-emerald-50'
-                              : 'bg-white hover:bg-gray-50 border-[#EEDBCD]/50'
-                          }`}
-                        >
-                          <div className={`w-6 h-6 rounded-full border flex items-center justify-center p-0.5 text-xs ${answers.wantsExtras === false ? 'bg-emerald-600 border-emerald-600 text-white' : 'border-[#CBD5E1]'}`}>
-                            <Check className="w-4 h-4 stroke-[3]" />
-                          </div>
-                          <div>
-                            <span className="font-medium text-sm sm:text-base text-brand-charcoal block">Não precisa, apenas as roupas</span>
-                            <span className="text-xs text-brand-charcoal/50 font-light block">Resultado focado puramente nas camadas, acessórios e tipos de malha.</span>
-                          </div>
-                        </button>
-                      </div>
-
-                      {/* Recapitulation Details Table */}
-                      <div className="bg-[#FAF6F0] rounded-2xl p-4 border border-[#EEDBCD]/40">
-                        <span className="text-xs font-semibold text-brand-charcoal/60 uppercase block mb-2 tracking-wide text-center">Resumo de Seleções</span>
-                        <div className="grid grid-cols-2 gap-x-4 gap-y-2 text-xs">
-                          <div className="text-gray-500">Idade do bebê:</div>
-                          <div className="font-medium text-right text-brand-charcoal">{getAgeFriendlyName(answers.age)}</div>
-
-                          <div className="text-gray-500">O que ele está fazendo:</div>
-                          <div className="font-medium text-right text-brand-charcoal">{getStateFriendlyName(answers.state)}</div>
-
-                          <div className="text-gray-500">Sensibilidade térmica:</div>
-                          <div className="font-medium text-right text-brand-charcoal">Sente {answers.sensitivity === 'calor' ? 'mais calor 🥵' : answers.sensitivity === 'frio' ? 'mais frio 🥶' : 'temperatura normal 😊'}</div>
-
-                          <div className="text-gray-500">Clima selecionado:</div>
-                          <div className="font-medium text-right text-brand-charcoal">{answers.temperature}°C ({answers.hasWind ? 'Com Vento' : 'Ar calmo'})</div>
-                        </div>
-                      </div>
-                    </motion.div>
-                  )}
-
                 </AnimatePresence>
               </div>
 
@@ -887,7 +881,7 @@ export default function App() {
                   onClick={handleNextStep}
                   className="flex-1 py-3 bg-brand-rose hover:bg-[#D4717E] text-white text-sm font-medium rounded-xl cursor-pointer flex items-center justify-center gap-1.5 transition-all shadow-md shadow-brand-rose/10"
                 >
-                  {step === 4 ? 'Calcular Roupa Perfeita ⚡' : 'Continuar'} <ChevronRight className="w-4 h-4" />
+                  {step === 3 ? 'Calcular Roupa Perfeita ⚡' : 'Continuar'} <ChevronRight className="w-4 h-4" />
                 </button>
               </div>
             </motion.div>
@@ -1078,7 +1072,7 @@ export default function App() {
                             src={itemInfo.url}
                             alt={itemInfo.name}
                             referrerPolicy="no-referrer"
-                            className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                            className="w-full h-full object-contain p-2 transition-transform duration-500 group-hover:scale-105"
                             onError={(e) => {
                               e.currentTarget.style.display = 'none';
                               const fallback = e.currentTarget.parentElement?.querySelector('.fallback-icon') as HTMLDivElement;
@@ -1119,20 +1113,6 @@ export default function App() {
                       </motion.div>
                     );
                   })}
-                </div>
-              </div>
-
-              {/* COZY VOICE COUNSEL BUBBLE */}
-              <div className="bg-[#FFF9F2] rounded-2xl p-4 border border-[#FAEDE2]/60 relative shadow-2xs">
-                <div className="absolute -top-2 left-5 px-3 py-0.5 bg-brand-rose text-white text-[10px] font-semibold tracking-wider rounded-full uppercase flex items-center gap-1">
-                  <Heart className="w-2.5 h-2.5 fill-white" /> Conselho do Coração
-                </div>
-                <div className="space-y-2 mt-1.5">
-                  {result.cozyParagraphs.map((para, i) => (
-                    <p key={i} className="text-brand-charcoal/90 text-sm font-light leading-relaxed">
-                      {para}
-                    </p>
-                  ))}
                 </div>
               </div>
 
@@ -1232,6 +1212,40 @@ export default function App() {
 
               </div>
 
+              {/* COZY VOICE COUNSEL BUBBLE + EXTRA TIPS (Conselhos) */}
+              <div className="space-y-3">
+                {/* COZY VOICE COUNSEL BUBBLE */}
+                <div className="bg-[#FFF9F2] rounded-2xl p-4 border border-[#FAEDE2]/60 relative shadow-2xs">
+                  <div className="absolute -top-2 left-5 px-3 py-0.5 bg-brand-rose text-white text-[10px] font-semibold tracking-wider rounded-full uppercase flex items-center gap-1">
+                    <Heart className="w-2.5 h-2.5 fill-white" /> Conselho do Coração
+                  </div>
+                  <div className="space-y-2 mt-1.5">
+                    {result.cozyParagraphs.map((para, i) => (
+                      <p key={i} className="text-brand-charcoal/90 text-sm font-light leading-relaxed">
+                        {para}
+                      </p>
+                    ))}
+                  </div>
+                </div>
+
+                {/* EXTRA ADVICES (optional output block) */}
+                {result.extraTips && (
+                  <div className="bg-brand-sage/40 rounded-2xl p-4 border border-brand-sage">
+                    <span className="text-xs font-semibold text-emerald-800 flex items-center gap-1.5 mb-2">
+                      <Info className="w-4 h-4 text-emerald-700" /> Dicas de Cuidados com o Bebê e Conselhos Extras:
+                    </span>
+                    <ul className="space-y-2">
+                      {result.extraTips.map((tip, idx) => (
+                        <li key={idx} className="text-xs text-emerald-950/90 leading-relaxed flex items-start gap-1.5 font-light">
+                          <span className="text-[#10B981] shrink-0 mt-0.5">💡</span>
+                          <span>{tip}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+              </div>
+
               {/* SECURITY ALERTS BLOCK */}
               <div className="bg-[#FFF5F5] rounded-2xl p-4 border border-[#FFE3E3]">
                 <span className="text-xs font-bold text-red-700 flex items-center gap-1.5 mb-2 uppercase tracking-wide">
@@ -1246,23 +1260,6 @@ export default function App() {
                   ))}
                 </ul>
               </div>
-
-              {/* EXTRA ADVICES (optional output block) */}
-              {result.extraTips && (
-                <div className="bg-brand-sage/40 rounded-2xl p-4 border border-brand-sage">
-                  <span className="text-xs font-semibold text-emerald-800 flex items-center gap-1.5 mb-2">
-                    <Info className="w-4 h-4 text-emerald-700" /> Dicas de Cuidados com o Bebê e Conselhos Extras:
-                  </span>
-                  <ul className="space-y-2">
-                    {result.extraTips.map((tip, idx) => (
-                      <li key={idx} className="text-xs text-emerald-950/90 leading-relaxed flex items-start gap-1.5 font-light">
-                        <span className="text-emerald-600 shrink-0 mt-0.5">💡</span>
-                        <span>{tip}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              )}
 
               {/* VERIFIED COMFORT CHECKBOX BOX */}
               <div className="text-center text-xs text-brand-charcoal/60 italic bg-brand-beige border border-[#EEDBCD]/30 py-2.5 px-4 rounded-xl flex items-center justify-center gap-1.5">
@@ -1314,10 +1311,263 @@ export default function App() {
       </main>
 
       {/* Footer Details */}
-      <footer className="w-full max-w-xl text-center mt-5 text-[11px] text-[#A69799] font-light space-y-1 select-none z-10">
+      <footer className="w-full max-w-xl text-center mt-5 text-[11px] text-[#A69799] font-light space-y-1 select-none z-10 pb-6">
         <p>Criado com amor para simplificar o cuidado com seu bebê. 🧸</p>
         <p>© 2026 Como Vestir o Bebê • Prático, higiênico e offline • Lógica inteligente baseada em guias de neonatologia.</p>
       </footer>
+
+      {/* OVERLAY SYSTEM (DRAWER, ABOUT, INSTALL MODALS) */}
+      <AnimatePresence>
+        {isMenuOpen && (
+          <React.Fragment key="drawer-holder">
+            {/* Backdrop */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 0.4 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setIsMenuOpen(false)}
+              className="fixed inset-0 bg-brand-charcoal z-40 cursor-pointer"
+            />
+
+            {/* Pastel Drawer Panel Custom Slide */}
+            <motion.div
+              initial={{ x: '-100%' }}
+              animate={{ x: 0 }}
+              exit={{ x: '-100%' }}
+              transition={{ type: 'spring', damping: 25, stiffness: 180 }}
+              className="fixed top-0 left-0 bottom-0 w-[85%] max-w-[340px] bg-[#FAF6F0] z-50 shadow-2xl flex flex-col justify-between rounded-r-3xl border-r border-[#FAEDE2]"
+            >
+              {/* Drawer Content */}
+              <div className="p-6 flex-1 flex flex-col overflow-y-auto">
+                {/* Header of Drawer */}
+                <div className="flex justify-between items-center pb-5 border-b border-[#FAEDE2] mb-6">
+                  <div className="flex items-center gap-2">
+                    <div className="w-8 h-8 bg-brand-rose text-white rounded-xl flex items-center justify-center">
+                      <Baby className="w-4 h-4" />
+                    </div>
+                    <div>
+                      <h4 className="font-display font-semibold text-sm text-brand-charcoal">BebêClima 💛</h4>
+                      <span className="text-[10px] text-gray-400 font-light block">Como Vestir o Bebê PWA</span>
+                    </div>
+                  </div>
+                  <motion.button
+                    whileTap={{ scale: 0.9 }}
+                    onClick={() => setIsMenuOpen(false)}
+                    className="p-1.5 hover:bg-brand-pink/20 text-brand-rose rounded-full transition-all cursor-pointer"
+                  >
+                    <X className="w-5 h-5" />
+                  </motion.button>
+                </div>
+
+                {/* Sidebar Navigation Items */}
+                <div className="space-y-2 flex-1">
+                  {/* Item Home */}
+                  <button
+                    onClick={() => {
+                      setIsMenuOpen(false);
+                      setScreen('welcome');
+                      setStep(1);
+                    }}
+                    className="w-full flex items-center gap-3.5 p-3 rounded-2xl text-left font-display font-medium text-sm text-[#5C4D4D] hover:bg-brand-pink/25 hover:text-brand-rose transition-all group cursor-pointer"
+                  >
+                    <div className="p-1.5 bg-white border border-[#EEDBCD]/40 rounded-xl group-hover:bg-brand-rose group-hover:text-white transition-all text-[#8C7A7A]">
+                      <Home className="w-4 h-4" />
+                    </div>
+                    <span>Início</span>
+                  </button>
+
+                  {/* Install PWA Option */}
+                  {isInstallable && (
+                    <button
+                      onClick={() => {
+                        setIsMenuOpen(false);
+                        handleInstallApp();
+                      }}
+                      className="w-full flex items-center gap-3.5 p-3 rounded-2xl text-left font-display font-medium text-sm text-[#5C4D4D] hover:bg-brand-pink/25 hover:text-brand-rose transition-all group cursor-pointer"
+                    >
+                      <div className="p-1.5 bg-white border border-[#EEDBCD]/40 rounded-xl group-hover:bg-brand-rose group-hover:text-white transition-all text-[#8C7A7A]">
+                        <Download className="w-4 h-4" />
+                      </div>
+                      <div className="flex-1">
+                        <span className="block">Adicionar à Tela Inicial</span>
+                        <span className="text-[10px] font-light text-brand-rose/80 block">Instalação aplicativo rápida</span>
+                      </div>
+                    </button>
+                  )}
+
+                  {/* WhatsApp Support */}
+                  <a
+                    href="https://wa.me/message/R2T4NMNY46OEL1"
+                    target="_blank"
+                    rel="noreferrer"
+                    onClick={() => setIsMenuOpen(false)}
+                    className="w-full flex items-center gap-3.5 p-3 rounded-2xl text-left font-display font-medium text-sm text-[#5C4D4D] hover:bg-emerald-50 hover:text-emerald-800 transition-all group cursor-pointer"
+                  >
+                    <div className="p-1.5 bg-white border border-[#EEDBCD]/40 rounded-xl group-hover:bg-emerald-600 group-hover:text-white transition-all text-[#8C7A7A]">
+                      <HelpCircle className="w-4 h-4" />
+                    </div>
+                    <div>
+                      <span>Suporte ou sugestões</span>
+                      <span className="text-[10px] font-light text-emerald-600 block">Fale Conosco pelo WhatsApp</span>
+                    </div>
+                  </a>
+
+                  {/* WhatsApp Offers Channel */}
+                  <a
+                    href="https://chat.whatsapp.com/IvwQos4ntsGEfgLZzZdayx?mode=gi_t"
+                    target="_blank"
+                    rel="noreferrer"
+                    onClick={() => setIsMenuOpen(false)}
+                    className="w-full flex items-center gap-3.5 p-3 rounded-2xl text-left font-display font-medium text-sm text-[#5C4D4D] hover:bg-amber-50 hover:text-amber-850 transition-all group cursor-pointer"
+                  >
+                    <div className="p-1.5 bg-white border border-[#EEDBCD]/40 rounded-xl group-hover:bg-amber-400 group-hover:text-white transition-all text-[#8C7A7A]">
+                      <Gift className="w-4 h-4" />
+                    </div>
+                    <div>
+                      <span>Grupo de Ofertas</span>
+                      <span className="text-[10px] font-light text-amber-700 block">Dicas e promoções especiais</span>
+                    </div>
+                  </a>
+
+                  {/* About the Application Item */}
+                  <button
+                    onClick={() => {
+                      setIsMenuOpen(false);
+                      setIsAboutOpen(true);
+                    }}
+                    className="w-full flex items-center gap-3.5 p-3 rounded-2xl text-left font-display font-medium text-sm text-[#5C4D4D] hover:bg-blue-50 hover:text-blue-800 transition-all group cursor-pointer"
+                  >
+                    <div className="p-1.5 bg-white border border-[#EEDBCD]/40 rounded-xl group-hover:bg-blue-600 group-hover:text-white transition-all text-[#8C7A7A]">
+                      <Info className="w-4 h-4" />
+                    </div>
+                    <span>Sobre o App</span>
+                  </button>
+                </div>
+
+                {/* Lovely Pastel App Installer Mini Banner inside Drawer */}
+                {isInstallable && (
+                  <div className="mt-auto bg-brand-pink/30 p-4 rounded-2xl border border-brand-rose/25 text-center shadow-3xs">
+                    <p className="text-[11.5px] text-[#8C5555] font-light leading-relaxed mb-3">
+                      Instale o app na sua tela inicial para acessar mais rápido no dia a dia 💛
+                    </p>
+                    <button
+                      onClick={() => {
+                        setIsMenuOpen(false);
+                        handleInstallApp();
+                      }}
+                      className="w-full py-2.5 bg-brand-rose text-white text-xs font-semibold rounded-xl hover:bg-[#D4717E] transition-colors cursor-pointer"
+                    >
+                      Instalar Agora
+                    </button>
+                  </div>
+                )}
+              </div>
+
+              {/* Drawer Footer Details */}
+              <div className="p-5 border-t border-[#FAEDE2] bg-[#FAF3EA] text-center rounded-br-3xl">
+                <span className="text-[10px] text-gray-400 block uppercase tracking-widest font-mono">BebêClima v3.2</span>
+                <span className="text-[9.5px] text-gray-400 font-light block leading-relaxed mt-1">Carrega atualizações em tempo real</span>
+              </div>
+            </motion.div>
+          </React.Fragment>
+        )}
+
+        {isAboutOpen && (
+          <React.Fragment key="about-modal">
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 0.5 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setIsAboutOpen(false)}
+              className="fixed inset-0 bg-brand-charcoal z-50 cursor-pointer"
+            />
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95, y: 20 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.95, y: 20 }}
+              transition={{ type: 'spring', damping: 25, stiffness: 200 }}
+              className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[90%] max-w-md bg-white rounded-3xl p-6 shadow-2xl z-55 border border-[#FAEDE2] flex flex-col gap-4 text-center"
+            >
+              <div className="w-12 h-12 bg-blue-50 text-blue-700 rounded-full flex items-center justify-center mx-auto">
+                <Info className="w-6 h-6" />
+              </div>
+              <h3 className="font-display font-semibold text-lg text-brand-charcoal">Sobre o BebêClima</h3>
+              <p className="text-xs sm:text-sm text-gray-600 font-light leading-relaxed">
+                O <strong>BebêClima / Como Vestir o Bebê</strong> é um aplicativo progressivo (PWA) de utilidade prática criado para de forma descomplicada apoiar cuidadores a escolherem as camadas perfeitas de vestimenta para os pequenos.
+              </p>
+              <p className="text-[11.5px] text-gray-500 font-light leading-relaxed bg-[#FAF6F0] p-3 rounded-2xl border border-[#FAEDE2]">
+                Utilizamos algoritmos térmicos baseados em consensos de pediatria e neonatologia para guiar o sono seguro, a transpiração livre e minimizar riscos de superaquecimento.
+              </p>
+              <div className="flex flex-col gap-2 pt-2">
+                <button
+                  onClick={() => setIsAboutOpen(false)}
+                  className="w-full py-2.5 bg-brand-rose hover:bg-[#D4717E] text-white text-sm font-medium rounded-xl cursor-pointer transition-colors"
+                >
+                  Entendi, obrigado!
+                </button>
+              </div>
+            </motion.div>
+          </React.Fragment>
+        )}
+
+        {isPwaInstructionOpen && (
+          <React.Fragment key="install-modal">
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 0.5 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setIsPwaInstructionOpen(false)}
+              className="fixed inset-0 bg-brand-charcoal z-50 cursor-pointer"
+            />
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95, y: 20 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.95, y: 20 }}
+              transition={{ type: 'spring', damping: 25, stiffness: 200 }}
+              className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[90%] max-w-md bg-white rounded-3xl p-6 shadow-2xl z-55 border border-[#FAEDE2] flex flex-col gap-4 focus:outline-none"
+            >
+              <div className="w-12 h-12 bg-brand-pink text-brand-rose rounded-full flex items-center justify-center mx-auto">
+                <Smartphone className="w-6 h-6" />
+              </div>
+              <h3 className="font-display font-semibold text-center text-lg text-brand-charcoal">Instalar na Tela Inicial</h3>
+              
+              <div className="space-y-4 py-1 text-xs text-gray-600 font-light">
+                <p className="text-center text-xs text-gray-500 leading-relaxed">
+                  Acesse com apenas um toque no seu celular! Funciona em tela cheia e offline de modo prático.
+                </p>
+
+                {/* iPhone / Safari specific manual */}
+                <div className="bg-[#FAF6F0] p-4 rounded-2xl border border-[#FAEDE2] space-y-2">
+                  <span className="font-display font-semibold text-brand-rose text-xs block uppercase tracking-wide">No iPhone (iOS - Safari)</span>
+                  <ol className="list-decimal list-inside space-y-2 text-xs leading-relaxed">
+                    <li>Toque no botão de <strong>Compartilhar</strong> <Share2 className="w-3.5 h-3.5 inline inline-block text-brand-rose" /> no Safari (setinha no rodapé).</li>
+                    <li>Role o menu de opções para baixo.</li>
+                    <li>Clique em <strong>Adicionar à Tela de Início</strong>.</li>
+                  </ol>
+                </div>
+
+                {/* Android / Chrome specific manual */}
+                <div className="bg-[#EAF5EC] p-4 rounded-2xl border border-emerald-100 space-y-2">
+                  <span className="font-display font-semibold text-emerald-800 text-xs block uppercase tracking-wide">No Android (Chrome)</span>
+                  <ol className="list-decimal list-inside space-y-2 text-xs text-emerald-950 leading-relaxed">
+                    <li>Toque no botão de <strong>3 pontinhos</strong> do navegador.</li>
+                    <li>Selecione <strong>Adicionar à Tela Inicial</strong> ou <strong>Instalar Aplicativo</strong>.</li>
+                  </ol>
+                </div>
+              </div>
+
+              <div className="flex flex-col gap-2 pt-2">
+                <button
+                  onClick={() => setIsPwaInstructionOpen(false)}
+                  className="w-full py-2.5 bg-brand-rose hover:bg-[#D4717E] text-white text-sm font-medium rounded-xl cursor-pointer transition-colors text-center"
+                >
+                  Entendi, vou instalar!
+                </button>
+              </div>
+            </motion.div>
+          </React.Fragment>
+        )}
+      </AnimatePresence>
 
     </div>
   );
