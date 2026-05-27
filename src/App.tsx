@@ -318,13 +318,23 @@ export default function App() {
   };
 
   return (
-    <div className="min-h-screen bg-[#FAF6F0] selection:bg-brand-pink/60 selection:text-brand-charcoal text-scale-subtle flex flex-col items-center justify-between pb-8 pt-4 px-4 sm:px-6">
+    <div className="min-h-screen bg-[#FAF6F0] selection:bg-brand-pink/60 selection:text-brand-charcoal text-scale-subtle flex flex-col items-center justify-between pb-8 pt-4 px-4 sm:px-6 relative overflow-x-hidden">
       
-      {/* Absolute Backdrop Circles for modern atmospheric touch */}
-      <div className="absolute top-0 left-0 right-0 h-[400px] overflow-hidden pointer-events-none z-0">
-        <div className="absolute -top-32 -left-32 w-96 h-96 rounded-full bg-[#FCE8E6] opacity-60 blur-3xl"></div>
-        <div className="absolute top-20 right-[-100px] w-80 h-80 rounded-full bg-[#F2EEFC] opacity-70 blur-3xl"></div>
-        <div className="absolute -top-10 left-[35%] w-72 h-72 rounded-full bg-[#EAF0EC] opacity-50 blur-3xl"></div>
+      {/* Absolute Cosmic Backdrop for elegant playfulness with a futuristic touch */}
+      <div className="absolute top-0 left-0 right-0 h-[450px] overflow-hidden pointer-events-none z-0 select-none">
+        {/* Soft atmospheric glow planets/orbs */}
+        <div className="absolute -top-28 -left-28 w-[400px] h-[400px] rounded-full bg-[#FCE8E6] opacity-75 blur-3xl animate-pulse" style={{ animationDuration: '12s' }}></div>
+        <div className="absolute top-24 right-[-120px] w-[350px] h-[350px] rounded-full bg-[#F2EEFC] opacity-80 blur-3xl animate-pulse" style={{ animationDuration: '10s' }}></div>
+        <div className="absolute -top-10 left-[30%] w-80 h-80 rounded-full bg-[#EAF0EC] opacity-60 blur-3xl"></div>
+        
+        {/* Futuristic thin orbits */}
+        <div className="absolute top-10 left-10 w-[240px] h-[240px] rounded-full border border-pink-200/20 opacity-30 animate-spin-slow" style={{ animationDuration: '30s' }} />
+        <div className="absolute top-24 right-20 w-[180px] h-[180px] rounded-full border border-purple-200/25 opacity-40 animate-spin-slow" style={{ animationDuration: '45s', animationDirection: 'reverse' }} />
+        
+        {/* Little floating stars / stardust */}
+        <div className="absolute top-12 left-[15%] w-2 h-2 rounded-full bg-pink-300 opacity-40 animate-stardust-slow"></div>
+        <div className="absolute top-48 left-[45%] w-1.5 h-1.5 rounded-full bg-purple-300 opacity-50 animate-stardust-slow" style={{ animationDelay: '2s' }}></div>
+        <div className="absolute top-32 right-[25%] w-2.5 h-2.5 rounded-full bg-amber-200 opacity-65 animate-stardust-slow" style={{ animationDelay: '4s' }}></div>
       </div>
 
       {/* Modern App Header with Hamburger & PWA install shortcuts */}
@@ -375,8 +385,8 @@ export default function App() {
         </div>
       </header>
 
-      {/* Primary Card Viewport */}
-      <main className="w-full max-w-xl bg-white rounded-3xl border border-[#FAEDE2] shadow-xl shadow-brand-charcoal/[0.02] z-10 overflow-hidden min-h-[500px] flex flex-col">
+      {/* Primary Card Viewport with elegant rounded glass edges and double-layer neon shadows */}
+      <main className="w-full max-w-xl bg-white/95 backdrop-blur-md rounded-3xl border border-white/65 shadow-[0_20px_50px_rgba(229,135,147,0.06)] hover:shadow-[0_25px_60px_rgba(229,135,147,0.12)] transition-all duration-500 z-10 overflow-hidden min-h-[500px] flex flex-col">
         <AnimatePresence mode="wait">
           
           {/* WELCOME SCREEN */}
@@ -391,9 +401,17 @@ export default function App() {
               id="screen-welcome"
             >
               <div className="pt-4 flex-1 flex flex-col justify-center items-center">
-                {/* Visual Avatar Cover */}
+                
+                {/* Visual Avatar Cover with Futuristic Back Orbit Ring */}
                 <div className="relative mb-6">
-                  <div className="absolute inset-0 bg-[#FFF9F2] rounded-full scale-125 blur-sm"></div>
+                  {/* Outer Cyber Spin Orbit Ring */}
+                  <div className="absolute inset-[-14px] rounded-full border border-dashed border-[#E58793]/40 animate-spin-slow"></div>
+                  <div className="absolute inset-[-6px] rounded-full border border-gradient-to-tr from-[#FCE8E6] to-[#F2EEFC] opacity-70 animate-pulse"></div>
+                  
+                  {/* Soft Background Planetary Glow */}
+                  <div className="absolute inset-0 bg-gradient-to-tr from-[#FFF9F2] to-[#FCE8E6] rounded-full scale-125 blur-md"></div>
+                  
+                  {/* Logo Center */}
                   <div className="relative w-28 h-28 mx-auto bg-white rounded-full flex items-center justify-center overflow-hidden border border-[#FAEDE2] shadow-md z-1">
                     <motion.img
                       animate={{ y: [0, -3, 0] }}
@@ -404,67 +422,77 @@ export default function App() {
                       referrerPolicy="no-referrer"
                     />
                   </div>
-                  <div className="absolute right-0 bottom-0 bg-white p-1.5 rounded-full shadow-md text-yellow-500 z-2">
-                    <Sparkles className="w-4 h-4 fill-yellow-500" />
+                  
+                  {/* Radiant Sparks Badge */}
+                  <div className="absolute -right-1.5 -bottom-1.5 bg-gradient-to-tr from-amber-400 to-yellow-300 p-2 rounded-full shadow-lg text-white z-2 border border-white animate-bounce" style={{ animationDuration: '4s' }}>
+                    <Sparkles className="w-4 h-4 fill-white" />
                   </div>
                 </div>
 
-                <h2 className="font-display text-2xl sm:text-3xl font-semibold text-brand-charcoal tracking-tight leading-tight mb-3">
-                  Vestir seu bebê com carinho e sem dúvidas!
+                <h2 className="font-display text-2xl sm:text-3.5xl font-bold text-brand-charcoal tracking-tight leading-tight mb-3 px-1">
+                  Vestir seu bebê com <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#D4717E] to-[#E58793] glow-pink">carinho</span> e sem dúvidas!
                 </h2>
 
-                <p className="text-gray-600 font-light text-sm sm:text-base max-w-sm leading-relaxed mb-6">
-                  Esqueça a insegurança. Responda a algumas perguntas simples sobre o dia de hoje e receba recomendações inteligentes, seguras e personalizadas de tecidos e camadas.
+                <p className="text-gray-500 font-light text-sm sm:text-base max-w-sm leading-relaxed mb-6">
+                  Esqueça a insegurança de vestir a mais ou a menos. Responda a algumas perguntas simples sobre o dia de hoje e receba recomendações térmicas seguras e personalizadas.
                 </p>
 
-                {/* Aesthetic Tags */}
+                {/* Aesthetic Glassmorphic Tags */}
                 <div className="flex flex-wrap justify-center gap-2 mb-6 pointer-events-none">
-                  <span className="text-xs font-medium px-3 py-1 bg-brand-sage text-emerald-800 rounded-full">👶 Sem excesso de camadas</span>
-                  <span className="text-xs font-medium px-3 py-1 bg-[#F2EEFC] text-purple-800 rounded-full">🌙 Sono seguro recomendado</span>
-                  <span className="text-xs font-medium px-3 py-1 bg-brand-pink text-brand-rose rounded-full">🌡️ Inteligência térmica</span>
+                  <span className="text-xs font-medium px-3.5 py-1.5 bg-brand-sage/60 text-emerald-800 rounded-full border border-emerald-150 shadow-3xs backdrop-blur-xs flex items-center gap-1">👶 Sem excesso de camadas</span>
+                  <span className="text-xs font-medium px-3.5 py-1.5 bg-[#F2EEFC]/60 text-purple-800 rounded-full border border-purple-150 shadow-3xs backdrop-blur-xs flex items-center gap-1">🌙 Sono seguro</span>
+                  <span className="text-xs font-medium px-3.5 py-1.5 bg-brand-pink/60 text-[#D4717E] rounded-full border border-pink-150 shadow-2xs backdrop-blur-xs flex items-center gap-1">🌡️ Inteligência térmica</span>
                 </div>
               </div>
 
               <div className="w-full mt-4 space-y-6">
+                
+                {/* Hero Gradient Conversion Button */}
                 <motion.button
                   id="btn-start"
                   onClick={startWizard}
-                  whileHover={{ scale: 1.01 }}
-                  whileTap={{ scale: 0.99 }}
-                  className="w-full py-4 bg-brand-rose hover:bg-[#D4717E] text-white font-medium rounded-2xl shadow-lg shadow-brand-rose/25 transition-all outline-none cursor-pointer flex items-center justify-center gap-2 text-md sm:text-lg"
+                  whileHover={{ scale: 1.02, y: -1 }}
+                  whileTap={{ scale: 0.98 }}
+                  className="w-full py-4.5 bg-gradient-to-r from-[#E58793] to-[#D4717E] hover:from-[#EC9CA7] hover:to-[#E58793] text-white font-semibold rounded-2xl shadow-lg shadow-brand-rose/30 hover:shadow-xl hover:shadow-brand-rose/40 transition-all outline-none cursor-pointer flex items-center justify-center gap-2 text-md sm:text-lg relative overflow-hidden group"
                 >
-                  Começar Calculadora <ChevronRight className="w-5 h-5" />
+                  <div className="absolute inset-0 bg-white/10 translate-y-[100%] group-hover:translate-y-0 transition-transform duration-300"></div>
+                  <span className="flex items-center gap-2">
+                    Começar Calculadora Dinâmica <ChevronRight className="w-5 h-5" />
+                  </span>
                 </motion.button>
 
-                {/* CHECAGEM RÁPIDA (QUICK CHECK) CONTAINER */}
-                <div className="pt-5 border-t border-[#FAEDE2] text-left">
+                {/* CHECAGEM RÁPIDA (QUICK CHECK) CONTAINER WITH PREMIUM TRANSLUCENT DESIGN */}
+                <div className="pt-6 border-t border-[#FAEDE2]/60 text-left">
                   <div className="flex items-center gap-2 mb-2">
-                    <Sparkles className="w-4 h-4 text-brand-rose animate-pulse" />
-                    <h3 className="font-display font-semibold text-sm text-brand-charcoal uppercase tracking-wider">
-                      Checagem Rápida: Quantos graus está agora? ⏱️
+                    <div className="flex items-center justify-center p-1 bg-brand-rose/10 text-[#D4717E] rounded-lg">
+                      <Sparkles className="w-4 h-4 animate-pulse" />
+                    </div>
+                    <h3 className="font-display font-semibold text-xs sm:text-sm text-brand-charcoal uppercase tracking-wider">
+                      Checagem Rápida: Clima Instantâneo ⏱️
                     </h3>
                   </div>
-                  <p className="text-xs text-gray-500 font-light mb-3">
-                    Com pressa? Informe apenas a temperatura e período para ter uma recomendação instantânea direta.
+                  <p className="text-xs text-gray-500 font-light mb-4">
+                    Com pressa? Informe apenas a temperatura da sala e o período do dia para testar as roupas certas em um piscar de olhos.
                   </p>
 
-                  <div className="bg-[#FFF9F2] rounded-2xl p-4 border border-[#FAEDE2] grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div className="bg-white/70 backdrop-blur-md rounded-2xl p-4.5 border border-[#FAEDE2]/60 grid grid-cols-1 sm:grid-cols-2 gap-4 shadow-[0_4px_24px_rgba(229,135,147,0.02)]">
+                    
                     {/* Temperature Controls */}
                     <div className="space-y-2">
-                      <label className="text-xs font-medium text-brand-charcoal flex items-center gap-1.5">
-                        <Thermometer className="w-3.5 h-3.5 text-brand-rose" /> Qual a temperatura?
+                      <label className="text-xs font-semibold text-brand-charcoal flex items-center gap-1.5">
+                        <Thermometer className="w-4 h-4 text-brand-rose" /> Qual a temperatura?
                       </label>
-                      <div className="flex items-center justify-between bg-white border border-[#EEDBCD]/50 rounded-xl p-1.5 max-w-[170px] shadow-2xs">
+                      <div className="flex items-center justify-between bg-white/90 border border-[#EEDBCD]/50 rounded-xl p-1.5 max-w-[170px] shadow-3xs hover:border-[#F2D7CD] transition-colors">
                         <motion.button
                           type="button"
                           id="btn-quick-dec"
                           onClick={() => setQuickTemp(prev => Math.max(5, prev - 1))}
                           whileTap={{ scale: 0.9 }}
-                          className="w-8 h-8 rounded-lg bg-gray-50 hover:bg-gray-100 flex items-center justify-center text-brand-charcoal cursor-pointer font-bold transition-all"
+                          className="w-8 h-8 rounded-lg bg-gray-50 hover:bg-[#FCE8E6]/40 flex items-center justify-center text-brand-charcoal font-bold transition-all cursor-pointer"
                         >
-                          <Minus className="w-3.5 h-3.5" />
+                          <Minus className="w-3.5 h-3.5 text-gray-600" />
                         </motion.button>
-                        <span className="font-display font-semibold text-sm text-brand-charcoal min-w-[32px] text-center">
+                        <span className="font-display font-bold text-sm text-brand-charcoal min-w-[32px] text-center font-mono">
                           {quickTemp}°C
                         </span>
                         <motion.button
@@ -472,27 +500,27 @@ export default function App() {
                           id="btn-quick-inc"
                           onClick={() => setQuickTemp(prev => Math.min(41, prev + 1))}
                           whileTap={{ scale: 0.9 }}
-                          className="w-8 h-8 rounded-lg bg-gray-50 hover:bg-gray-100 flex items-center justify-center text-brand-charcoal cursor-pointer font-bold transition-all"
+                          className="w-8 h-8 rounded-lg bg-gray-50 hover:bg-[#FCE8E6]/40 flex items-center justify-center text-brand-charcoal font-bold transition-all cursor-pointer"
                         >
-                          <Plus className="w-3.5 h-3.5" />
+                          <Plus className="w-3.5 h-3.5 text-gray-600" />
                         </motion.button>
                       </div>
                     </div>
 
                     {/* Period Controls */}
                     <div className="space-y-2">
-                      <label className="text-xs font-medium text-brand-charcoal flex items-center gap-1.5">
-                        <Clock className="w-3.5 h-3.5 text-purple-600" /> Período do Dia:
+                      <label className="text-xs font-semibold text-brand-charcoal flex items-center gap-1.5">
+                        <Clock className="w-4 h-4 text-purple-600 animate-float-gentle" /> Período do Dia:
                       </label>
-                      <div className="grid grid-cols-2 gap-1 bg-white border border-[#EEDBCD]/50 rounded-xl p-1 shadow-2xs">
+                      <div className="grid grid-cols-2 gap-1 bg-white/90 border border-[#EEDBCD]/50 rounded-xl p-1 shadow-3xs">
                         <button
                           type="button"
                           id="btn-quick-day"
                           onClick={() => setQuickPeriod('dia')}
-                          className={`py-1.5 rounded-lg text-xs font-medium transition-all cursor-pointer ${
+                          className={`py-2 rounded-lg text-xs font-medium transition-all cursor-pointer flex items-center justify-center gap-1 ${
                             quickPeriod === 'dia'
-                              ? 'bg-[#FFF9F2] text-amber-700 shadow-3xs font-semibold border border-amber-200/50'
-                              : 'text-gray-500 hover:text-gray-700'
+                              ? 'bg-gradient-to-tr from-[#FFF9F2] to-amber-100/40 text-amber-800 shadow-3xs font-semibold border border-amber-200/50'
+                              : 'text-gray-550 hover:text-gray-700 hover:bg-gray-50/50'
                           }`}
                         >
                           Dia ☀️
@@ -501,10 +529,10 @@ export default function App() {
                           type="button"
                           id="btn-quick-night"
                           onClick={() => setQuickPeriod('noite')}
-                          className={`py-1.5 rounded-lg text-xs font-medium transition-all cursor-pointer ${
+                          className={`py-2 rounded-lg text-xs font-medium transition-all cursor-pointer flex items-center justify-center gap-1 ${
                             quickPeriod === 'noite'
-                              ? 'bg-[#F2EEFC] text-purple-800 shadow-3xs font-semibold border border-purple-200/50'
-                              : 'text-gray-550 hover:text-gray-700'
+                              ? 'bg-gradient-to-tr from-[#F2EEFC] to-purple-100/40 text-purple-800 shadow-3xs font-semibold border border-purple-200/50'
+                              : 'text-gray-555 hover:text-gray-700 hover:bg-gray-50/50'
                           }`}
                         >
                           Noite 🌙
@@ -516,15 +544,13 @@ export default function App() {
                   <motion.button
                     id="btn-quick-submit"
                     onClick={() => handleQuickCheck(quickTemp, quickPeriod)}
-                    whileHover={{ scale: 1.01 }}
-                    whileTap={{ scale: 0.99 }}
-                    className="w-full mt-3 py-3 bg-[#EAF0EC] border border-emerald-200 hover:bg-[#DCE7E1] text-emerald-800 font-medium text-xs rounded-xl transition-all cursor-pointer flex items-center justify-center gap-1.5 shadow-sm"
+                    whileHover={{ scale: 1.015, y: -0.5 }}
+                    whileTap={{ scale: 0.985 }}
+                    className="w-full mt-3.5 py-3.5 bg-gradient-to-r from-emerald-50 to-[#EAF0EC] border border-emerald-200/80 hover:border-emerald-300 text-emerald-800 font-medium text-xs sm:text-sm rounded-xl transition-all cursor-pointer flex items-center justify-center gap-2 shadow-2xs hover:shadow-xs"
                   >
-                    Calcular Recomendação Rápida ⚡
+                    Calcular Recomendações Únicas ⚡
                   </motion.button>
                 </div>
-
-
               </div>
             </motion.div>
           )}
@@ -592,20 +618,20 @@ export default function App() {
                               key={item.key}
                               id={`age-opt-${item.key}`}
                               onClick={() => setAnswers(prev => ({ ...prev, age: item.key as BabyAge }))}
-                              className={`w-full p-3.5 rounded-2xl text-left border transition-all duration-200 cursor-pointer flex items-center justify-between ${
+                              className={`w-full p-3.5 rounded-2xl text-left border transition-all duration-300 cursor-pointer flex items-center justify-between shadow-2xs hover:shadow-xs ${
                                 answers.age === item.key
-                                  ? 'bg-brand-pink/30 border-brand-rose/60 ring-2 ring-brand-rose/10'
-                                  : 'bg-white hover:bg-gray-50 border-[#EEDBCD]/50'
+                                  ? 'bg-gradient-to-r from-[#FCE8E6]/50 to-white border-[#E58793] glow-pink cyber-outline-pink'
+                                  : 'bg-white hover:bg-gray-50 border-[#EEDBCD]/40'
                               }`}
                             >
                               <div>
-                                <span className="font-medium text-sm sm:text-base text-brand-charcoal block">{item.label}</span>
+                                <span className="font-semibold text-sm sm:text-base text-brand-charcoal block">{item.label}</span>
                                 <span className="text-xs text-brand-charcoal/50 font-light mt-0.5 block">{item.desc}</span>
                               </div>
-                              <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center transition-all ${
+                              <div className={`w-5.5 h-5.5 rounded-full border-2 flex items-center justify-center transition-all shadow-4xs ${
                                 answers.age === item.key 
-                                  ? 'bg-brand-rose border-brand-rose text-white' 
-                                  : 'border-[#CBD5E1]'
+                                  ? 'bg-gradient-to-tr from-[#E58793] to-[#D4717E] border-transparent text-white' 
+                                  : 'border-[#EEDBCD]/60'
                               }`}>
                                 {answers.age === item.key && <Check className="w-3.5 h-3.5 stroke-[3]" />}
                               </div>
@@ -631,9 +657,9 @@ export default function App() {
                               key={item.key}
                               id={`sens-opt-${item.key}`}
                               onClick={() => setAnswers(prev => ({ ...prev, sensitivity: item.key as ThermalSensitivity }))}
-                              className={`p-3 rounded-xl border text-center transition-all duration-200 cursor-pointer flex flex-col items-center gap-1.5 ${
+                              className={`p-3 rounded-xl border text-center transition-all duration-300 cursor-pointer flex flex-col items-center gap-1.5 shadow-2xs hover:shadow-xs hover:border-[#E58793]/40 ${
                                 answers.sensitivity === item.key
-                                  ? 'bg-brand-pink/30 border-brand-rose/50 text-brand-rose font-medium'
+                                  ? 'bg-gradient-to-tr from-[#FCE8E6]/50 to-white border-[#E58793] text-[#D4717E] font-semibold glow-pink'
                                   : 'bg-white hover:bg-gray-50 border-[#EEDBCD]/50 text-gray-600'
                               }`}
                             >
@@ -674,20 +700,20 @@ export default function App() {
                               key={item.key}
                               id={`state-opt-${item.key}`}
                               onClick={() => setAnswers(prev => ({ ...prev, state: item.key as BabyState }))}
-                              className={`w-full p-3.5 rounded-2xl text-left border transition-all duration-200 cursor-pointer flex items-center justify-between ${
+                              className={`w-full p-3.5 rounded-2xl text-left border transition-all duration-300 cursor-pointer flex items-center justify-between shadow-2xs hover:shadow-xs ${
                                 answers.state === item.key
-                                  ? 'bg-[#F2EEFC]/45 border-purple-300 ring-2 ring-purple-100'
-                                  : 'bg-white hover:bg-gray-50 border-[#EEDBCD]/50'
+                                  ? 'bg-gradient-to-r from-[#F2EEFC]/55 to-white border-purple-300 glow-purple cyber-outline-purple'
+                                  : 'bg-white hover:bg-gray-55/65 border-[#EEDBCD]/40'
                               }`}
                             >
                               <div>
-                                <span className="font-medium text-sm sm:text-base text-brand-charcoal block">{item.label}</span>
+                                <span className="font-semibold text-sm sm:text-base text-brand-charcoal block">{item.label}</span>
                                 <span className="text-xs text-brand-charcoal/50 font-light mt-0.5 block">{item.desc}</span>
                               </div>
-                              <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center transition-all ${
+                              <div className={`w-5.5 h-5.5 rounded-full border-2 flex items-center justify-center transition-all shadow-4xs ${
                                 answers.state === item.key 
-                                  ? 'bg-purple-600 border-purple-600 text-white' 
-                                  : 'border-[#CBD5E1]'
+                                  ? 'bg-gradient-to-tr from-purple-500 to-indigo-500 border-transparent text-white' 
+                                  : 'border-[#EEDBCD]/60'
                               }`}>
                                 {answers.state === item.key && <Check className="w-3.5 h-3.5 stroke-[3]" />}
                               </div>
@@ -711,10 +737,10 @@ export default function App() {
                                 type="button"
                                 id={`period-opt-${item.key}`}
                                 onClick={() => setAnswers(prev => ({ ...prev, period: item.key as PeriodOfDay }))}
-                                className={`p-3 rounded-xl border text-center transition-all duration-200 cursor-pointer text-xs font-medium ${
+                                className={`p-3 rounded-xl border text-center transition-all duration-300 cursor-pointer text-xs font-semibold shadow-2xs hover:shadow-xs ${
                                   answers.period === item.key
-                                    ? 'bg-[#FFF9F2] border-amber-300 text-amber-700 font-semibold shadow-xs'
-                                    : `bg-white border-[#EEDBCD]/50 text-gray-600 ${item.style}`
+                                    ? 'bg-gradient-to-tr from-[#FFF9F2] to-amber-100/30 border-amber-300 text-amber-800 glow-amber'
+                                    : `bg-white border-[#EEDBCD]/45 text-gray-600 ${item.style}`
                                 }`}
                               >
                                 {item.label}
@@ -737,10 +763,10 @@ export default function App() {
                                 type="button"
                                 id={`loc-opt-${item.key}`}
                                 onClick={() => setAnswers(prev => ({ ...prev, location: item.key as EnvironmentLocation }))}
-                                className={`p-3 rounded-xl border text-center transition-all duration-200 cursor-pointer text-xs font-medium ${
+                                className={`p-3 rounded-xl border text-center transition-all duration-300 cursor-pointer text-xs font-semibold shadow-2xs hover:shadow-xs ${
                                   answers.location === item.key
-                                    ? 'bg-brand-sage border-emerald-300 text-emerald-800 font-semibold shadow-xs'
-                                    : 'bg-white border-[#EEDBCD]/50 text-gray-600 hover:border-emerald-200'
+                                    ? 'bg-gradient-to-tr from-brand-sage/60 to-[#EAF0EC]/20 border-emerald-300 text-emerald-800 glow-emerald'
+                                    : 'bg-white border-[#EEDBCD]/45 text-gray-600 hover:border-emerald-200'
                                 }`}
                               >
                                 {item.label}
@@ -848,17 +874,17 @@ export default function App() {
                                 type="button"
                                 id={`wind-opt-${item.value}`}
                                 onClick={() => setAnswers(prev => ({ ...prev, hasWind: item.value }))}
-                                className={`p-4 rounded-2xl border text-left transition-all duration-200 cursor-pointer ${
+                                className={`p-4 rounded-2xl border text-left transition-all duration-300 cursor-pointer shadow-2xs hover:shadow-xs hover:border-[#E58793]/40 ${
                                   answers.hasWind === item.value
-                                    ? 'bg-brand-sage/40 border-emerald-300 ring-2 ring-emerald-50'
-                                    : 'bg-white hover:bg-gray-50 border-[#EEDBCD]/50'
+                                    ? 'bg-gradient-to-tr from-brand-sage/60 to-[#EAF0EC]/20 border-emerald-300 text-emerald-800 glow-emerald'
+                                    : 'bg-white border-[#EEDBCD]/45 text-gray-650'
                                 }`}
                               >
                                 <div className="flex items-center gap-2 mb-1">
-                                  <IconCmp className={`w-4 h-4 ${answers.hasWind === item.value ? 'text-emerald-700' : 'text-gray-400'}`} />
-                                  <span className={`text-sm font-medium ${answers.hasWind === item.value ? 'text-emerald-800' : 'text-gray-700'}`}>{item.label}</span>
+                                  <IconCmp className={`w-4 h-4 ${answers.hasWind === item.value ? 'text-emerald-700 font-semibold' : 'text-gray-400'}`} />
+                                  <span className={`text-sm font-medium ${answers.hasWind === item.value ? 'text-emerald-850 font-semibold' : 'text-gray-700'}`}>{item.label}</span>
                                 </div>
-                                <span className="text-xs text-brand-charcoal/50 font-light leading-snug">{item.desc}</span>
+                                <span className="text-xs text-brand-charcoal/55 font-light leading-snug">{item.desc}</span>
                               </button>
                             );
                           })}
@@ -876,7 +902,7 @@ export default function App() {
                   type="button"
                   id="btn-back"
                   onClick={handlePrevStep}
-                  className="px-4 py-3 bg-gray-100 hover:bg-gray-200 text-brand-charcoal border border-gray-200 text-sm font-medium rounded-xl cursor-pointer flex items-center gap-1.5 transition-colors"
+                  className="px-5 py-3.5 bg-[#FAF6F0]/80 hover:bg-gray-200 text-brand-charcoal border border-[#EEDBCD]/60 text-sm font-semibold rounded-xl cursor-pointer flex items-center gap-1.5 transition-all shadow-3xs"
                 >
                   <ChevronLeft className="w-4 h-4" /> Voltar
                 </button>
@@ -885,7 +911,7 @@ export default function App() {
                   type="button"
                   id="btn-next"
                   onClick={handleNextStep}
-                  className="flex-1 py-3 bg-brand-rose hover:bg-[#D4717E] text-white text-sm font-medium rounded-xl cursor-pointer flex items-center justify-center gap-1.5 transition-all shadow-md shadow-brand-rose/10"
+                  className="flex-1 py-3.5 bg-gradient-to-r from-[#E58793] to-[#D4717E] hover:from-[#EC9CA7] hover:to-[#E58793] text-white text-sm font-bold rounded-xl cursor-pointer flex items-center justify-center gap-1.5 transition-all shadow-md shadow-brand-rose/25 relative overflow-hidden group"
                 >
                   {step === 3 ? 'Calcular Roupa Perfeita ⚡' : 'Continuar'} <ChevronRight className="w-4 h-4" />
                 </button>
@@ -1000,34 +1026,34 @@ export default function App() {
               </div>
 
               {/* COGNITIVE VISUAL THERMOMETER */}
-              <div className="bg-white rounded-2xl p-4 border border-[#FAEDE2] flex flex-col items-center shadow-3xs">
-                <span className="text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-2.5 flex items-center gap-1">
-                  <Layers className="w-3.5 h-3.5 text-brand-rose" /> Termômetro Visual: Conforto do bebê
+              <div className="bg-white/80 backdrop-blur-xs rounded-2xl p-5 border border-[#FAEDE2] flex flex-col items-center shadow-3xs">
+                <span className="text-[10px] font-semibold text-gray-450 uppercase tracking-widest mb-3 flex items-center gap-1.5 leading-none">
+                  <Thermometer className="w-3.5 h-3.5 text-brand-rose" /> Termômetro de Conforto Térmico
                 </span>
-                <div className="grid grid-cols-3 gap-2 w-full max-w-sm">
-                  <div className={`py-2 px-3 rounded-xl text-center flex flex-col items-center justify-center transition-all ${
+                <div className="grid grid-cols-3 gap-2.5 w-full max-w-sm">
+                  <div className={`py-2.5 px-3 rounded-2xl text-center flex flex-col items-center justify-center transition-all duration-300 w-full ${
                     answers.temperature < 19 
-                      ? 'bg-blue-550 bg-sky-100 border border-sky-300 text-sky-800 shadow-xs font-semibold' 
-                      : 'bg-[#FAF6F0]/60 border border-transparent text-gray-450 opacity-60 font-light'
+                      ? 'bg-gradient-to-tr from-sky-100 to-sky-50 border border-sky-300 text-sky-850 shadow-2xs font-semibold glow-sky' 
+                      : 'bg-[#FAF6F0]/50 border border-transparent text-gray-400 opacity-60 font-light'
                   }`}>
                     <span className="text-xl">🥶</span>
-                    <span className="text-[11px] mt-0.5">Frio</span>
+                    <span className="text-[11px] mt-1 font-medium">Frio</span>
                   </div>
-                  <div className={`py-2 px-3 rounded-xl text-center flex flex-col items-center justify-center transition-all ${
+                  <div className={`py-2.5 px-3 rounded-2xl text-center flex flex-col items-center justify-center transition-all duration-300 w-full ${
                     answers.temperature >= 19 && answers.temperature < 27
-                      ? 'bg-emerald-50 border border-emerald-250 text-emerald-850 shadow-xs font-semibold' 
-                      : 'bg-[#FAF6F0]/60 border border-transparent text-gray-455 opacity-60 font-light'
+                      ? 'bg-gradient-to-tr from-emerald-100 to-emerald-50 border border-emerald-300 text-emerald-850 shadow-2xs font-semibold glow-emerald' 
+                      : 'bg-[#FAF6F0]/50 border border-transparent text-gray-400 opacity-60 font-light'
                   }`}>
                     <span className="text-xl">😊</span>
-                    <span className="text-[11px] mt-0.5">Confortável</span>
+                    <span className="text-[11px] mt-1 font-medium">Normal</span>
                   </div>
-                  <div className={`py-2 px-3 rounded-xl text-center flex flex-col items-center justify-center transition-all ${
+                  <div className={`py-2.5 px-3 rounded-2xl text-center flex flex-col items-center justify-center transition-all duration-300 w-full ${
                     answers.temperature >= 27
-                      ? 'bg-rose-50 border border-rose-250 text-rose-850 shadow-xs font-semibold' 
-                      : 'bg-[#FAF6F0]/60 border border-transparent text-gray-455 opacity-60 font-light'
+                      ? 'bg-gradient-to-tr from-rose-100 to-rose-50 border border-rose-300 text-rose-850 shadow-2xs font-semibold glow-rose' 
+                      : 'bg-[#FAF6F0]/50 border border-transparent text-gray-400 opacity-60 font-light'
                   }`}>
                     <span className="text-xl">🥵</span>
-                    <span className="text-[11px] mt-0.5">Muito Quente</span>
+                    <span className="text-[11px] mt-1 font-medium">Muito Quente</span>
                   </div>
                 </div>
               </div>
@@ -1123,15 +1149,15 @@ export default function App() {
               </div>
 
               {/* CORE METRIC CARD: LAYER COUNT */}
-              <div className="bg-brand-lavender/40 border border-[#DED4FA]/40 rounded-2xl p-4 flex flex-col md:flex-row items-center gap-4">
+              <div className="bg-[#FAF3FF]/80 backdrop-blur-xs border border-purple-200/55 rounded-2xl p-5 flex flex-col md:flex-row items-center gap-4 glow-purple shadow-3xs">
                 <div className="flex-1">
                   <div className="flex items-center gap-2 mb-1.5 text-xs text-brand-charcoal/70 uppercase font-semibold">
-                    <Layers className="w-4 h-4 text-purple-600" /> RECOMENDAÇÃO DE CAMADAS
+                    <Layers className="w-4 h-4 text-purple-650" /> RECOMENDAÇÃO DE CAMADAS
                   </div>
                   <h4 className="font-display font-bold text-2xl text-purple-950 mb-1">
                     {result.layerCount} {result.layerCount === 1 ? 'Camada única' : result.layerCount === 2 ? 'Camadas leves' : 'Camadas aconchegantes'}
                   </h4>
-                  <p className="text-xs text-purple-900/80 font-light">
+                  <p className="text-xs text-purple-900/80 font-light leading-relaxed">
                     {result.layersDescription}
                   </p>
                 </div>
@@ -1144,8 +1170,8 @@ export default function App() {
                       initial={{ scaleX: 0 }}
                       animate={{ scaleX: 1 }}
                       transition={{ delay: i * 0.1 }}
-                      className={`h-5.5 rounded-md flex items-center justify-between px-2.5 text-[10px] font-bold tracking-tight text-white ${
-                        i === 0 ? 'bg-indigo-600' : i === 1 ? 'bg-purple-500' : 'bg-pink-400'
+                      className={`h-6 rounded-lg flex items-center justify-between px-3 text-[10px] font-bold tracking-tight text-white shadow-2xs ${
+                        i === 0 ? 'bg-gradient-to-r from-indigo-500 to-indigo-600 border border-indigo-400/20' : i === 1 ? 'bg-gradient-to-r from-purple-500 to-purple-600 border border-purple-400/20' : 'bg-gradient-to-r from-pink-400 to-pink-500 border border-pink-300/20'
                       }`}
                     >
                       <span>💡 Camada {i + 1}</span>
@@ -1163,7 +1189,7 @@ export default function App() {
               <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
                 
                 {/* OUTFIT RECOMMENDATION */}
-                <div className="bg-white rounded-2xl p-3.5 border border-[#FAEDE2] hover:shadow-2xs transition-shadow">
+                <div className="bg-white rounded-2xl p-4 border-t-4 border-t-brand-rose border-[#FAEDE2] shadow-3xs hover:shadow-2xs transition-shadow">
                   <span className="text-xs font-semibold text-brand-rose flex items-center gap-1.5 mb-2.5">
                     <Shirt className="w-3.5 h-3.5" /> Peças Sugeridas:
                   </span>
@@ -1178,7 +1204,7 @@ export default function App() {
                 </div>
 
                 {/* RECOMMENDED FABRICS */}
-                <div className="bg-white rounded-2xl p-3.5 border border-[#FAEDE2] hover:shadow-2xs transition-shadow">
+                <div className="bg-white rounded-2xl p-4 border-t-4 border-t-emerald-300 border-[#FAEDE2] shadow-3xs hover:shadow-2xs transition-shadow">
                   <span className="text-xs font-semibold text-teal-700 flex items-center gap-1.5 mb-2.5">
                     <Sparkles className="w-3.5 h-3.5" /> Tecidos Recomendados:
                   </span>
@@ -1186,17 +1212,17 @@ export default function App() {
                     {result.recommendedFabrics.map((item, idx) => (
                       <li key={idx} className="text-xs text-brand-charcoal/80 flex items-start gap-1 leading-snug font-light">
                         <span className="text-teal-600 shrink-0 select-none">✓</span>
-                        <span className="font-medium text-teal-900">{item}</span>
+                        <span className="font-semibold text-teal-900">{item}</span>
                       </li>
                     ))}
                   </ul>
                   <p className="text-[10px] text-gray-500 font-light mt-2 leading-tight">
-                    *Prefira sempre fibras naturais para deixar a pele do bebê respirar.
+                    *Prefira sempre fibras naturais para deixar a pele respirar livremente.
                   </p>
                 </div>
 
                 {/* ACCESSORIES */}
-                <div className="bg-white rounded-2xl p-3.5 border border-[#FAEDE2] hover:shadow-2xs transition-shadow">
+                <div className="bg-white rounded-2xl p-4 border-t-4 border-t-amber-300 border-[#FAEDE2] shadow-3xs hover:shadow-2xs transition-shadow">
                   <span className="text-xs font-semibold text-amber-700 flex items-center gap-1.5 mb-2.5">
                     <Footprints className="w-3.5 h-3.5" /> Acessórios Indicados:
                   </span>
@@ -1282,7 +1308,7 @@ export default function App() {
                     setStep(1);
                     setScreen('wizard');
                   }}
-                  className="flex-1 py-3.5 bg-brand-rose hover:bg-[#D4717E] text-white text-sm font-medium rounded-xl cursor-pointer flex items-center justify-center gap-2 transition-all shadow-md shadow-brand-rose/15"
+                  className="flex-1 py-3.5 bg-gradient-to-r from-[#E58793] to-[#D4717E] hover:from-[#EC9CA7] hover:to-[#E58793] text-white text-sm font-bold rounded-xl cursor-pointer flex items-center justify-center gap-2 transition-all shadow-md shadow-brand-rose/25"
                 >
                   <RefreshCw className="w-4 h-4" /> Alterar Dados de Entrada
                 </button>
@@ -1304,7 +1330,7 @@ export default function App() {
                     setStep(1);
                     setScreen('welcome');
                   }}
-                  className="px-5 py-3.5 bg-gray-100 hover:bg-gray-200 text-brand-charcoal text-sm font-medium rounded-xl cursor-pointer transition-colors"
+                  className="px-5 py-3.5 bg-[#FAF6F0]/80 hover:bg-gray-150 text-brand-charcoal border border-[#EEDBCD]/60 text-sm font-semibold rounded-xl cursor-pointer transition-all shadow-3xs"
                 >
                   Reiniciar Tudo
                 </button>

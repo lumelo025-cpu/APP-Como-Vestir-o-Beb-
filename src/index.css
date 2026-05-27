@@ -41,3 +41,94 @@ h1, h2, h3, h4 {
 ::-webkit-scrollbar-thumb:hover {
   background: #E2C7B3;
 }
+
+/* 🌟 FUTURISTIC BABY DESIGN SYSTEM - CUSTOM UTILITIES 🌟 */
+
+/* Glassmorphism containers with soft frosted transparency */
+.glass-baby {
+  background: rgba(255, 255, 255, 0.72);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.6);
+}
+
+.glass-baby-dark {
+  background: rgba(45, 35, 37, 0.03);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.35);
+}
+
+/* Elegant futuristic pastel neon glows */
+.glow-pink {
+  box-shadow: 0 8px 32px rgba(229, 135, 147, 0.08), 0 0 12px rgba(229, 135, 147, 0.05);
+}
+
+.glow-lavender {
+  box-shadow: 0 8px 32px rgba(111, 76, 219, 0.06), 0 0 12px rgba(111, 76, 219, 0.04);
+}
+
+.glow-sage {
+  box-shadow: 0 8px 32px rgba(16, 185, 129, 0.06), 0 0 12px rgba(16, 185, 129, 0.04);
+}
+
+.glow-rose {
+  box-shadow: 0 10px 30px rgba(229, 135, 147, 0.15);
+}
+
+.glow-blue {
+  box-shadow: 0 8px 32px rgba(14, 165, 233, 0.08), 0 0 12px rgba(14, 165, 233, 0.04);
+}
+
+/* Animated interactive transitions */
+.cyber-outline-pink {
+  box-shadow: 0 0 0 2px rgba(229, 135, 147, 0.15);
+  border-color: rgba(229, 135, 147, 0.45);
+}
+
+.cyber-outline-lavender {
+  box-shadow: 0 0 0 2px rgba(111, 76, 219, 0.12);
+  border-color: rgba(111, 76, 219, 0.35);
+}
+
+/* Cute micro keyframe animations */
+@keyframes float-gentle {
+  0%, 100% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-5px) rotate(2deg);
+  }
+}
+
+@keyframes float-stardust {
+  0%, 100% {
+    transform: translate(0, 0) scale(1);
+    opacity: 0.3;
+  }
+  50% {
+    transform: translate(4px, -6px) scale(1.15);
+    opacity: 0.75;
+  }
+}
+
+.animate-float-gentle {
+  animation: float-gentle 6s ease-in-out infinite;
+}
+
+.animate-stardust-slow {
+  animation: float-stardust 8s ease-in-out infinite;
+}
+
+@keyframes spin-slow {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.animate-spin-slow {
+  animation: spin-slow 40s linear infinite;
+}
