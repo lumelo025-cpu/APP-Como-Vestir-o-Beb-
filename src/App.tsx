@@ -39,7 +39,7 @@ import {
   Share2,
   Smartphone
 } from 'lucide-react';
-import { QuestionnaireAnswers, RecommendationResult, BabyAge, BabyState, PeriodOfDay, ThermalSensitivity, EnvironmentLocation } from './types.ts';
+import { QuestionnaireAnswers, RecommendationResult, BabyAge, BabyState, PeriodOfDay, ThermalSensitivity, EnvironmentCondition, AmbientFeeling } from './types.ts';
 import { calculateClothing } from './babyLogic.ts';
 import menuClothesLogo from './assets/images/menu_clothes_logo_1779899134603.png';
 
@@ -130,12 +130,12 @@ export default function App() {
   // Default values for Questionnaire
   const [answers, setAnswers] = useState<QuestionnaireAnswers>({
     age: '0-3-meses',
-    state: 'acordado-casa',
+    state: 'acordado',
     period: 'dia',
-    temperature: 22,
-    hasWind: false,
     sensitivity: 'normal',
-    location: 'interno',
+    condition: 'fechado',
+    feeling: 'agradavel',
+    temperature: null,
     wantsExtras: true,
   });
 
@@ -230,15 +230,23 @@ export default function App() {
   };
 
   const handleQuickCheck = (temp: number, pOfDay: PeriodOfDay) => {
+    let feel: AmbientFeeling = 'agradavel';
+    if (temp < 12) feel = 'muito-frio';
+    else if (temp < 16) feel = 'frio';
+    else if (temp < 19) feel = 'fresquinho';
+    else if (temp < 25) feel = 'agradavel';
+    else if (temp < 31) feel = 'quente';
+    else feel = 'muito-quente';
+
     setAnswers({
       age: '0-3-meses',
-      state: 'acordado-casa',
+      state: 'acordado',
       period: pOfDay,
-      temperature: temp,
-      hasWind: false,
       sensitivity: 'normal',
-      location: 'interno',
-      wantsExtras: false,
+      condition: 'fechado',
+      feeling: feel,
+      temperature: temp,
+      wantsExtras: true,
     });
     setScreen('loading');
   };
@@ -262,7 +270,17 @@ export default function App() {
   // Quick adjusters inside final result screen (quality of life feature for moms)
   const adjustResultTemperature = (delta: number) => {
     setAnswers(prev => {
-      const newTemp = Math.max(5, Math.min(41, prev.temperature + delta));
+      let currentTemp = prev.temperature;
+      if (currentTemp === null) {
+        // default based on feeling
+        if (prev.feeling === 'muito-quente') currentTemp = 33;
+        else if (prev.feeling === 'quente') currentTemp = 28;
+        else if (prev.feeling === 'agradavel') currentTemp = 23;
+        else if (prev.feeling === 'fresquinho') currentTemp = 19;
+        else if (prev.feeling === 'frio') currentTemp = 14;
+        else currentTemp = 9;
+      }
+      const newTemp = Math.max(5, Math.min(41, currentTemp + delta));
       const updatedAnswers = { ...prev, temperature: newTemp };
       // Recalculate result instantly
       const calculation = calculateClothing(updatedAnswers);
@@ -273,7 +291,8 @@ export default function App() {
 
   const toggleResultWind = () => {
     setAnswers(prev => {
-      const updatedAnswers = { ...prev, hasWind: !prev.hasWind };
+      const isWind = prev.condition === 'vento-frio';
+      const updatedAnswers = { ...prev, condition: (isWind ? 'fechado' : 'vento-frio') as EnvironmentCondition };
       const calculation = calculateClothing(updatedAnswers);
       setResult(calculation);
       return updatedAnswers;
@@ -294,20 +313,51 @@ export default function App() {
   const getStateFriendlyName = (stateKey: BabyState) => {
     switch (stateKey) {
       case 'dormindo': return 'Dormindo bochechando';
-      case 'acordado-casa': return 'Acordado brincando em casa';
+      case 'acordado': return 'Acordado e brincalhão';
       case 'passeando': return 'Passeando lá fora';
-      case 'sling-colo': return 'No sling ou colo quentinho';
-      case 'ar-condicionado': return 'No ar-condicionado fresquinho';
+      case 'colo-sling': return 'No colo ou sling quentinho';
+      case 'carrinho': return 'Dentro do carrinho protegido';
+    }
+  };
+
+  const getConditionFriendlyName = (condKey: EnvironmentCondition) => {
+    switch (condKey) {
+      case 'fechado': return 'Fechado e aconchegante';
+      case 'ventilado': return 'Ventilado';
+      case 'ventilador': return 'Com ventilador';
+      case 'ar-condicionado': return 'Com ar-condicionado';
+      case 'externo': return 'Área externa';
+      case 'vento-frio': return 'Com vento frio';
+    }
+  };
+
+  const getFeelingFriendlyName = (feelKey: AmbientFeeling) => {
+    switch (feelKey) {
+      case 'muito-quente': return '🥵 Muito quente';
+      case 'quente': return '☀️ Quente';
+      case 'agradavel': return '😊 Agradável';
+      case 'fresquinho': return '🌥️ Fresquinho';
+      case 'frio': return '🥶 Frio';
+      case 'muito-frio': return '❄️ Muito frio';
     }
   };
 
   // Dynamic Thermometer colors based on Celsius degree
-  const getTempColorStyle = (temp: number) => {
-    if (temp < 16) return { bg: 'bg-blue-50 text-blue-700 border-blue-200', fill: 'bg-blue-500', pill: 'bg-blue-600 text-white' };
-    if (temp >= 16 && temp < 20) return { bg: 'bg-teal-50 text-teal-700 border-teal-200', fill: 'bg-teal-400', pill: 'bg-teal-600 text-white' };
-    if (temp >= 20 && temp < 24) return { bg: 'bg-emerald-50 text-emerald-800 border-emerald-200', fill: 'bg-emerald-500', pill: 'bg-emerald-600 text-white' };
-    if (temp >= 24 && temp < 28) return { bg: 'bg-amber-50 text-amber-800 border-amber-200', fill: 'bg-amber-500', pill: 'bg-amber-600 text-white' };
-    if (temp >= 28 && temp < 32) return { bg: 'bg-orange-50 text-orange-800 border-orange-200', fill: 'bg-orange-500', pill: 'bg-orange-600 text-white' };
+  const getTempColorStyle = (temp: number | null, feeling: AmbientFeeling) => {
+    let t = temp;
+    if (t === null) {
+      if (feeling === 'muito-quente') t = 33;
+      else if (feeling === 'quente') t = 28;
+      else if (feeling === 'agradavel') t = 23;
+      else if (feeling === 'fresquinho') t = 19;
+      else if (feeling === 'frio') t = 14;
+      else t = 9;
+    }
+    if (t < 16) return { bg: 'bg-blue-50 text-blue-700 border-blue-200', fill: 'bg-blue-500', pill: 'bg-blue-600 text-white' };
+    if (t >= 16 && t < 20) return { bg: 'bg-teal-50 text-teal-700 border-teal-200', fill: 'bg-teal-400', pill: 'bg-[#51a7b4] text-white' };
+    if (t >= 20 && t < 24) return { bg: 'bg-emerald-50 text-emerald-800 border-emerald-200', fill: 'bg-emerald-500', pill: 'bg-[#299c6f] text-white' };
+    if (t >= 24 && t < 28) return { bg: 'bg-amber-50 text-amber-800 border-amber-200', fill: 'bg-amber-500', pill: 'bg-[#d69324] text-white' };
+    if (t >= 28 && t < 32) return { bg: 'bg-orange-50 text-orange-850 border-orange-200', fill: 'bg-orange-500', pill: 'bg-[#df6a14] text-white' };
     return { bg: 'bg-rose-50 text-rose-800 border-rose-200', fill: 'bg-rose-500', pill: 'bg-rose-600 text-white' };
   };
 
@@ -598,7 +648,7 @@ export default function App() {
                           Qual a idade do bebê? 🍼
                         </label>
                         <p className="text-xs text-gray-500 font-light mb-3">
-                          Bebês muito novos regulam pior a temperatura corporal e requerem mais aconchego.
+                          Bebês muito novos regulam menos a temperatura corporal e requerem mais aconchego.
                         </p>
                         <div className="space-y-2.5">
                           {[
@@ -677,212 +727,255 @@ export default function App() {
                     >
                       <div>
                         <label className="font-display text-md sm:text-lg font-medium text-brand-charcoal block mb-1">
-                          O que o bebê está fazendo agora? 🛌
+                          Vamos vestir o bebê para: 🛌
                         </label>
                         <p className="text-xs text-gray-500 font-light mb-3">
-                          Dormir exige cuidado com cobertas soltas. Sling e colo dão calor de pele fantástico!
+                          selecione a opção que mais se encaixa para o momento que vamos vestir o bebê
                         </p>
-                        <div className="space-y-2.5">
+                        <div className="grid grid-cols-1 gap-2">
                           {[
-                            { key: 'dormindo', label: 'Dormindo', desc: 'Segurança absoluta do sono de bochecha' },
-                            { key: 'acordado-casa', label: 'Acordado em casa', desc: 'Tempo livre para brincar e rolar' },
-                            { key: 'passeando', label: 'Passeando', desc: 'Em carrinho de bebê ou caminhando livre' },
-                            { key: 'sling-colo', label: 'No colo / Sling', desc: 'Colo humano aquece imensamente o corpíneo' },
-                            { key: 'ar-condicionado', label: 'Em ambiente climatizado', desc: 'Ar-condicionado geladinho com vento contínuo' }
+                            { key: 'dormindo', label: 'Dormir', desc: 'Confortável e seguro' },
+                            { key: 'acordado', label: 'Acordado em casa', desc: 'Tempo livre para brincar e rolar' },
+                            { key: 'passeando', label: 'Passear ao ar livre', desc: 'Caminhando ou ao ar livre' },
+                            { key: 'colo-sling', label: 'No colo / Sling', desc: 'Colinho de mãe/pai que aquece bastantão' },
+                            { key: 'carrinho', label: 'Dentro do carrinho', desc: 'Protegido da brisa direta' }
                           ].map((item) => (
                             <button
                               key={item.key}
+                              type="button"
                               id={`state-opt-${item.key}`}
                               onClick={() => setAnswers(prev => ({ ...prev, state: item.key as BabyState }))}
-                              className={`w-full p-3.5 rounded-2xl text-left border transition-all duration-300 cursor-pointer flex items-center justify-between shadow-2xs hover:shadow-xs ${
+                              className={`w-full p-3 rounded-xl text-left border transition-all duration-300 cursor-pointer flex items-center justify-between shadow-3xs hover:shadow-2xs ${
                                 answers.state === item.key
                                   ? 'bg-gradient-to-r from-[#F2EEFC]/55 to-white border-purple-300 glow-purple cyber-outline-purple'
-                                  : 'bg-white hover:bg-gray-55/65 border-[#EEDBCD]/40'
+                                  : 'bg-white hover:bg-gray-50 border-[#EEDBCD]/40'
                               }`}
                             >
                               <div>
-                                <span className="font-semibold text-sm sm:text-base text-brand-charcoal block">{item.label}</span>
-                                <span className="text-xs text-brand-charcoal/50 font-light mt-0.5 block">{item.desc}</span>
+                                <span className="font-semibold text-xs sm:text-sm text-brand-charcoal block">{item.label}</span>
+                                <span className="text-[11px] text-brand-charcoal/50 font-light mt-0.5 block">{item.desc}</span>
                               </div>
-                              <div className={`w-5.5 h-5.5 rounded-full border-2 flex items-center justify-center transition-all shadow-4xs ${
+                              <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center transition-all ${
                                 answers.state === item.key 
                                   ? 'bg-gradient-to-tr from-purple-500 to-indigo-500 border-transparent text-white' 
                                   : 'border-[#EEDBCD]/60'
                               }`}>
-                                {answers.state === item.key && <Check className="w-3.5 h-3.5 stroke-[3]" />}
+                                {answers.state === item.key && <Check className="w-3 h-3 stroke-[3]" />}
                               </div>
                             </button>
                           ))}
                         </div>
                       </div>
 
-                      <div className="grid grid-cols-2 gap-4 pt-1">
-                        <div>
-                          <label className="font-display text-sm font-medium text-brand-charcoal block mb-2">
-                            Período do Dia:
-                          </label>
-                          <div className="grid grid-cols-2 gap-2">
-                            {[
-                              { key: 'dia', label: 'Dia ☀️', style: 'hover:border-amber-200' },
-                              { key: 'noite', label: 'Noite 🌙', style: 'hover:border-indigo-200' }
-                            ].map((item) => (
-                              <button
-                                key={item.key}
-                                type="button"
-                                id={`period-opt-${item.key}`}
-                                onClick={() => setAnswers(prev => ({ ...prev, period: item.key as PeriodOfDay }))}
-                                className={`p-3 rounded-xl border text-center transition-all duration-300 cursor-pointer text-xs font-semibold shadow-2xs hover:shadow-xs ${
-                                  answers.period === item.key
-                                    ? 'bg-gradient-to-tr from-[#FFF9F2] to-amber-100/30 border-amber-300 text-amber-800 glow-amber'
-                                    : `bg-white border-[#EEDBCD]/45 text-gray-600 ${item.style}`
-                                }`}
-                              >
-                                {item.label}
-                              </button>
-                            ))}
-                          </div>
+                      <div>
+                        <label className="font-display text-md sm:text-lg font-medium text-brand-charcoal block mb-1">
+                          O ambiente está: 🏡
+                        </label>
+                        <p className="text-xs text-gray-500 font-light mb-2.5">
+                          A sensação real do lugar onde o bebê passará esse momento.
+                        </p>
+                        <div className="grid grid-cols-2 gap-2">
+                          {[
+                            { key: 'fechado', label: 'Fechado', desc: 'Aconchegante e quente' },
+                            { key: 'ventilado', label: 'Ventilado', desc: 'Ar correndo levemente' },
+                            { key: 'ventilador', label: 'Com ventilador', desc: 'Fluxo contínuo ativo' },
+                            { key: 'ar-condicionado', label: 'Ar Condicionado', desc: 'Climatizado mais frio' },
+                            { key: 'externo', label: 'Área externa', desc: 'Ao ar livre' },
+                            { key: 'vento-frio', label: 'Vento frio', desc: 'Brigas e correntes frias' }
+                          ].map((item) => (
+                            <button
+                              key={item.key}
+                              type="button"
+                              id={`cond-opt-${item.key}`}
+                              onClick={() => setAnswers(prev => ({ ...prev, condition: item.key as EnvironmentCondition }))}
+                              className={`p-2.5 rounded-xl border text-left transition-all duration-300 cursor-pointer shadow-3xs hover:shadow-2xs ${
+                                answers.condition === item.key
+                                  ? 'bg-gradient-to-r from-emerald-50/50 to-white border-emerald-300 text-emerald-850 glow-emerald'
+                                  : 'bg-white hover:bg-gray-50 border-[#EEDBCD]/40 text-gray-650'
+                              }`}
+                            >
+                              <span className="font-semibold text-xs text-brand-charcoal block">{item.label}</span>
+                              <span className="text-[10px] text-brand-charcoal/50 font-light mt-0.5 block">{item.desc}</span>
+                            </button>
+                          ))}
                         </div>
+                      </div>
 
-                        <div>
-                          <label className="font-display text-sm font-medium text-brand-charcoal block mb-2">
-                            Onde o bebê ficará:
-                          </label>
-                          <div className="grid grid-cols-2 gap-2">
-                            {[
-                              { key: 'interno', label: 'Interno 🏡' },
-                              { key: 'externo', label: 'Externo 🌳' }
-                            ].map((item) => (
-                              <button
-                                key={item.key}
-                                type="button"
-                                id={`loc-opt-${item.key}`}
-                                onClick={() => setAnswers(prev => ({ ...prev, location: item.key as EnvironmentLocation }))}
-                                className={`p-3 rounded-xl border text-center transition-all duration-300 cursor-pointer text-xs font-semibold shadow-2xs hover:shadow-xs ${
-                                  answers.location === item.key
-                                    ? 'bg-gradient-to-tr from-brand-sage/60 to-[#EAF0EC]/20 border-emerald-300 text-emerald-800 glow-emerald'
-                                    : 'bg-white border-[#EEDBCD]/45 text-gray-600 hover:border-emerald-200'
-                                }`}
-                              >
-                                {item.label}
-                              </button>
-                            ))}
-                          </div>
+                      <div className="pt-1">
+                        <label className="font-display text-sm font-medium text-brand-charcoal block mb-2">
+                          Período do Dia: ☀️🌙
+                        </label>
+                        <div className="grid grid-cols-2 gap-2">
+                          {[
+                            { key: 'dia', label: 'Dia ☀️', style: 'hover:border-amber-200' },
+                            { key: 'noite', label: 'Noite 🌙', style: 'hover:border-indigo-200' }
+                          ].map((item) => (
+                            <button
+                              key={item.key}
+                              type="button"
+                              id={`period-opt-${item.key}`}
+                              onClick={() => setAnswers(prev => ({ ...prev, period: item.key as PeriodOfDay }))}
+                              className={`p-3 rounded-xl border text-center transition-all duration-300 cursor-pointer text-xs font-semibold shadow-3xs hover:shadow-2xs ${
+                                answers.period === item.key
+                                  ? 'bg-gradient-to-tr from-[#FFF9F2] to-amber-100/30 border-amber-300 text-amber-800 glow-amber'
+                                  : `bg-white border-[#EEDBCD]/45 text-gray-600 ${item.style}`
+                              }`}
+                            >
+                              {item.label}
+                            </button>
+                          ))}
                         </div>
                       </div>
                     </motion.div>
                   )}
 
-                  {/* STEP 3: WEATHER CONDITION */}
                   {step === 3 && (
                     <motion.div
                       key="step3"
                       initial={{ opacity: 0, y: 10 }}
                       animate={{ opacity: 1, y: 0 }}
                       exit={{ opacity: 0, y: -10 }}
-                      className="space-y-6"
+                      className="space-y-5"
                     >
                       <div className="text-center">
                         <label className="font-display text-md sm:text-lg font-medium text-brand-charcoal block mb-1">
-                          Qual é a temperatura do ambiente? 🌡️
+                          Como o ambiente está agora? 🌡️
                         </label>
                         <p className="text-xs text-gray-500 font-light mb-4">
-                          Arraste o controle ou ajuste de forma fina no - e + até bater com o clima real.
+                          Substitua a lida puramente numérica pela percepção do clima atual.
                         </p>
 
-                        {/* Interactive Thermometer Status Widget */}
-                        <div className={`mx-auto rounded-3xl p-5 border text-center transition-all max-w-sm ${getTempColorStyle(answers.temperature).bg}`}>
-                          <div className="text-xs font-semibold tracking-wider uppercase opacity-85">Temperatura selecionada</div>
-                          <div className="flex items-center justify-center gap-4 mt-2 mb-1">
-                            <motion.button
-                              id="btn-temp-dec"
-                              type="button"
-                              onClick={() => setAnswers(prev => ({ ...prev, temperature: Math.max(5, prev.temperature - 1) }))}
-                              whileTap={{ scale: 0.9 }}
-                              className="w-10 h-10 rounded-full bg-white flex items-center justify-center text-brand-charcoal shadow-xs hover:shadow-md cursor-pointer border border-[#EEDBCD]/40"
-                              title="Diminuir 1 grau"
-                            >
-                              <Minus className="w-5 h-5 stroke-[2.5]" />
-                            </motion.button>
-                            
-                            <span className="text-4xl sm:text-5xl font-display font-medium tracking-tight">
-                              {answers.temperature}<span className="text-2xl font-light">°C</span>
-                            </span>
-
-                            <motion.button
-                              id="btn-temp-inc"
-                              type="button"
-                              onClick={() => setAnswers(prev => ({ ...prev, temperature: Math.min(40, prev.temperature + 1) }))}
-                              whileTap={{ scale: 0.9 }}
-                              className="w-10 h-10 rounded-full bg-white flex items-center justify-center text-brand-charcoal shadow-xs hover:shadow-md cursor-pointer border border-[#EEDBCD]/40"
-                              title="Aumentar 1 grau"
-                            >
-                              <Plus className="w-5 h-5 stroke-[2.5]" />
-                            </motion.button>
-                          </div>
-                          
-                          <p className="text-xs font-medium italic mt-2 opacity-90 block">
-                            {answers.temperature < 15 && '🥶 Ar congelante! Muitas camadas e proteção especial.'}
-                            {answers.temperature >= 15 && answers.temperature < 19 && '🍃 Clima fresquinho de outono ou ar-condicionado moderado.'}
-                            {answers.temperature >= 19 && answers.temperature < 23 && '😊 Temperatura deliciosa de brisa agradável.'}
-                            {answers.temperature >= 23 && answers.temperature < 27 && '⛅ Temperatura morna de primavera aconchegante.'}
-                            {answers.temperature >= 27 && answers.temperature < 32 && '🌞 Dia quente de verão! Cuidado com sobreposições.'}
-                            {answers.temperature >= 32 && '🔥 Calor intenso! Tecido único e super arejado.'}
-                          </p>
-                        </div>
-                      </div>
-
-                      {/* Cool Slide lever */}
-                      <div className="space-y-1">
-                        <div className="flex justify-between text-xs text-gray-500 font-light px-1">
-                          <span>5°C (Frio Extremo)</span>
-                          <span>22°C (Agradável)</span>
-                          <span>40°C (Calor Extremo)</span>
-                        </div>
-                        <div className="relative mt-2">
-                          <input
-                            id="input-temp-slider"
-                            type="range"
-                            min="5"
-                            max="40"
-                            value={answers.temperature}
-                            onChange={(e) => setAnswers(prev => ({ ...prev, temperature: parseInt(e.target.value) }))}
-                            className="w-full h-2.5 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-brand-rose focus:outline-none"
-                          />
-                        </div>
-                      </div>
-
-                      {/* Wind chill question */}
-                      <div className="pt-2">
-                        <label className="font-display text-sm font-medium text-brand-charcoal block mb-2">
-                          Tem vento ou sensação mais fria do que marca o termômetro? 🍃
-                        </label>
-                        <div className="grid grid-cols-2 gap-4">
+                        {/* Feeling options list/grid */}
+                        <div className="grid grid-cols-2 gap-2.5 max-w-md mx-auto">
                           {[
-                            { value: true, label: 'Sim, venta ou tem correntes', desc: 'Indica maior proteção externa', icon: Wind },
-                            { value: false, label: 'Não, ar está calmo', desc: 'Temperatura pura e constante', icon: Sun }
-                          ].map((item) => {
-                            const IconCmp = item.icon;
-                            return (
-                              <button
-                                key={item.value.toString()}
-                                type="button"
-                                id={`wind-opt-${item.value}`}
-                                onClick={() => setAnswers(prev => ({ ...prev, hasWind: item.value }))}
-                                className={`p-4 rounded-2xl border text-left transition-all duration-300 cursor-pointer shadow-2xs hover:shadow-xs hover:border-[#E58793]/40 ${
-                                  answers.hasWind === item.value
-                                    ? 'bg-gradient-to-tr from-brand-sage/60 to-[#EAF0EC]/20 border-emerald-300 text-emerald-800 glow-emerald'
-                                    : 'bg-white border-[#EEDBCD]/45 text-gray-650'
-                                }`}
-                              >
-                                <div className="flex items-center gap-2 mb-1">
-                                  <IconCmp className={`w-4 h-4 ${answers.hasWind === item.value ? 'text-emerald-700 font-semibold' : 'text-gray-400'}`} />
-                                  <span className={`text-sm font-medium ${answers.hasWind === item.value ? 'text-emerald-850 font-semibold' : 'text-gray-700'}`}>{item.label}</span>
+                            { key: 'muito-quente', label: 'Muito quente', emoji: '🥵', desc: 'Calor acima de 30°C' },
+                            { key: 'quente', label: 'Quente', emoji: '☀️', desc: 'Sol entre 27°C e 30°C' },
+                            { key: 'agradavel', label: 'Agradável', emoji: '😊', desc: 'Varanda fresca (22°C - 26°C)' },
+                            { key: 'fresquinho', label: 'Fresquinho', emoji: '🌥️', desc: 'Outono ameno (18°C - 21°C)' },
+                            { key: 'frio', label: 'Frio', emoji: '🥶', desc: 'Estação fria (12°C - 17°C)' },
+                            { key: 'muito-frio', label: 'Muito frio', emoji: '❄️', desc: 'Geada abaixo de 12°C' }
+                          ].map((item) => (
+                            <button
+                              key={item.key}
+                              type="button"
+                              id={`feel-opt-${item.key}`}
+                              onClick={() => setAnswers(prev => {
+                                const updated = { ...prev, feeling: item.key as AmbientFeeling };
+                                // If they have temperature enabled, update it to align nicely
+                                if (prev.temperature !== null) {
+                                  let defaultT = 23;
+                                  if (item.key === 'muito-quente') defaultT = 33;
+                                  else if (item.key === 'quente') defaultT = 28;
+                                  else if (item.key === 'agradavel') defaultT = 23;
+                                  else if (item.key === 'fresquinho') defaultT = 19;
+                                  else if (item.key === 'frio') defaultT = 14;
+                                  else defaultT = 9;
+                                  updated.temperature = defaultT;
+                                }
+                                return updated;
+                              })}
+                              className={`p-3 rounded-2xl border text-left transition-all duration-300 cursor-pointer shadow-3xs flex flex-col justify-between h-[75px] ${
+                                answers.feeling === item.key
+                                  ? 'bg-gradient-to-tr from-[#FFF9F2] to-amber-50/20 border-amber-300 glow-amber text-[#b47716]'
+                                  : 'bg-white hover:bg-gray-50 border-[#EEDBCD]/40 text-gray-700'
+                              }`}
+                            >
+                              <div className="flex items-center justify-between w-full h-full">
+                                <div>
+                                  <span className="font-semibold text-xs text-brand-charcoal block leading-tight">{item.label}</span>
+                                  <span className="text-[10px] text-gray-500 font-light block mt-1 leading-snug">{item.desc}</span>
                                 </div>
-                                <span className="text-xs text-brand-charcoal/55 font-light leading-snug">{item.desc}</span>
-                              </button>
-                            );
-                          })}
+                                <span className="text-2xl ml-1 leading-none">{item.emoji}</span>
+                              </div>
+                            </button>
+                          ))}
                         </div>
+                      </div>
+
+                      {/* Optional: Input de temperatura aproximada em graus */}
+                      <div className="pt-4 border-t border-[#FAEDE2]">
+                        <button
+                          type="button"
+                          id="btn-toggle-temp"
+                          onClick={() => {
+                            if (answers.temperature === null) {
+                              // Enable temperature based on feeling
+                              let defaultT = 23;
+                              if (answers.feeling === 'muito-quente') defaultT = 33;
+                              else if (answers.feeling === 'quente') defaultT = 28;
+                              else if (answers.feeling === 'agradavel') defaultT = 23;
+                              else if (answers.feeling === 'fresquinho') defaultT = 19;
+                              else if (answers.feeling === 'frio') defaultT = 14;
+                              else defaultT = 9;
+                              setAnswers(prev => ({ ...prev, temperature: defaultT }));
+                            } else {
+                              // Disable temperature
+                              setAnswers(prev => ({ ...prev, temperature: null }));
+                            }
+                          }}
+                          className="flex items-center gap-2.5 text-xs text-brand-charcoal/85 hover:text-brand-rose font-semibold bg-white border border-[#EEDBCD]/45 p-3 rounded-xl transition-all shadow-3xs cursor-pointer w-full justify-center"
+                        >
+                          <Thermometer className={`w-3.5 h-3.5 ${answers.temperature !== null ? 'text-brand-rose animate-pulse' : 'text-gray-400'}`} />
+                          {answers.temperature !== null 
+                            ? 'Omitir temperatura aproximada em graus (°C)' 
+                            : 'Opcional: Informar temperatura aproximada em graus (°C)'}
+                        </button>
+
+                        {answers.temperature !== null && (
+                          <motion.div
+                            initial={{ opacity: 0, height: 0 }}
+                            animate={{ opacity: 1, height: 'auto' }}
+                            exit={{ opacity: 0, height: 0 }}
+                            className="space-y-4 pt-4 text-center overflow-hidden"
+                          >
+                            <p className="text-[11px] text-gray-500 font-light mb-1">
+                              Ajuste os graus de forma fina utilizando os botões de - e + ou arraste o controle deslizante abaixo:
+                            </p>
+
+                            {/* Interactive Thermometer Status Widget */}
+                            <div className={`mx-auto rounded-3xl p-4 border text-center transition-all max-w-sm ${getTempColorStyle(answers.temperature, answers.feeling).bg}`}>
+                              <span className="text-3xl font-display font-medium tracking-tight">
+                                {answers.temperature}<span className="text-xl font-light">°C</span>
+                              </span>
+                              
+                              <div className="flex items-center justify-center gap-3 mt-3">
+                                <motion.button
+                                  id="btn-temp-dec-wiz"
+                                  type="button"
+                                  onClick={() => setAnswers(prev => ({ ...prev, temperature: Math.max(5, (prev.temperature || 22) - 1) }))}
+                                  whileTap={{ scale: 0.9 }}
+                                  className="w-9 h-9 rounded-full bg-white flex items-center justify-center text-brand-charcoal shadow-xs hover:shadow-md cursor-pointer border border-[#EEDBCD]/45"
+                                  title="Diminuir 1 grau"
+                                >
+                                  <Minus className="w-4 h-4 stroke-[2.5]" />
+                                </motion.button>
+
+                                <div className="flex-1 max-w-[150px]">
+                                  <input
+                                    id="input-temp-slider-wiz"
+                                    type="range"
+                                    min="5"
+                                    max="40"
+                                    value={answers.temperature}
+                                    onChange={(e) => setAnswers(prev => ({ ...prev, temperature: parseInt(e.target.value) }))}
+                                    className="w-full h-1.5 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-brand-rose focus:outline-none"
+                                  />
+                                </div>
+
+                                <motion.button
+                                  id="btn-temp-inc-wiz"
+                                  type="button"
+                                  onClick={() => setAnswers(prev => ({ ...prev, temperature: Math.min(40, (prev.temperature || 22) + 1) }))}
+                                  whileTap={{ scale: 0.9 }}
+                                  className="w-9 h-9 rounded-full bg-white flex items-center justify-center text-brand-charcoal shadow-xs hover:shadow-md cursor-pointer border border-[#EEDBCD]/45"
+                                  title="Aumentar 1 grau"
+                                >
+                                  <Plus className="w-4 h-4 stroke-[2.5]" />
+                                </motion.button>
+                              </div>
+                            </div>
+                          </motion.div>
+                        )}
                       </div>
                     </motion.div>
                   )}
@@ -969,7 +1062,7 @@ export default function App() {
               {/* Header result badge info */}
               <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between pb-3 border-b border-[#FAEDE2] gap-3">
                 <div className="flex items-center gap-3">
-                  <div className={`p-2.5 rounded-full ${getTempColorStyle(answers.temperature).pill}`}>
+                  <div className={`p-2.5 rounded-full ${getTempColorStyle(answers.temperature, answers.feeling).pill}`}>
                     <Thermometer className="w-5 h-5" />
                   </div>
                   <div>
@@ -994,7 +1087,7 @@ export default function App() {
                     <Minus className="w-3.5 h-3.5 stroke-[2.5]" />
                   </button>
                   <span className="text-xs font-mono font-medium text-brand-charcoal px-2 bg-white rounded-md shadow-3xs py-1 min-w-[45px] text-center">
-                    {answers.temperature}°C
+                    {answers.temperature !== null ? `${answers.temperature}°C` : getFeelingFriendlyName(answers.feeling)}
                   </span>
                   <button
                     id="btn-res-inc"
@@ -1011,8 +1104,8 @@ export default function App() {
                     id="btn-res-wind"
                     type="button"
                     onClick={toggleResultWind}
-                    className={`p-1.5 rounded-md transition-all cursor-pointer ${answers.hasWind ? 'bg-[#EAF0EC] text-emerald-800' : 'text-gray-400 hover:text-gray-600'}`}
-                    title={answers.hasWind ? "Remover efeito de vento" : "Simular vento/sensação fria"}
+                    className={`p-1.5 rounded-md transition-all cursor-pointer ${answers.condition === 'vento-frio' ? 'bg-emerald-50 text-emerald-800' : 'text-gray-400 hover:text-gray-650'}`}
+                    title={answers.condition === 'vento-frio' ? "Remover efeito de vento" : "Simular vento/sensação fria"}
                   >
                     <Wind className="w-3.5 h-3.5" />
                   </button>
@@ -1024,31 +1117,80 @@ export default function App() {
                 <span className="text-[10px] font-semibold text-gray-450 uppercase tracking-widest mb-3 flex items-center gap-1.5 leading-none">
                   <Thermometer className="w-3.5 h-3.5 text-brand-rose" /> Termômetro de Conforto Térmico
                 </span>
-                <div className="grid grid-cols-3 gap-2.5 w-full max-w-sm">
-                  <div className={`py-2.5 px-3 rounded-2xl text-center flex flex-col items-center justify-center transition-all duration-300 w-full ${
-                    answers.temperature < 19 
-                      ? 'bg-gradient-to-tr from-sky-100 to-sky-50 border border-sky-300 text-sky-850 shadow-2xs font-semibold glow-sky' 
-                      : 'bg-[#FAF6F0]/50 border border-transparent text-gray-400 opacity-60 font-light'
-                  }`}>
-                    <span className="text-xl">🥶</span>
-                    <span className="text-[11px] mt-1 font-medium">Frio</span>
+                {(() => {
+                  const effectiveTemp = answers.temperature !== null ? answers.temperature : (() => {
+                    if (answers.feeling === 'muito-quente') return 33;
+                    if (answers.feeling === 'quente') return 28;
+                    if (answers.feeling === 'agradavel') return 23;
+                    if (answers.feeling === 'fresquinho') return 19;
+                    if (answers.feeling === 'frio') return 14;
+                    return 9;
+                  })();
+                  return (
+                    <div className="grid grid-cols-3 gap-2.5 w-full max-w-sm">
+                      <div className={`py-2.5 px-3 rounded-2xl text-center flex flex-col items-center justify-center transition-all duration-300 w-full ${
+                        effectiveTemp < 19 
+                          ? 'bg-gradient-to-tr from-sky-100 to-sky-50 border border-sky-300 text-sky-850 shadow-2xs font-semibold glow-sky' 
+                          : 'bg-[#FAF6F0]/50 border border-transparent text-gray-400 opacity-60 font-light'
+                      }`}>
+                        <span className="text-xl">🥶</span>
+                        <span className="text-[11px] mt-1 font-medium">Frio</span>
+                      </div>
+                      <div className={`py-2.5 px-3 rounded-2xl text-center flex flex-col items-center justify-center transition-all duration-300 w-full ${
+                        effectiveTemp >= 19 && effectiveTemp < 27
+                          ? 'bg-gradient-to-tr from-emerald-100 to-emerald-50 border border-emerald-300 text-emerald-850 shadow-2xs font-semibold glow-emerald' 
+                          : 'bg-[#FAF6F0]/50 border border-transparent text-gray-400 opacity-60 font-light'
+                      }`}>
+                        <span className="text-xl">😊</span>
+                        <span className="text-[11px] mt-1 font-medium">Normal</span>
+                      </div>
+                      <div className={`py-2.5 px-3 rounded-2xl text-center flex flex-col items-center justify-center transition-all duration-300 w-full ${
+                        effectiveTemp >= 27
+                          ? 'bg-gradient-to-tr from-rose-100 to-rose-50 border border-rose-300 text-rose-850 shadow-2xs font-semibold glow-rose' 
+                          : 'bg-[#FAF6F0]/50 border border-transparent text-gray-400 opacity-60 font-light'
+                      }`}>
+                        <span className="text-xl">🥵</span>
+                        <span className="text-[11px] mt-1 font-medium">Muito Quente</span>
+                      </div>
+                    </div>
+                  );
+                })()}
+              </div>
+
+              {/* CORE METRIC CARD: LAYER COUNT */}
+              <div className="bg-[#FAF3FF]/80 backdrop-blur-xs border border-purple-200/55 rounded-2xl p-5 flex flex-col md:flex-row items-center gap-4 glow-purple shadow-3xs">
+                <div className="flex-1">
+                  <div className="flex items-center gap-2 mb-1.5 text-xs text-brand-charcoal/70 uppercase font-semibold">
+                    <Layers className="w-4 h-4 text-purple-650" /> RECOMENDAÇÃO DE CAMADAS
                   </div>
-                  <div className={`py-2.5 px-3 rounded-2xl text-center flex flex-col items-center justify-center transition-all duration-300 w-full ${
-                    answers.temperature >= 19 && answers.temperature < 27
-                      ? 'bg-gradient-to-tr from-emerald-100 to-emerald-50 border border-emerald-300 text-emerald-850 shadow-2xs font-semibold glow-emerald' 
-                      : 'bg-[#FAF6F0]/50 border border-transparent text-gray-400 opacity-60 font-light'
-                  }`}>
-                    <span className="text-xl">😊</span>
-                    <span className="text-[11px] mt-1 font-medium">Normal</span>
-                  </div>
-                  <div className={`py-2.5 px-3 rounded-2xl text-center flex flex-col items-center justify-center transition-all duration-300 w-full ${
-                    answers.temperature >= 27
-                      ? 'bg-gradient-to-tr from-rose-100 to-rose-50 border border-rose-300 text-rose-850 shadow-2xs font-semibold glow-rose' 
-                      : 'bg-[#FAF6F0]/50 border border-transparent text-gray-400 opacity-60 font-light'
-                  }`}>
-                    <span className="text-xl">🥵</span>
-                    <span className="text-[11px] mt-1 font-medium">Muito Quente</span>
-                  </div>
+                  <h4 className="font-display font-bold text-2xl text-purple-950 mb-1">
+                    {result.layerCount} {result.layerCount === 1 ? 'Camada única' : result.layerCount === 2 ? 'Camadas leves' : 'Camadas aconchegantes'}
+                  </h4>
+                  <p className="text-xs text-purple-900/80 font-light leading-relaxed">
+                    {result.layersDescription}
+                  </p>
+                </div>
+
+                {/* Layer visual stack pills */}
+                <div className="flex flex-col gap-1 w-full md:w-32">
+                  {Array.from({ length: result.layerCount }).map((_, i) => (
+                    <motion.div
+                      key={i}
+                      initial={{ scaleX: 0 }}
+                      animate={{ scaleX: 1 }}
+                      transition={{ delay: i * 0.1 }}
+                      className={`h-6 rounded-lg flex items-center justify-between px-3 text-[10px] font-bold tracking-tight text-white shadow-2xs ${
+                        i === 0 ? 'bg-gradient-to-r from-indigo-500 to-indigo-600 border border-indigo-400/20' : i === 1 ? 'bg-gradient-to-r from-purple-500 to-purple-600 border border-purple-400/20' : 'bg-gradient-to-r from-pink-400 to-pink-500 border border-pink-300/20'
+                      }`}
+                    >
+                      <span>💡 Camada {i + 1}</span>
+                      <span className="font-light opacity-90">
+                        {i === 0 && 'Base / Toque'}
+                        {i === 1 && 'Intermediária'}
+                        {i === 2 && 'Isolamento'}
+                      </span>
+                    </motion.div>
+                  ))}
                 </div>
               </div>
 
@@ -1139,43 +1281,6 @@ export default function App() {
                       </motion.div>
                     );
                   })}
-                </div>
-              </div>
-
-              {/* CORE METRIC CARD: LAYER COUNT */}
-              <div className="bg-[#FAF3FF]/80 backdrop-blur-xs border border-purple-200/55 rounded-2xl p-5 flex flex-col md:flex-row items-center gap-4 glow-purple shadow-3xs">
-                <div className="flex-1">
-                  <div className="flex items-center gap-2 mb-1.5 text-xs text-brand-charcoal/70 uppercase font-semibold">
-                    <Layers className="w-4 h-4 text-purple-650" /> RECOMENDAÇÃO DE CAMADAS
-                  </div>
-                  <h4 className="font-display font-bold text-2xl text-purple-950 mb-1">
-                    {result.layerCount} {result.layerCount === 1 ? 'Camada única' : result.layerCount === 2 ? 'Camadas leves' : 'Camadas aconchegantes'}
-                  </h4>
-                  <p className="text-xs text-purple-900/80 font-light leading-relaxed">
-                    {result.layersDescription}
-                  </p>
-                </div>
-
-                {/* Layer visual stack pills */}
-                <div className="flex flex-col gap-1 w-full md:w-32">
-                  {Array.from({ length: result.layerCount }).map((_, i) => (
-                    <motion.div
-                      key={i}
-                      initial={{ scaleX: 0 }}
-                      animate={{ scaleX: 1 }}
-                      transition={{ delay: i * 0.1 }}
-                      className={`h-6 rounded-lg flex items-center justify-between px-3 text-[10px] font-bold tracking-tight text-white shadow-2xs ${
-                        i === 0 ? 'bg-gradient-to-r from-indigo-500 to-indigo-600 border border-indigo-400/20' : i === 1 ? 'bg-gradient-to-r from-purple-500 to-purple-600 border border-purple-400/20' : 'bg-gradient-to-r from-pink-400 to-pink-500 border border-pink-300/20'
-                      }`}
-                    >
-                      <span>💡 Camada {i + 1}</span>
-                      <span className="font-light opacity-90">
-                        {i === 0 && 'Base / Toque'}
-                        {i === 1 && 'Intermediária'}
-                        {i === 2 && 'Isolamento'}
-                      </span>
-                    </motion.div>
-                  ))}
                 </div>
               </div>
 

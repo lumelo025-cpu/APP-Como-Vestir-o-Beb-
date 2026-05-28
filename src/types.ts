@@ -5,22 +5,24 @@
 
 export type BabyAge = 'recem-nascido' | '0-3-meses' | '3-6-meses' | '6-12-meses' | 'mais-de-1-ano';
 
-export type BabyState = 'dormindo' | 'acordado-casa' | 'passeando' | 'sling-colo' | 'ar-condicionado';
+export type BabyState = 'dormindo' | 'acordado' | 'colo-sling' | 'passeando' | 'carrinho';
 
 export type PeriodOfDay = 'dia' | 'noite';
 
 export type ThermalSensitivity = 'calor' | 'normal' | 'frio';
 
-export type EnvironmentLocation = 'interno' | 'externo';
+export type EnvironmentCondition = 'fechado' | 'ventilado' | 'ventilador' | 'ar-condicionado' | 'externo' | 'vento-frio';
+
+export type AmbientFeeling = 'muito-quente' | 'quente' | 'agradavel' | 'fresquinho' | 'frio' | 'muito-frio';
 
 export interface QuestionnaireAnswers {
   age: BabyAge;
   state: BabyState;
   period: PeriodOfDay;
-  temperature: number; // in °C
-  hasWind: boolean;
   sensitivity: ThermalSensitivity;
-  location: EnvironmentLocation;
+  condition: EnvironmentCondition;
+  feeling: AmbientFeeling;
+  temperature: number | null;
   wantsExtras: boolean;
 }
 
