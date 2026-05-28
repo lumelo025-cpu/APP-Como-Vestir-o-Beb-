@@ -99,12 +99,6 @@ const CLOTHING_DATABASE: Record<string, { name: string; desc: string; url: strin
     url: 'https://site.maecompleta.com/wp-content/uploads/2026/05/Captura-de-tela-2026-05-27-115437.png',
     heatingLevel: 'Muito Alto'
   },
-  'segunda-pele-termica': {
-    name: 'Segunda pele térmica respirável',
-    desc: 'Base térmica respirável para reter calor em rajadas geladas.',
-    url: 'https://site.maecompleta.com/wp-content/uploads/2026/05/Captura-de-tela-2026-05-27-120548.png',
-    heatingLevel: 'Alto'
-  },
   'meias': {
     name: 'Meias de Bebê',
     desc: 'Proteção suave e macia para evitar os pezinhos gelados.',
