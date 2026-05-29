@@ -1,5 +1,5 @@
-// Como Vestir o Bebê (BebêClima) - Lightweight Network-First Service Worker
-const CACHE_NAME = 'bebeclima-cache-v3';
+// ClimaBaby - Lightweight Network-First Service Worker
+const CACHE_NAME = 'climababy-cache-v1';
 
 // Assets to cache initially for offline reliability (just core shells)
 const PRECACHE_ASSETS = [

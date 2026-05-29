@@ -5,21 +5,92 @@
   --font-sans: "Quicksand", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   --font-display: "Fredoka", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   
-  --color-brand-beige: #FAFAFA;
-  --color-brand-cream: #F5F5F7;
-  --color-brand-pink: #FFF0F0;
-  --color-brand-lavender: #F5F5F7;
-  --color-brand-sage: #F4F7F5;
-  --color-brand-rose: #0071E3; /* Apple Blue as primary action indicator */
-  --color-brand-charcoal: #1D1D1F; /* Apple charcoal */
+  --color-brand-beige: #FFFDF9; /* Warm White */
+  --color-brand-cream: #F8F4EE; /* Soft Cream */
+  --color-brand-pink: #F4C7B8; /* Peach Baby */
+  --color-brand-lavender: #DCCFE8; /* Lavanda Suave */
+  --color-brand-sage: #BFC8B2; /* Sage Green */
+  --color-brand-beige-border: #EDE5DB; /* Light Beige */
+  
+  /* Overriding Tailwind pink shades dynamically to point to Peach Baby */
+  --color-pink-50: #FFFDF9; /* Warm White / Soft glow base */
+  --color-pink-100: #FFF3EE; /* Very soft Peach tone */
+  --color-pink-150: #FCECE5;
+  --color-pink-200: #F9DDD3;
+  --color-pink-250: #F7D1C3;
+  --color-pink-300: #F4BFA8;
+  --color-pink-350: #EF9D86;
+  --color-pink-400: #F4C7B8; /* Peach Baby Main Highlight */
+  --color-pink-500: #F4C7B8; /* Peach Baby Solid */
+  --color-pink-550: #E4A28E; 
+  --color-pink-600: #CB7C69;
+  --color-pink-650: #B96552; /* Highly readable dark Peach/Terracotta font */
+  --color-pink-700: #A14F3D;
+  --color-pink-750: #8A3D2C;
+  --color-pink-850: #6F2718;
+  --color-pink-900: #55170B;
+  --color-pink-950: #3C0E04;
+
+  /* Overriding Tailwind slate shades dynamic definitions to match maternal typography */
+  --color-slate-50: #FFFDF9; /* Warm White */
+  --color-slate-100: #F8F4EE; /* Soft Cream */
+  --color-slate-200: #EDE5DB; /* Light Beige used for borders */
+  --color-slate-300: #E1DACF;
+  --color-slate-400: #C2BAB0;
+  --color-slate-500: #8B847C; /* Secondary text color */
+  --color-slate-605: #756E66;
+  --color-slate-700: #5F5A55; /* Main text color */
+  --color-slate-800: #4B4642;
+  --color-slate-900: #3D3936;
+  --color-slate-950: #252321;
+
+  /* Overriding Tailwind rose shades dynamically to point to Sage Green */
+  --color-rose-50: #F6F7F5;
+  --color-rose-100: #EBEDE7;
+  --color-rose-150: #DFE4D9;
+  --color-rose-200: #D1D8C6;
+  --color-rose-250: #C5CEB8;
+  --color-rose-300: #B7C0AA;
+  --color-rose-500: #BFC8B2; /* Sage Green */
+  --color-rose-600: #A9B29B;
+  --color-rose-650: #939C86;
+  --color-rose-700: #737B67; /* Readable contrast sage */
+  --color-rose-850: #505648;
+  --color-rose-900: #393E33;
+  --color-rose-950: #22251F;
+
+  /* Overriding Tailwind blue and sky variables for Azul Bebê */
+  --color-blue-50: #F3F7FA;
+  --color-blue-100: #E6EEF5;
+  --color-blue-200: #D0E1EE;
+  --color-blue-300: #D7E8F2; /* Azul Bebê Claro */
+  --color-blue-500: #A1BDD1;
+  --color-blue-650: #4B789B;
+  --color-blue-700: #41729C;
+
+  /* Overriding purple / lavender variables to point to Lavanda Suave */
+  --color-purple-50: #FAF7FD;
+  --color-purple-100: #F3EEF9;
+  --color-purple-200: #E6DCF1;
+  --color-purple-300: #DCCFE8; /* Lavanda Suave */
+  --color-purple-500: #B59ECF;
+  --color-purple-600: #967CBA;
+  --color-purple-700: #74599A;
+  --color-purple-800: #5B437C;
+  --color-purple-900: #3C2A53;
 }
 
 /* Base style resets and Apple defaults */
 body {
   font-family: var(--font-sans);
-  background-color: #FFF9F3; /* Cozy warm peach-cream background */
-  color: #2D2727; /* Soft dark brown-dark-gray */
+  background-color: #FFFDF9; /* Warm White requested: #FFFDF9 */
+  color: #5F5A55; /* Main text color requested: #5F5A55 */
   -webkit-font-smoothing: antialiased;
+}
+
+/* Premium linear gradient requested */
+.bg-gradient-premium {
+  background: linear-gradient(135deg, #FFFDF9 0%, #F8F4EE 35%, #F4C7B8 100%);
 }
 
 h1, h2, h3, h4 {

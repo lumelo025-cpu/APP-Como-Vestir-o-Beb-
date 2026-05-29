@@ -1,6 +1,6 @@
 {
-  "name": "Como Vestir o Bebê",
-  "short_name": "BebêClima",
+  "name": "ClimaBaby",
+  "short_name": "ClimaBaby",
   "description": "Calculadora inteligente e acolhedora de vestimenta para seu bebê conforme a temperatura e o clima atual.",
   "start_url": "/",
   "display": "standalone",
@@ -9,13 +9,13 @@
   "orientation": "portrait",
   "icons": [
     {
-      "src": "https://site.maecompleta.com/wp-content/uploads/2026/05/ChatGPT-Image-27-de-mai.-de-2026-13_20_02.png",
+      "src": "https://site.maecompleta.com/wp-content/uploads/2026/05/Design-sem-nome-34.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "https://site.maecompleta.com/wp-content/uploads/2026/05/ChatGPT-Image-27-de-mai.-de-2026-13_20_02.png",
+      "src": "https://site.maecompleta.com/wp-content/uploads/2026/05/Design-sem-nome-34.png",
       "sizes": "192x192",
       "type": "image/png",
       "purpose": "maskable"
