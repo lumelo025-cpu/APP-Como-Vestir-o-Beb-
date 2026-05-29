@@ -362,47 +362,31 @@ export default function App() {
   };
 
   return (
-    <div className="min-h-screen bg-[#FAF6F0] selection:bg-brand-pink/60 selection:text-brand-charcoal text-scale-subtle flex flex-col items-center justify-between pb-8 pt-4 px-4 sm:px-6 relative overflow-x-hidden">
+    <div className="min-h-screen bg-gradient-to-b from-[#FFF0F5] via-[#FFFBF0] to-[#E6F3FF] selection:bg-pink-200 selection:text-pink-900 text-slate-800 flex flex-col items-center justify-between pb-8 pt-4 px-4 sm:px-6 relative overflow-x-hidden">
       
-      {/* Absolute Cosmic Backdrop for elegant playfulness with a futuristic touch */}
-      <div className="absolute top-0 left-0 right-0 h-[450px] overflow-hidden pointer-events-none z-0 select-none">
-        {/* Soft atmospheric glow planets/orbs */}
-        <div className="absolute -top-28 -left-28 w-[400px] h-[400px] rounded-full bg-[#FCE8E6] opacity-75 blur-3xl animate-pulse" style={{ animationDuration: '12s' }}></div>
-        <div className="absolute top-24 right-[-120px] w-[350px] h-[350px] rounded-full bg-[#F2EEFC] opacity-80 blur-3xl animate-pulse" style={{ animationDuration: '10s' }}></div>
-        <div className="absolute -top-10 left-[30%] w-80 h-80 rounded-full bg-[#EAF0EC] opacity-60 blur-3xl"></div>
-        
-        {/* Futuristic thin orbits */}
-        <div className="absolute top-10 left-10 w-[240px] h-[240px] rounded-full border border-pink-200/20 opacity-30 animate-spin-slow" style={{ animationDuration: '30s' }} />
-        <div className="absolute top-24 right-20 w-[180px] h-[180px] rounded-full border border-purple-200/25 opacity-40 animate-spin-slow" style={{ animationDuration: '45s', animationDirection: 'reverse' }} />
-        
-        {/* Little floating stars / stardust */}
-        <div className="absolute top-12 left-[15%] w-2 h-2 rounded-full bg-pink-300 opacity-40 animate-stardust-slow"></div>
-        <div className="absolute top-48 left-[45%] w-1.5 h-1.5 rounded-full bg-purple-300 opacity-50 animate-stardust-slow" style={{ animationDelay: '2s' }}></div>
-        <div className="absolute top-32 right-[25%] w-2.5 h-2.5 rounded-full bg-amber-200 opacity-65 animate-stardust-slow" style={{ animationDelay: '4s' }}></div>
-      </div>
-
-      {/* Modern App Header with Hamburger & PWA install shortcuts */}
-      <header className="w-full max-w-xl flex items-center justify-between py-1 mb-3.5 z-20">
+      {/* Playful & Cozy Header with pastel frames and PWA install shortcuts */}
+      <header className="w-full max-w-xl flex items-center justify-between py-1 mb-4 z-20">
         <div className="flex items-center gap-2">
-          {/* Menu Trigger Button */}
+          {/* Menu Trigger Button with baby-pink frame */}
           <motion.button 
             id="btn-open-menu"
-            whileTap={{ scale: 0.9 }}
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.92 }}
             onClick={() => setIsMenuOpen(true)}
-            className="p-2.5 bg-white border border-[#FAEDE2] hover:bg-[#FAF6F0] text-brand-charcoal rounded-full shadow-2xs hover:shadow-xs transition-all cursor-pointer flex items-center justify-center relative"
+            className="p-2.5 bg-pink-50 border-2 border-pink-100 hover:bg-pink-100 text-pink-600 rounded-full shadow-sm transition-all cursor-pointer flex items-center justify-center relative"
           >
-            <Menu className="w-5 h-5 text-brand-charcoal" />
+            <Menu className="w-4 h-4 stroke-[2.5]" />
           </motion.button>
         </div>
 
-        {/* Center application branding */}
+        {/* Center application branding with warm amber yellow frame */}
         <motion.div 
           onClick={() => { setScreen('welcome'); setStep(1); }}
-          className="cursor-pointer flex items-center justify-center gap-1.5 px-3 py-1.5 bg-white border border-[#FAEDE2] rounded-full shadow-3xs group hover:border-[#F2D7CD] transition-all"
-          whileHover={{ scale: 1.02 }}
-          whileTap={{ scale: 0.98 }}
+          className="cursor-pointer flex items-center justify-center gap-1.5 px-4 py-2 bg-yellow-50 border-2 border-yellow-200/80 rounded-full shadow-sm group hover:bg-yellow-100 hover:border-yellow-300 transition-all"
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.95 }}
         >
-          <div className="w-6 h-6 rounded-full overflow-hidden flex items-center justify-center border border-brand-rose/20 shrink-0">
+          <div className="w-6 h-6 rounded-full overflow-hidden flex items-center justify-center shrink-0 border border-yellow-200 shadow-xs">
             <img 
               src={menuClothesLogo} 
               alt="Logo Como Vestir o Bebê" 
@@ -410,27 +394,28 @@ export default function App() {
               referrerPolicy="no-referrer"
             />
           </div>
-          <span className="font-display font-medium text-xs sm:text-sm text-brand-charcoal select-none tracking-tight">
-            Como Vestir o Bebê
+          <span className="font-display font-bold text-xs sm:text-sm text-amber-800 select-none tracking-tight">
+            Como Vestir o Bebê 👶💛
           </span>
         </motion.div>
 
-        {/* Right download PWA icon shortcut */}
+        {/* Right download PWA icon shortcut with sky blue frame */}
         <div className="flex items-center">
           <motion.button 
             id="header-btn-install"
-            whileTap={{ scale: 0.9 }}
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.92 }}
             onClick={handleInstallApp}
-            className="p-2.5 bg-brand-rose/10 text-brand-rose border border-brand-rose/10 hover:bg-brand-rose/20 rounded-full shadow-3xs hover:shadow-2xs transition-all cursor-pointer flex items-center justify-center"
+            className="p-2.5 bg-sky-50 border-2 border-sky-100 hover:bg-sky-100 text-sky-600 rounded-full shadow-sm transition-all cursor-pointer flex items-center justify-center"
             title="Instalar Aplicativo"
           >
-            <Download className="w-4 h-4" />
+            <Download className="w-4 h-4 stroke-[2.5]" />
           </motion.button>
         </div>
       </header>
 
-      {/* Primary Card Viewport with elegant rounded glass edges and double-layer neon shadows */}
-      <main className="w-full max-w-xl bg-white/95 backdrop-blur-md rounded-3xl border border-white/65 shadow-[0_20px_50px_rgba(229,135,147,0.06)] hover:shadow-[0_25px_60px_rgba(229,135,147,0.12)] transition-all duration-500 z-10 overflow-hidden min-h-[500px] flex flex-col">
+      {/* Primary Card Viewport styled with generous roundedness, playful pink border, soft clouds shadow */}
+      <main className="w-full max-w-xl bg-white rounded-[2.2rem] border-4 border-pink-100/80 shadow-[0_16px_36px_rgba(255,182,193,0.18)] transition-all duration-300 z-10 overflow-hidden min-h-[500px] flex flex-col">
         <AnimatePresence mode="wait">
           
           {/* WELCOME SCREEN */}
@@ -445,126 +430,110 @@ export default function App() {
               id="screen-welcome"
             >
               <div className="pt-4 flex-1 flex flex-col justify-center items-center">
-                
-                {/* Visual Avatar Cover with Futuristic Back Orbit Ring */}
+                {/* Playful & Soft Premium App Icon Container with pastel watercolor frame */}
                 <div className="relative mb-6">
-                  {/* Outer Cyber Spin Orbit Ring */}
-                  <div className="absolute inset-[-14px] rounded-full border border-dashed border-[#E58793]/40 animate-spin-slow"></div>
-                  <div className="absolute inset-[-6px] rounded-full border border-gradient-to-tr from-[#FCE8E6] to-[#F2EEFC] opacity-70 animate-pulse"></div>
-                  
-                  {/* Soft Background Planetary Glow */}
-                  <div className="absolute inset-0 bg-gradient-to-tr from-[#FFF9F2] to-[#FCE8E6] rounded-full scale-125 blur-md"></div>
-                  
-                  {/* Logo Center */}
-                  <div className="relative w-28 h-28 mx-auto bg-white rounded-full flex items-center justify-center overflow-hidden border border-[#FAEDE2] shadow-md z-1">
+                  <div className="absolute -inset-1.5 bg-gradient-to-r from-pink-300 via-yellow-200 to-sky-300 rounded-[2.5rem] blur-md opacity-75 animate-pulse" />
+                  <div className="relative w-24 h-24 mx-auto bg-gradient-to-tr from-pink-50 via-white to-amber-50 rounded-[2rem] flex items-center justify-center overflow-hidden border-2 border-pink-200 shadow-md z-1">
                     <motion.img
-                      animate={{ y: [0, -3, 0] }}
+                      animate={{ y: [0, -3, 0], rotate: [0, 1.5, -1.5, 0] }}
                       transition={{ repeat: Infinity, duration: 4, ease: 'easeInOut' }}
                       src={menuClothesLogo}
                       alt="Logo Como Vestir o Bebê"
-                      className="w-full h-full object-cover"
+                      className="w-16 h-16 object-cover"
                       referrerPolicy="no-referrer"
                     />
                   </div>
-                  
-                  {/* Radiant Sparks Badge */}
-                  <div className="absolute -right-1.5 -bottom-1.5 bg-gradient-to-tr from-amber-400 to-yellow-300 p-2 rounded-full shadow-lg text-white z-2 border border-white animate-bounce" style={{ animationDuration: '4s' }}>
-                    <Sparkles className="w-4 h-4 fill-white" />
-                  </div>
                 </div>
 
-                <h2 className="font-display text-2xl sm:text-3.5xl font-bold text-brand-charcoal tracking-tight leading-tight mb-3 px-1">
-                  Vestir seu bebê com <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#D4717E] to-[#E58793] glow-pink">carinho</span> e sem dúvidas!
+                <h2 className="font-display text-2xl sm:text-3xl font-semibold text-pink-600 tracking-tight leading-tight mb-3 px-1">
+                  Vestir seu bebê com carinho e cores! 🌸✨
                 </h2>
 
-                <p className="text-gray-500 font-light text-sm sm:text-base max-w-sm leading-relaxed mb-6">
-                  Esqueça a insegurança de vestir a mais ou a menos. Responda a algumas perguntas simples sobre o dia de hoje e receba recomendações térmicas seguras e personalizadas.
+                <p className="text-gray-600 font-medium text-xs sm:text-sm max-w-sm leading-relaxed mb-6">
+                  Esqueça a insegurança de vestir a mais ou a menos. Responda a algumas perguntas simples e receba recomendações seguras baseadas no método de camadas.
                 </p>
 
-                {/* Aesthetic Glassmorphic Tags */}
+                {/* Elegant, colorful baby badge categories */}
                 <div className="flex flex-wrap justify-center gap-2 mb-6 pointer-events-none">
-                  <span className="text-xs font-medium px-3.5 py-1.5 bg-brand-sage/60 text-emerald-800 rounded-full border border-emerald-150 shadow-3xs backdrop-blur-xs flex items-center gap-1">👶 Sem excesso de camadas</span>
-                  <span className="text-xs font-medium px-3.5 py-1.5 bg-[#F2EEFC]/60 text-purple-800 rounded-full border border-purple-150 shadow-3xs backdrop-blur-xs flex items-center gap-1">🌙 Sono seguro</span>
-                  <span className="text-xs font-medium px-3.5 py-1.5 bg-brand-pink/60 text-[#D4717E] rounded-full border border-pink-150 shadow-2xs backdrop-blur-xs flex items-center gap-1">🌡️ Inteligência térmica</span>
+                  <span className="text-xs font-semibold px-3 py-1.5 bg-rose-50 text-rose-700 rounded-full border border-rose-200 flex items-center gap-1 shadow-2xs">👶 Sem excesso</span>
+                  <span className="text-xs font-semibold px-3 py-1.5 bg-sky-50 text-sky-700 rounded-full border border-sky-200 flex items-center gap-1 shadow-2xs">🌙 Sono seguro</span>
+                  <span className="text-xs font-semibold px-3 py-1.5 bg-amber-50 text-amber-800 rounded-full border border-amber-200 flex items-center gap-1 shadow-2xs">🌡️ Apoio térmico</span>
                 </div>
               </div>
 
               <div className="w-full mt-4 space-y-6">
                 
-                {/* Hero Gradient Conversion Button */}
+                {/* Playful & Solid Primary Button with a delicate cotton-candy pink palette */}
                 <motion.button
                   id="btn-start"
                   onClick={startWizard}
-                  whileHover={{ scale: 1.02, y: -1 }}
-                  whileTap={{ scale: 0.98 }}
-                  className="w-full py-4.5 bg-gradient-to-r from-[#E58793] to-[#D4717E] hover:from-[#EC9CA7] hover:to-[#E58793] text-white font-semibold rounded-2xl shadow-lg shadow-brand-rose/30 hover:shadow-xl hover:shadow-brand-rose/40 transition-all outline-none cursor-pointer flex items-center justify-center gap-2 text-md sm:text-lg relative overflow-hidden group"
+                  whileHover={{ scale: 1.01, y: -0.5 }}
+                  whileTap={{ scale: 0.99 }}
+                  className="w-full py-4.5 bg-gradient-to-r from-pink-600 via-pink-550 to-rose-500 hover:from-pink-700 hover:to-rose-600 text-white font-display font-semibold rounded-2xl shadow-md transition-all outline-none cursor-pointer flex items-center justify-center gap-2 text-md active:translate-y-[1px]"
                 >
-                  <div className="absolute inset-0 bg-white/10 translate-y-[100%] group-hover:translate-y-0 transition-transform duration-300"></div>
-                  <span className="flex items-center gap-2">
-                    Começar Calculadora Dinâmica <ChevronRight className="w-5 h-5" />
-                  </span>
+                  <span>Começar calculadora de roupas</span>
+                  <ChevronRight className="w-5 h-5 stroke-[2.5]" />
                 </motion.button>
 
-                {/* CHECAGEM RÁPIDA (QUICK CHECK) CONTAINER WITH PREMIUM TRANSLUCENT DESIGN */}
-                <div className="pt-6 border-t border-[#FAEDE2]/60 text-left">
-                  <div className="flex items-center gap-2 mb-2">
-                    <div className="flex items-center justify-center p-1 bg-brand-rose/10 text-[#D4717E] rounded-lg">
-                      <Sparkles className="w-4 h-4 animate-pulse" />
-                    </div>
-                    <h3 className="font-display font-semibold text-xs sm:text-sm text-brand-charcoal uppercase tracking-wider">
-                      Checagem Rápida: Clima Instantâneo ⏱️
+                {/* QUICK CHECK COMPONENT: CHEERFUL & COLORFUL PEACH COMPONENT */}
+                <div className="pt-6 border-t border-pink-100 text-left">
+                  <div className="flex items-center gap-2 mb-1.5">
+                    <h3 className="font-display font-semibold text-sm text-pink-650 tracking-wide uppercase flex items-center gap-1">
+                      🩺 Consulta Rápida Express! ⏱️
                     </h3>
                   </div>
-                  <p className="text-xs text-gray-500 font-light mb-4">
-                    Com pressa? Informe apenas a temperatura da sala e o período do dia para testar as roupas certas em um piscar de olhos.
+                  <p className="text-xs text-gray-500 font-medium mb-4 leading-relaxed">
+                    Com pressa? Informe apenas a temperatura da sala e o período do dia para ver a sugestão de roupa.
                   </p>
 
-                  <div className="bg-white/70 backdrop-blur-md rounded-2xl p-4.5 border border-[#FAEDE2]/60 grid grid-cols-1 sm:grid-cols-2 gap-4 shadow-[0_4px_24px_rgba(229,135,147,0.02)]">
+                  <div className="bg-gradient-to-b from-[#FFFDF9] to-[#FFF7EE] rounded-3xl p-5 border-2 border-amber-100 grid grid-cols-1 sm:grid-cols-2 gap-4 shadow-3xs">
                     
                     {/* Temperature Controls */}
-                    <div className="space-y-2">
-                      <label className="text-xs font-semibold text-brand-charcoal flex items-center gap-1.5">
-                        <Thermometer className="w-4 h-4 text-brand-rose" /> Qual a temperatura?
+                    <div className="space-y-1.5">
+                      <label className="text-xs font-bold text-amber-900 flex items-center gap-1.5">
+                        <Thermometer className="w-4 h-4 text-rose-500 shrink-0" /> Qual a temperatura?
                       </label>
-                      <div className="flex items-center justify-between bg-white/90 border border-[#EEDBCD]/50 rounded-xl p-1.5 max-w-[170px] shadow-3xs hover:border-[#F2D7CD] transition-colors">
+                      <div className="flex items-center justify-between bg-white border border-pink-100 rounded-2xl p-1.5 max-w-[170px] shadow-sm">
                         <motion.button
                           type="button"
                           id="btn-quick-dec"
                           onClick={() => setQuickTemp(prev => Math.max(5, prev - 1))}
+                          whileHover={{ scale: 1.05 }}
                           whileTap={{ scale: 0.9 }}
-                          className="w-8 h-8 rounded-lg bg-gray-50 hover:bg-[#FCE8E6]/40 flex items-center justify-center text-brand-charcoal font-bold transition-all cursor-pointer"
+                          className="w-8 h-8 rounded-xl bg-pink-100/80 hover:bg-pink-100 border border-pink-200 flex items-center justify-center text-pink-700 font-bold transition-all cursor-pointer"
                         >
-                          <Minus className="w-3.5 h-3.5 text-gray-600" />
+                          <Minus className="w-3.5 h-3.5 stroke-[3]" />
                         </motion.button>
-                        <span className="font-display font-bold text-sm text-brand-charcoal min-w-[32px] text-center font-mono">
+                        <span className="font-sans font-bold text-md text-gray-900 min-w-[32px] text-center font-mono">
                           {quickTemp}°C
                         </span>
                         <motion.button
                           type="button"
                           id="btn-quick-inc"
                           onClick={() => setQuickTemp(prev => Math.min(41, prev + 1))}
+                          whileHover={{ scale: 1.05 }}
                           whileTap={{ scale: 0.9 }}
-                          className="w-8 h-8 rounded-lg bg-gray-50 hover:bg-[#FCE8E6]/40 flex items-center justify-center text-brand-charcoal font-bold transition-all cursor-pointer"
+                          className="w-8 h-8 rounded-xl bg-sky-100/80 hover:bg-sky-150 border border-sky-200 flex items-center justify-center text-sky-700 font-bold transition-all cursor-pointer"
                         >
-                          <Plus className="w-3.5 h-3.5 text-gray-600" />
+                          <Plus className="w-3.5 h-3.5 stroke-[3]" />
                         </motion.button>
                       </div>
                     </div>
 
                     {/* Period Controls */}
-                    <div className="space-y-2">
-                      <label className="text-xs font-semibold text-brand-charcoal flex items-center gap-1.5">
-                        <Clock className="w-4 h-4 text-purple-600 animate-float-gentle" /> Período do Dia:
+                    <div className="space-y-1.5">
+                      <label className="text-xs font-bold text-amber-900 flex items-center gap-1.5">
+                        <Clock className="w-4 h-4 text-pink-500 shrink-0" /> Período do Dia:
                       </label>
-                      <div className="grid grid-cols-2 gap-1 bg-white/90 border border-[#EEDBCD]/50 rounded-xl p-1 shadow-3xs">
+                      <div className="grid grid-cols-2 gap-1 bg-white border border-pink-100 rounded-2xl p-1 shadow-sm">
                         <button
                           type="button"
                           id="btn-quick-day"
                           onClick={() => setQuickPeriod('dia')}
-                          className={`py-2 rounded-lg text-xs font-medium transition-all cursor-pointer flex items-center justify-center gap-1 ${
+                          className={`py-2 rounded-xl text-xs font-bold transition-all cursor-pointer flex items-center justify-center gap-1 ${
                             quickPeriod === 'dia'
-                              ? 'bg-gradient-to-tr from-[#FFF9F2] to-amber-100/40 text-amber-800 shadow-3xs font-semibold border border-amber-200/50'
-                              : 'text-gray-550 hover:text-gray-700 hover:bg-gray-50/50'
+                              ? 'bg-[#FEF3C7] border border-[#FCD34D] text-[#92400E] shadow-sm'
+                              : 'text-amber-700 hover:text-amber-900 hover:bg-yellow-50'
                           }`}
                         >
                           Dia ☀️
@@ -573,10 +542,10 @@ export default function App() {
                           type="button"
                           id="btn-quick-night"
                           onClick={() => setQuickPeriod('noite')}
-                          className={`py-2 rounded-lg text-xs font-medium transition-all cursor-pointer flex items-center justify-center gap-1 ${
+                          className={`py-2 rounded-xl text-xs font-bold transition-all cursor-pointer flex items-center justify-center gap-1 ${
                             quickPeriod === 'noite'
-                              ? 'bg-gradient-to-tr from-[#F2EEFC] to-purple-100/40 text-purple-800 shadow-3xs font-semibold border border-purple-200/50'
-                              : 'text-gray-555 hover:text-gray-700 hover:bg-gray-50/50'
+                              ? 'bg-[#E0F2FE] border border-[#7DD3FC] text-[#0369A1] shadow-sm'
+                              : 'text-indigo-650 hover:text-indigo-900 hover:bg-indigo-50'
                           }`}
                         >
                           Noite 🌙
@@ -588,11 +557,11 @@ export default function App() {
                   <motion.button
                     id="btn-quick-submit"
                     onClick={() => handleQuickCheck(quickTemp, quickPeriod)}
-                    whileHover={{ scale: 1.015, y: -0.5 }}
-                    whileTap={{ scale: 0.985 }}
-                    className="w-full mt-3.5 py-3.5 bg-gradient-to-r from-emerald-50 to-[#EAF0EC] border border-emerald-200/80 hover:border-emerald-300 text-emerald-800 font-medium text-xs sm:text-sm rounded-xl transition-all cursor-pointer flex items-center justify-center gap-2 shadow-2xs hover:shadow-xs"
+                    whileHover={{ scale: 1.01 }}
+                    whileTap={{ scale: 0.99 }}
+                    className="w-full mt-3.5 py-4 bg-gradient-to-r from-pink-600 to-rose-500 hover:from-pink-700 hover:to-rose-600 text-white font-display font-semibold text-sm rounded-2xl transition-all cursor-pointer flex items-center justify-center gap-2 shadow-sm"
                   >
-                    Calcular Recomendações Únicas ⚡
+                    Ver recomendação direta <ChevronRight className="w-5 h-5 stroke-[2]" />
                   </motion.button>
                 </div>
               </div>
@@ -609,20 +578,20 @@ export default function App() {
               className="flex-1 flex flex-col justify-between p-6 sm:p-8"
               id="screen-wizard"
             >
-              {/* Steppers Header */}
+              {/* Playful & Soft Steppers Header */}
               <div className="mb-6">
-                <div className="flex justify-between items-center text-xs text-gray-500 mb-2">
-                  <span className="font-display font-medium text-brand-rose">Passo {step} de 3</span>
-                  <span className="font-light">
-                    {step === 1 && 'Sobre o bebê'}
-                    {step === 2 && 'Momento & Lugar'}
-                    {step === 3 && 'O Clima atual'}
+                <div className="flex justify-between items-center text-xs text-rose-500 font-bold mb-2">
+                  <span className="font-display font-bold">Passo {step} de 3 🌸</span>
+                  <span className="font-display font-semibold text-amber-700 bg-amber-50 px-2.5 py-0.5 rounded-full border border-amber-200/50">
+                    {step === 1 && 'Sobre o bebê 🍼'}
+                    {step === 2 && 'Momento & Lugar 🏡'}
+                    {step === 3 && 'O Clima atual 🌡️'}
                   </span>
                 </div>
-                {/* Custom animated progress bar */}
-                <div className="w-full h-1.5 bg-[#FAF6F0] rounded-full overflow-hidden">
+                {/* Playful and colorful animated progress bar */}
+                <div className="w-full h-2.5 bg-pink-50/80 rounded-full overflow-hidden border border-pink-100 shadow-sm">
                   <motion.div 
-                    className="h-full bg-brand-rose" 
+                    className="h-full bg-gradient-to-r from-[#FFB7CA] to-[#FFA3B1] rounded-full" 
                     initial={{ width: '33.3%' }}
                     animate={{ width: `${step * 33.3}%` }}
                     transition={{ duration: 0.3 }}
@@ -630,7 +599,7 @@ export default function App() {
                 </div>
               </div>
 
-              {/* Dynamic Steps Render */}
+              {/* Dynamic Steps Render with child themes */}
               <div className="flex-1 flex flex-col justify-center my-2">
                 <AnimatePresence mode="wait">
                   
@@ -644,13 +613,13 @@ export default function App() {
                       className="space-y-5"
                     >
                       <div>
-                        <label className="font-display text-md sm:text-lg font-medium text-brand-charcoal block mb-1">
+                        <label className="font-display text-base sm:text-lg font-bold text-rose-700 block mb-1">
                           Qual a idade do bebê? 🍼
                         </label>
-                        <p className="text-xs text-gray-500 font-light mb-3">
+                        <p className="text-xs text-gray-500 font-medium mb-3 leading-relaxed">
                           Bebês muito novos regulam menos a temperatura corporal e requerem mais aconchego.
                         </p>
-                        <div className="space-y-2.5">
+                        <div className="space-y-2">
                           {[
                             { key: 'recem-nascido', label: 'Recém-nascido', desc: 'Até os primeiros 28 dias' },
                             { key: '0-3-meses', label: '0 a 3 meses', desc: 'Fase de acomodação' },
@@ -662,22 +631,22 @@ export default function App() {
                               key={item.key}
                               id={`age-opt-${item.key}`}
                               onClick={() => setAnswers(prev => ({ ...prev, age: item.key as BabyAge }))}
-                              className={`w-full p-3.5 rounded-2xl text-left border transition-all duration-300 cursor-pointer flex items-center justify-between shadow-2xs hover:shadow-xs ${
+                              className={`w-full p-3 rounded-2xl text-left border-2 transition-all duration-200 cursor-pointer flex items-center justify-between shadow-sm ${
                                 answers.age === item.key
-                                  ? 'bg-gradient-to-r from-[#FCE8E6]/50 to-white border-[#E58793] glow-pink cyber-outline-pink'
-                                  : 'bg-white hover:bg-gray-50 border-[#EEDBCD]/40'
+                                  ? 'bg-gradient-to-r from-[#FFF0F2] to-[#FFD2D7] border-[#FFA3B1] text-pink-955 scale-[1.01]'
+                                  : 'bg-white hover:bg-pink-50/20 border-pink-100 text-slate-850'
                               }`}
                             >
                               <div>
-                                <span className="font-semibold text-sm sm:text-base text-brand-charcoal block">{item.label}</span>
-                                <span className="text-xs text-brand-charcoal/50 font-light mt-0.5 block">{item.desc}</span>
+                                <span className={`font-display font-bold text-sm sm:text-base block ${answers.age === item.key ? 'text-pink-955' : 'text-slate-850'}`}>{item.label}</span>
+                                <span className={`text-[11px] font-medium mt-0.5 block ${answers.age === item.key ? 'text-pink-700' : 'text-gray-500'}`}>{item.desc}</span>
                               </div>
-                              <div className={`w-5.5 h-5.5 rounded-full border-2 flex items-center justify-center transition-all shadow-4xs ${
+                              <div className={`w-6 h-6 rounded-full border-2 flex items-center justify-center transition-all ${
                                 answers.age === item.key 
-                                  ? 'bg-gradient-to-tr from-[#E58793] to-[#D4717E] border-transparent text-white' 
-                                  : 'border-[#EEDBCD]/60'
+                                  ? 'bg-pink-500 border-transparent text-white' 
+                                  : 'border-pink-100 bg-pink-50/50'
                               }`}>
-                                {answers.age === item.key && <Check className="w-3.5 h-3.5 stroke-[3]" />}
+                                {answers.age === item.key && <Check className="w-4 h-4 stroke-[4] text-white" />}
                               </div>
                             </button>
                           ))}
@@ -685,30 +654,30 @@ export default function App() {
                       </div>
 
                       <div className="pt-2">
-                        <label className="font-display text-md sm:text-lg font-medium text-brand-charcoal block mb-1">
+                        <label className="font-display text-base sm:text-lg font-bold text-rose-700 block mb-1">
                           O bebê costuma sentir: 🌡️
                         </label>
-                        <p className="text-xs text-gray-500 font-light mb-3">
+                        <p className="text-xs text-gray-500 font-medium mb-3 leading-relaxed">
                           Cada criança possui seu próprio biotipo natural de metabolizar calor.
                         </p>
                         <div className="grid grid-cols-3 gap-2">
                           {[
-                            { key: 'calor', label: 'Mais calor', emoji: '🥵' },
-                            { key: 'normal', label: 'Normal / Neutro', emoji: '😊' },
-                            { key: 'frio', label: 'Mais frio', emoji: '🥶' }
+                            { key: 'calor', label: 'Mais calor', emoji: '🥵', selectedBg: 'bg-[#FFEBEE] text-[#C62828] border-[#FFCDD2]' },
+                            { key: 'normal', label: 'Normal / Neutro', emoji: '😊', selectedBg: 'bg-[#E8F8F5] text-[#00695C] border-[#A3E4D7]' },
+                            { key: 'frio', label: 'Mais frio', emoji: '🥶', selectedBg: 'bg-[#EBF5FB] text-[#1565C0] border-[#AED6F1]' }
                           ].map((item) => (
                             <button
                               key={item.key}
                               id={`sens-opt-${item.key}`}
                               onClick={() => setAnswers(prev => ({ ...prev, sensitivity: item.key as ThermalSensitivity }))}
-                              className={`p-3 rounded-xl border text-center transition-all duration-300 cursor-pointer flex flex-col items-center gap-1.5 shadow-2xs hover:shadow-xs hover:border-[#E58793]/40 ${
+                              className={`p-3 rounded-2xl border-2 text-center transition-all duration-200 cursor-pointer flex flex-col items-center gap-1.5 shadow-sm hover:scale-102 ${
                                 answers.sensitivity === item.key
-                                  ? 'bg-gradient-to-tr from-[#FCE8E6]/50 to-white border-[#E58793] text-[#D4717E] font-semibold glow-pink'
-                                  : 'bg-white hover:bg-gray-50 border-[#EEDBCD]/50 text-gray-600'
+                                  ? `${item.selectedBg} border-2 scale-102`
+                                  : 'bg-white hover:bg-pink-50/20 border-pink-100 text-slate-700'
                               }`}
                             >
-                              <span className="text-lg">{item.emoji}</span>
-                              <span className="text-xs leading-none">{item.label}</span>
+                              <span className="text-2xl">{item.emoji}</span>
+                              <span className="text-xs leading-none font-semibold">{item.label}</span>
                             </button>
                           ))}
                         </div>
@@ -726,41 +695,41 @@ export default function App() {
                       className="space-y-5"
                     >
                       <div>
-                        <label className="font-display text-md sm:text-lg font-medium text-brand-charcoal block mb-1">
+                        <label className="font-display text-base sm:text-lg font-bold text-rose-700 block mb-1">
                           Vamos vestir o bebê para: 🛌
                         </label>
-                        <p className="text-xs text-gray-500 font-light mb-3">
-                          selecione a opção que mais se encaixa para o momento que vamos vestir o bebê
+                        <p className="text-xs text-gray-500 font-medium mb-3">
+                          Selecione o momento ou atividade atual do bebê.
                         </p>
                         <div className="grid grid-cols-1 gap-2">
                           {[
-                            { key: 'dormindo', label: 'Dormir', desc: 'Confortável e seguro' },
-                            { key: 'acordado', label: 'Acordado em casa', desc: 'Tempo livre para brincar e rolar' },
-                            { key: 'passeando', label: 'Passear ao ar livre', desc: 'Caminhando ou ao ar livre' },
-                            { key: 'colo-sling', label: 'No colo / Sling', desc: 'Colinho de mãe/pai que aquece bastantão' },
-                            { key: 'carrinho', label: 'Dentro do carrinho', desc: 'Protegido da brisa direta' }
+                            { key: 'dormindo', label: 'Dormir', desc: 'Confortável e seguro 💤' },
+                            { key: 'acordado', label: 'Acordado em casa', desc: 'Tempo livre para brincar e se movimentar 🧸' },
+                            { key: 'passeando', label: 'Passear ao ar livre', desc: 'Caminhando ou passeando na rua 🌳' },
+                            { key: 'colo-sling', label: 'No colo / Sling', desc: 'Colinho aconchegante de mãe ou pai 🤗' },
+                            { key: 'carrinho', label: 'Dentro do carrinho', desc: 'Protegido da brisa direta 🛒' }
                           ].map((item) => (
                             <button
                               key={item.key}
                               type="button"
                               id={`state-opt-${item.key}`}
                               onClick={() => setAnswers(prev => ({ ...prev, state: item.key as BabyState }))}
-                              className={`w-full p-3 rounded-xl text-left border transition-all duration-300 cursor-pointer flex items-center justify-between shadow-3xs hover:shadow-2xs ${
+                              className={`w-full p-3 rounded-2xl text-left border-2 transition-all duration-200 cursor-pointer flex items-center justify-between shadow-sm ${
                                 answers.state === item.key
-                                  ? 'bg-gradient-to-r from-[#F2EEFC]/55 to-white border-purple-300 glow-purple cyber-outline-purple'
-                                  : 'bg-white hover:bg-gray-50 border-[#EEDBCD]/40'
+                                  ? 'bg-gradient-to-r from-[#E0F2FE] to-[#BAE6FD] border-[#8AC9FA] text-sky-950 scale-[1.01]'
+                                  : 'bg-white hover:bg-pink-50/20 border-pink-100 text-slate-800'
                               }`}
                             >
                               <div>
-                                <span className="font-semibold text-xs sm:text-sm text-brand-charcoal block">{item.label}</span>
-                                <span className="text-[11px] text-brand-charcoal/50 font-light mt-0.5 block">{item.desc}</span>
+                                <span className={`font-display font-bold text-xs sm:text-sm block ${answers.state === item.key ? 'text-sky-955' : 'text-slate-800'}`}>{item.label}</span>
+                                <span className={`text-[11px] font-semibold mt-0.5 block ${answers.state === item.key ? 'text-sky-700' : 'text-gray-500'}`}>{item.desc}</span>
                               </div>
-                              <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center transition-all ${
+                              <div className={`w-6 h-6 rounded-full border-2 flex items-center justify-center transition-all ${
                                 answers.state === item.key 
-                                  ? 'bg-gradient-to-tr from-purple-500 to-indigo-500 border-transparent text-white' 
-                                  : 'border-[#EEDBCD]/60'
+                                  ? 'bg-sky-500 border-transparent text-white' 
+                                  : 'border-pink-200 bg-pink-50/50'
                               }`}>
-                                {answers.state === item.key && <Check className="w-3 h-3 stroke-[3]" />}
+                                {answers.state === item.key && <Check className="w-4 h-4 stroke-[4] text-white" />}
                               </div>
                             </button>
                           ))}
@@ -768,10 +737,10 @@ export default function App() {
                       </div>
 
                       <div>
-                        <label className="font-display text-md sm:text-lg font-medium text-brand-charcoal block mb-1">
+                        <label className="font-display text-base sm:text-lg font-bold text-rose-700 block mb-1">
                           O ambiente está: 🏡
                         </label>
-                        <p className="text-xs text-gray-500 font-light mb-2.5">
+                        <p className="text-xs text-gray-500 font-medium mb-2.5">
                           A sensação real do lugar onde o bebê passará esse momento.
                         </p>
                         <div className="grid grid-cols-2 gap-2">
@@ -781,44 +750,46 @@ export default function App() {
                             { key: 'ventilador', label: 'Com ventilador', desc: 'Fluxo contínuo ativo' },
                             { key: 'ar-condicionado', label: 'Ar Condicionado', desc: 'Climatizado mais frio' },
                             { key: 'externo', label: 'Área externa', desc: 'Ao ar livre' },
-                            { key: 'vento-frio', label: 'Vento frio', desc: 'Brigas e correntes frias' }
+                            { key: 'vento-frio', label: 'Vento frio', desc: 'Brisas e correntes frias' }
                           ].map((item) => (
                             <button
                               key={item.key}
                               type="button"
                               id={`cond-opt-${item.key}`}
                               onClick={() => setAnswers(prev => ({ ...prev, condition: item.key as EnvironmentCondition }))}
-                              className={`p-2.5 rounded-xl border text-left transition-all duration-300 cursor-pointer shadow-3xs hover:shadow-2xs ${
+                              className={`p-2.5 rounded-2xl border-2 text-left transition-all duration-200 cursor-pointer shadow-sm hover:scale-102 ${
                                 answers.condition === item.key
-                                  ? 'bg-gradient-to-r from-emerald-50/50 to-white border-emerald-300 text-emerald-850 glow-emerald'
-                                  : 'bg-white hover:bg-gray-50 border-[#EEDBCD]/40 text-gray-650'
+                                  ? 'bg-gradient-to-r from-[#FFF5F6] to-[#FFE0E4] border-[#FFB3C1] text-pink-900 border-2 font-semibold scale-[1.01]'
+                                  : 'bg-white hover:bg-pink-50/20 border-pink-100 text-slate-800'
                               }`}
                             >
-                              <span className="font-semibold text-xs text-brand-charcoal block">{item.label}</span>
-                              <span className="text-[10px] text-brand-charcoal/50 font-light mt-0.5 block">{item.desc}</span>
+                              <span className={`font-display font-semibold text-xs block ${answers.condition === item.key ? 'text-pink-955' : 'text-slate-800'}`}>{item.label}</span>
+                              <span className={`text-[10px] font-medium mt-0.5 block ${answers.condition === item.key ? 'text-pink-600' : 'text-gray-500'}`}>{item.desc}</span>
                             </button>
                           ))}
                         </div>
                       </div>
 
                       <div className="pt-1">
-                        <label className="font-display text-sm font-medium text-brand-charcoal block mb-2">
+                        <label className="font-display text-sm font-bold text-rose-700 block mb-2">
                           Período do Dia: ☀️🌙
                         </label>
                         <div className="grid grid-cols-2 gap-2">
                           {[
-                            { key: 'dia', label: 'Dia ☀️', style: 'hover:border-amber-200' },
-                            { key: 'noite', label: 'Noite 🌙', style: 'hover:border-indigo-200' }
+                            { key: 'dia', label: 'Dia ☀️' },
+                            { key: 'noite', label: 'Noite 🌙' }
                           ].map((item) => (
                             <button
                               key={item.key}
                               type="button"
                               id={`period-opt-${item.key}`}
                               onClick={() => setAnswers(prev => ({ ...prev, period: item.key as PeriodOfDay }))}
-                              className={`p-3 rounded-xl border text-center transition-all duration-300 cursor-pointer text-xs font-semibold shadow-3xs hover:shadow-2xs ${
+                              className={`p-3 rounded-2xl border-2 text-center transition-all duration-200 cursor-pointer text-xs font-semibold shadow-sm ${
                                 answers.period === item.key
-                                  ? 'bg-gradient-to-tr from-[#FFF9F2] to-amber-100/30 border-amber-300 text-amber-800 glow-amber'
-                                  : `bg-white border-[#EEDBCD]/45 text-gray-600 ${item.style}`
+                                  ? item.key === 'dia'
+                                    ? 'bg-[#FEF3C7] border-[#FCD34D] text-[#92400E] border-2'
+                                    : 'bg-[#E0F2FE] border-[#7DD3FC] text-[#0369A1] border-2'
+                                  : 'bg-white border-pink-100 text-slate-700 hover:bg-pink-50/10'
                               }`}
                             >
                               {item.label}
@@ -838,68 +809,109 @@ export default function App() {
                       className="space-y-5"
                     >
                       <div className="text-center">
-                        <label className="font-display text-md sm:text-lg font-medium text-brand-charcoal block mb-1">
+                        <label className="font-display text-base sm:text-lg font-bold text-rose-700 block mb-1">
                           Como o ambiente está agora? 🌡️
                         </label>
-                        <p className="text-xs text-gray-500 font-light mb-4">
+                        <p className="text-xs text-gray-500 font-medium mb-4 leading-relaxed">
                           Substitua a lida puramente numérica pela percepção do clima atual.
                         </p>
 
-                        {/* Feeling options list/grid */}
+                        {/* Feeling options list/grid with beautiful responsive climatic coloring */}
                         <div className="grid grid-cols-2 gap-2.5 max-w-md mx-auto">
                           {[
-                            { key: 'muito-quente', label: 'Muito quente', emoji: '🥵', desc: 'Calor acima de 30°C' },
-                            { key: 'quente', label: 'Quente', emoji: '☀️', desc: 'Sol entre 27°C e 30°C' },
-                            { key: 'agradavel', label: 'Agradável', emoji: '😊', desc: 'Varanda fresca (22°C - 26°C)' },
-                            { key: 'fresquinho', label: 'Fresquinho', emoji: '🌥️', desc: 'Outono ameno (18°C - 21°C)' },
-                            { key: 'frio', label: 'Frio', emoji: '🥶', desc: 'Estação fria (12°C - 17°C)' },
-                            { key: 'muito-frio', label: 'Muito frio', emoji: '❄️', desc: 'Geada abaixo de 12°C' }
-                          ].map((item) => (
-                            <button
-                              key={item.key}
-                              type="button"
-                              id={`feel-opt-${item.key}`}
-                              onClick={() => setAnswers(prev => {
-                                const updated = { ...prev, feeling: item.key as AmbientFeeling };
-                                // If they have temperature enabled, update it to align nicely
-                                if (prev.temperature !== null) {
-                                  let defaultT = 23;
-                                  if (item.key === 'muito-quente') defaultT = 33;
-                                  else if (item.key === 'quente') defaultT = 28;
-                                  else if (item.key === 'agradavel') defaultT = 23;
-                                  else if (item.key === 'fresquinho') defaultT = 19;
-                                  else if (item.key === 'frio') defaultT = 14;
-                                  else defaultT = 9;
-                                  updated.temperature = defaultT;
-                                }
-                                return updated;
-                              })}
-                              className={`p-3 rounded-2xl border text-left transition-all duration-300 cursor-pointer shadow-3xs flex flex-col justify-between h-[75px] ${
-                                answers.feeling === item.key
-                                  ? 'bg-gradient-to-tr from-[#FFF9F2] to-amber-50/20 border-amber-300 glow-amber text-[#b47716]'
-                                  : 'bg-white hover:bg-gray-50 border-[#EEDBCD]/40 text-gray-700'
-                              }`}
-                            >
-                              <div className="flex items-center justify-between w-full h-full">
-                                <div>
-                                  <span className="font-semibold text-xs text-brand-charcoal block leading-tight">{item.label}</span>
-                                  <span className="text-[10px] text-gray-500 font-light block mt-1 leading-snug">{item.desc}</span>
+                            { 
+                              key: 'muito-quente', 
+                              label: 'Muito quente', 
+                              emoji: '🥵', 
+                              desc: 'Acima de 30°C',
+                              activeBg: 'bg-[#FFEBEB] border-[#FFC1C1] text-[#900] shadow-xxs scale-102',
+                              normalBg: 'bg-white border-pink-100 text-slate-750 hover:border-pink-200 hover:bg-pink-50/10'
+                            },
+                            { 
+                              key: 'quente', 
+                              label: 'Quente', 
+                              emoji: '☀️', 
+                              desc: '27°C a 30°C',
+                              activeBg: 'bg-[#FFFBDB] border-[#FDE047] text-[#854D0E] shadow-xxs scale-102',
+                              normalBg: 'bg-white border-pink-100 text-slate-750 hover:border-pink-200 hover:bg-pink-50/10'
+                            },
+                            { 
+                              key: 'agradavel', 
+                              label: 'Agradável', 
+                              emoji: '😊', 
+                              desc: '22°C a 26°C',
+                              activeBg: 'bg-[#EBFDF4] border-[#86EFAC] text-[#166534] shadow-xxs scale-102',
+                              normalBg: 'bg-white border-pink-100 text-slate-750 hover:border-pink-200 hover:bg-pink-50/10'
+                            },
+                            { 
+                              key: 'fresquinho', 
+                              label: 'Fresquinho', 
+                              emoji: '🌥️', 
+                              desc: '18°C a 21°C',
+                              activeBg: 'bg-[#E3FAFC] border-[#99E9F2] text-[#0B7285] shadow-xxs scale-102',
+                              normalBg: 'bg-white border-pink-100 text-slate-750 hover:border-pink-200 hover:bg-pink-50/10'
+                            },
+                            { 
+                              key: 'frio', 
+                              label: 'Frio', 
+                              emoji: '🥶', 
+                              desc: '12°C a 17°C',
+                              activeBg: 'bg-[#E0F2FE] border-[#7DD3FC] text-[#0369A1] shadow-xxs scale-102',
+                              normalBg: 'bg-white border-pink-100 text-slate-750 hover:border-pink-200 hover:bg-pink-50/10'
+                            },
+                            { 
+                              key: 'muito-frio', 
+                              label: 'Muito frio', 
+                              emoji: '❄️', 
+                              desc: 'Abaixo de 12°C',
+                              activeBg: 'bg-[#F3E8FF] border-[#D8B4FE] text-[#6B21A8] shadow-xxs scale-102',
+                              normalBg: 'bg-white border-pink-100 text-slate-750 hover:border-pink-200 hover:bg-pink-50/10'
+                            }
+                          ].map((item) => {
+                            const isSelected = answers.feeling === item.key;
+                            return (
+                              <button
+                                key={item.key}
+                                type="button"
+                                id={`feel-opt-${item.key}`}
+                                onClick={() => setAnswers(prev => {
+                                  const updated = { ...prev, feeling: item.key as AmbientFeeling };
+                                  if (prev.temperature !== null) {
+                                    let defaultT = 23;
+                                    if (item.key === 'muito-quente') defaultT = 33;
+                                    else if (item.key === 'quente') defaultT = 28;
+                                    else if (item.key === 'agradavel') defaultT = 23;
+                                    else if (item.key === 'fresquinho') defaultT = 19;
+                                    else if (item.key === 'frio') defaultT = 14;
+                                    else defaultT = 9;
+                                    updated.temperature = defaultT;
+                                  }
+                                  return updated;
+                                })}
+                                className={`p-3 rounded-2xl border-2 text-left transition-all duration-200 cursor-pointer shadow-sm flex flex-col justify-between h-[80px] hover:scale-102 ${
+                                  isSelected ? item.activeBg : item.normalBg
+                                }`}
+                              >
+                                <div className="flex items-center justify-between w-full h-full">
+                                  <div>
+                                    <span className="font-display font-semibold text-xs sm:text-sm block leading-tight">{item.label}</span>
+                                    <span className={`text-[10px] font-medium block mt-1 leading-snug ${isSelected ? 'opacity-90' : 'text-gray-500'}`}>{item.desc}</span>
+                                  </div>
+                                  <span className="text-3xl ml-1 leading-none">{item.emoji}</span>
                                 </div>
-                                <span className="text-2xl ml-1 leading-none">{item.emoji}</span>
-                              </div>
-                            </button>
-                          ))}
+                              </button>
+                            );
+                          })}
                         </div>
                       </div>
-
-                      {/* Optional: Input de temperatura aproximada em graus */}
-                      <div className="pt-4 border-t border-[#FAEDE2]">
+ 
+                      {/* Optional: Input de temperatura aproximada em graus com design lúdico e amigável */}
+                      <div className="pt-4 border-t border-pink-100">
                         <button
                           type="button"
                           id="btn-toggle-temp"
                           onClick={() => {
                             if (answers.temperature === null) {
-                              // Enable temperature based on feeling
                               let defaultT = 23;
                               if (answers.feeling === 'muito-quente') defaultT = 33;
                               else if (answers.feeling === 'quente') defaultT = 28;
@@ -909,18 +921,21 @@ export default function App() {
                               else defaultT = 9;
                               setAnswers(prev => ({ ...prev, temperature: defaultT }));
                             } else {
-                              // Disable temperature
                               setAnswers(prev => ({ ...prev, temperature: null }));
                             }
                           }}
-                          className="flex items-center gap-2.5 text-xs text-brand-charcoal/85 hover:text-brand-rose font-semibold bg-white border border-[#EEDBCD]/45 p-3 rounded-xl transition-all shadow-3xs cursor-pointer w-full justify-center"
+                          className={`flex items-center gap-2.5 text-xs font-semibold p-3.5 rounded-2xl transition-all shadow-xs cursor-pointer w-full justify-center border-2 ${
+                            answers.temperature !== null 
+                              ? 'bg-rose-50 text-rose-700 border-rose-250' 
+                              : 'bg-sky-50 text-sky-700 border-sky-150 hover:bg-sky-100/50'
+                          }`}
                         >
-                          <Thermometer className={`w-3.5 h-3.5 ${answers.temperature !== null ? 'text-brand-rose animate-pulse' : 'text-gray-400'}`} />
+                          <Thermometer className={`w-4 h-4 ${answers.temperature !== null ? 'text-rose-650' : 'text-sky-500'}`} />
                           {answers.temperature !== null 
-                            ? 'Omitir temperatura aproximada em graus (°C)' 
-                            : 'Opcional: Informar temperatura aproximada em graus (°C)'}
+                            ? 'Omitir temperatura exata em graus (°C)' 
+                            : 'Opcional: Informar temperatura exata em graus (°C)'}
                         </button>
-
+ 
                         {answers.temperature !== null && (
                           <motion.div
                             initial={{ opacity: 0, height: 0 }}
@@ -928,14 +943,14 @@ export default function App() {
                             exit={{ opacity: 0, height: 0 }}
                             className="space-y-4 pt-4 text-center overflow-hidden"
                           >
-                            <p className="text-[11px] text-gray-500 font-light mb-1">
+                            <p className="text-[11px] text-gray-500 font-medium mb-1">
                               Ajuste os graus de forma fina utilizando os botões de - e + ou arraste o controle deslizante abaixo:
                             </p>
-
-                            {/* Interactive Thermometer Status Widget */}
-                            <div className={`mx-auto rounded-3xl p-4 border text-center transition-all max-w-sm ${getTempColorStyle(answers.temperature, answers.feeling).bg}`}>
-                              <span className="text-3xl font-display font-medium tracking-tight">
-                                {answers.temperature}<span className="text-xl font-light">°C</span>
+ 
+                            {/* Interactive Thermometer Status Widget but extremely warm and cozy rounded layout */}
+                            <div className="mx-auto rounded-[1.75rem] p-4 border-2 border-pink-100 text-center transition-all max-w-sm bg-gradient-to-b from-[#FFFDF9] to-[#FFF8F1] shadow-xs text-gray-950">
+                              <span className="text-3xl font-display font-bold tracking-tight text-pink-650">
+                                {answers.temperature}<span className="text-xl font-bold">°C</span>
                               </span>
                               
                               <div className="flex items-center justify-center gap-3 mt-3">
@@ -943,13 +958,14 @@ export default function App() {
                                   id="btn-temp-dec-wiz"
                                   type="button"
                                   onClick={() => setAnswers(prev => ({ ...prev, temperature: Math.max(5, (prev.temperature || 22) - 1) }))}
+                                  whileHover={{ scale: 1.05 }}
                                   whileTap={{ scale: 0.9 }}
-                                  className="w-9 h-9 rounded-full bg-white flex items-center justify-center text-brand-charcoal shadow-xs hover:shadow-md cursor-pointer border border-[#EEDBCD]/45"
+                                  className="w-10 h-10 rounded-xl bg-pink-100 border-2 border-pink-200 flex items-center justify-center text-pink-700 shadow-xs cursor-pointer"
                                   title="Diminuir 1 grau"
                                 >
-                                  <Minus className="w-4 h-4 stroke-[2.5]" />
+                                  <Minus className="w-4 h-4 stroke-[3]" />
                                 </motion.button>
-
+ 
                                 <div className="flex-1 max-w-[150px]">
                                   <input
                                     id="input-temp-slider-wiz"
@@ -958,19 +974,20 @@ export default function App() {
                                     max="40"
                                     value={answers.temperature}
                                     onChange={(e) => setAnswers(prev => ({ ...prev, temperature: parseInt(e.target.value) }))}
-                                    className="w-full h-1.5 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-brand-rose focus:outline-none"
+                                    className="w-full h-2 bg-pink-100 rounded-lg appearance-none cursor-pointer accent-pink-500 focus:outline-none"
                                   />
                                 </div>
-
+ 
                                 <motion.button
                                   id="btn-temp-inc-wiz"
                                   type="button"
                                   onClick={() => setAnswers(prev => ({ ...prev, temperature: Math.min(40, (prev.temperature || 22) + 1) }))}
+                                  whileHover={{ scale: 1.05 }}
                                   whileTap={{ scale: 0.9 }}
-                                  className="w-9 h-9 rounded-full bg-white flex items-center justify-center text-brand-charcoal shadow-xs hover:shadow-md cursor-pointer border border-[#EEDBCD]/45"
+                                  className="w-10 h-10 rounded-xl bg-sky-100 border-2 border-sky-200 flex items-center justify-center text-sky-700 shadow-xs cursor-pointer"
                                   title="Aumentar 1 grau"
                                 >
-                                  <Plus className="w-4 h-4 stroke-[2.5]" />
+                                  <Plus className="w-4 h-4 stroke-[3]" />
                                 </motion.button>
                               </div>
                             </div>
@@ -983,67 +1000,68 @@ export default function App() {
                 </AnimatePresence>
               </div>
 
-              {/* Step Navigation Button Row */}
-              <div className="flex gap-3 pt-6 border-t border-[#FAEDE2] mt-4">
+              {/* Step Navigation Button Row with bouncy elements & pink header line */}
+              <div className="flex gap-3 pt-6 border-t border-pink-100 mt-4">
                 <button
                   type="button"
                   id="btn-back"
                   onClick={handlePrevStep}
-                  className="px-5 py-3.5 bg-[#FAF6F0]/80 hover:bg-gray-200 text-brand-charcoal border border-[#EEDBCD]/60 text-sm font-semibold rounded-xl cursor-pointer flex items-center gap-1.5 transition-all shadow-3xs"
+                  className="px-5 py-4 bg-white hover:bg-pink-50/25 text-pink-700 border-2 border-pink-200 text-sm font-display font-semibold rounded-2xl cursor-pointer flex items-center gap-1.5 transition-all shadow-xs"
                 >
-                  <ChevronLeft className="w-4 h-4" /> Voltar
+                  <ChevronLeft className="w-4 h-4 stroke-[2]" /> Voltar
                 </button>
 
                 <button
                   type="button"
                   id="btn-next"
                   onClick={handleNextStep}
-                  className="flex-1 py-3.5 bg-gradient-to-r from-[#E58793] to-[#D4717E] hover:from-[#EC9CA7] hover:to-[#E58793] text-white text-sm font-bold rounded-xl cursor-pointer flex items-center justify-center gap-1.5 transition-all shadow-md shadow-brand-rose/25 relative overflow-hidden group"
+                  className="flex-1 py-4.5 bg-gradient-to-r from-pink-600 via-pink-550 to-rose-500 hover:from-pink-700 hover:to-rose-600 text-white text-sm font-display font-semibold rounded-2xl cursor-pointer flex items-center justify-center gap-1.5 transition-all shadow-md active:translate-y-[1px]"
                 >
-                  {step === 3 ? 'Calcular Roupa Perfeita ⚡' : 'Continuar'} <ChevronRight className="w-4 h-4" />
+                  {step === 3 ? 'Calcular recomendação ⚡' : 'Continuar'} <ChevronRight className="w-4 h-4 stroke-[2]" />
                 </button>
               </div>
             </motion.div>
           )}
 
-          {/* LOADING SCREEN WITH PULSING COMPILING METRICS */}
+          {/* LOADING SCREEN WITH DELIGHTFUL PULSING ANIMATIONS */}
           {screen === 'loading' && (
             <motion.div
               key="loading"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              className="flex-1 flex flex-col justify-center items-center p-8 text-center"
+              className="flex-1 flex flex-col justify-center items-center p-8 text-center bg-gradient-to-br from-pink-50/50 to-yellow-50/50"
               id="screen-loading"
             >
               <div className="relative mb-6">
-                <div className="absolute inset-0 bg-brand-pink/20 rounded-full scale-150 animate-ping"></div>
-                <div className="relative w-20 h-20 bg-[#FFF9F2] border border-[#FAEDE2] rounded-full flex items-center justify-center">
+                <div className="absolute -inset-2 bg-gradient-to-r from-pink-300 via-amber-200 to-sky-300 rounded-full blur opacity-80 animate-pulse" />
+                <div className="relative w-20 h-20 bg-white border-2 border-pink-100 rounded-full flex items-center justify-center shadow-lg">
                   <motion.div
-                    animate={{ rotate: 360 }}
-                    transition={{ repeat: Infinity, duration: 2.2, ease: 'linear' }}
+                    animate={{ rotate: 360, scale: [1, 1.15, 1] }}
+                    transition={{ repeat: Infinity, duration: 2.5, ease: 'linear' }}
+                    className="text-3xl select-none"
                   >
-                    <RefreshCw className="w-8 h-8 text-brand-rose" />
+                    👶
                   </motion.div>
+                  <div className="absolute -top-1 -right-1 text-xl select-none">✨</div>
                 </div>
               </div>
-
-              {/* Animated Text Sequence */}
+ 
               <AnimatePresence mode="wait">
                 <motion.h3
                   key={loadingText}
-                  initial={{ opacity: 0, y: 5 }}
+                  initial={{ opacity: 0, y: 7 }}
                   animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -5 }}
-                  transition={{ duration: 0.2 }}
-                  className="font-display text-lg font-medium text-brand-charcoal max-w-xs mt-2"
+                  exit={{ opacity: 0, y: -7 }}
+                  transition={{ duration: 0.25 }}
+                  className="font-display text-md font-bold text-pink-700 max-w-xs mt-2"
                 >
                   {loadingText}
                 </motion.h3>
               </AnimatePresence>
 
-              <p className="text-xs text-gray-500 font-light mt-3 max-w-xs">
-                Nossos especialistas revisam camadas térmicas seguras para evitar riscos de superaquecimento ou choque térmico.
+              <p className="text-xs text-amber-900/80 font-semibold mt-3.5 max-w-xs leading-relaxed">
+                Analisando as camadas térmicas e o conforto seguro para o maior bem-estar do seu bebê! 🌸🧸
               </p>
             </motion.div>
           )}
@@ -1056,47 +1074,47 @@ export default function App() {
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0 }}
               transition={{ duration: 0.3 }}
-              className="flex-1 flex flex-col justify-between p-5 sm:p-7 space-y-4"
+              className="flex-1 flex flex-col justify-between p-5 sm:p-7 space-y-5"
               id="screen-result"
             >
               {/* Header result badge info */}
-              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between pb-3 border-b border-[#FAEDE2] gap-3">
+              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between pb-3.5 border-b-2 border-pink-50 gap-3">
                 <div className="flex items-center gap-3">
-                  <div className={`p-2.5 rounded-full ${getTempColorStyle(answers.temperature, answers.feeling).pill}`}>
-                    <Thermometer className="w-5 h-5" />
+                  <div className={`p-2.5 rounded-full ${getTempColorStyle(answers.temperature, answers.feeling).pill} border-2 border-white shadow-xs`}>
+                    <Thermometer className="w-5 h-5 text-gray-800" />
                   </div>
                   <div>
-                    <h3 className="font-display font-semibold text-lg text-brand-charcoal leading-tight">
+                    <h3 className="font-display font-semibold text-lg sm:text-xl text-rose-700 leading-tight border-none outline-none">
                       {result.temperatureCategory}
                     </h3>
-                    <p className="text-xs text-gray-500 font-light">
+                    <p className="text-xs text-slate-500 font-semibold mt-0.5">
                       Sensibilidade: {getAgeFriendlyName(answers.age)}
                     </p>
                   </div>
                 </div>
-
-                {/* Instant thermal adjuster panel (extremely practical for parents on the fly) */}
-                <div className="flex items-center gap-1.5 self-start bg-brand-beige border border-[#EEDBCD]/40 rounded-xl p-1 shadow-2xs">
+ 
+                {/* Instant thermal adjuster panel (extremely practical for parents on the fly) with playful design */}
+                <div className="flex items-center gap-1.5 self-start bg-gradient-to-r from-pink-50 to-[#FFFBF0] border-2 border-pink-100 rounded-2xl p-1 shadow-xs">
                   <button
                     id="btn-res-dec"
                     type="button"
                     onClick={() => adjustResultTemperature(-1)}
-                    className="p-1.5 hover:bg-white text-brand-charcoal/80 rounded-md transition-all cursor-pointer"
+                    className="p-2 hover:bg-white text-pink-700 hover:text-pink-800 rounded-xl transition-all cursor-pointer bg-white/40 border border-pink-100/50 shadow-xxs"
                     title="Testar com 1°C a menos"
                   >
-                    <Minus className="w-3.5 h-3.5 stroke-[2.5]" />
+                    <Minus className="w-3.5 h-3.5 stroke-[3]" />
                   </button>
-                  <span className="text-xs font-mono font-medium text-brand-charcoal px-2 bg-white rounded-md shadow-3xs py-1 min-w-[45px] text-center">
+                  <span className="text-xs font-display font-semibold text-rose-800 px-2.5 bg-white border-2 border-pink-100 rounded-xl shadow-xs py-1.5 min-w-[55px] text-center">
                     {answers.temperature !== null ? `${answers.temperature}°C` : getFeelingFriendlyName(answers.feeling)}
                   </span>
                   <button
                     id="btn-res-inc"
                     type="button"
                     onClick={() => adjustResultTemperature(1)}
-                    className="p-1.5 hover:bg-white text-brand-charcoal/80 rounded-md transition-all cursor-pointer"
+                    className="p-2 hover:bg-white text-pink-700 hover:text-pink-800 rounded-xl transition-all cursor-pointer bg-white/40 border border-pink-100/50 shadow-xxs"
                     title="Testar com 1°C a mais"
                   >
-                    <Plus className="w-3.5 h-3.5 stroke-[2.5]" />
+                    <Plus className="w-3.5 h-3.5 stroke-[3]" />
                   </button>
                   
                   {/* Wind toggle button right inside results */}
@@ -1104,18 +1122,18 @@ export default function App() {
                     id="btn-res-wind"
                     type="button"
                     onClick={toggleResultWind}
-                    className={`p-1.5 rounded-md transition-all cursor-pointer ${answers.condition === 'vento-frio' ? 'bg-emerald-50 text-emerald-800' : 'text-gray-400 hover:text-gray-650'}`}
+                    className={`p-2 rounded-xl transition-all cursor-pointer border ${answers.condition === 'vento-frio' ? 'bg-indigo-600 text-white border-transparent shadow-xs' : 'text-slate-400 bg-white/40 border-pink-100/50 hover:text-slate-655'}`}
                     title={answers.condition === 'vento-frio' ? "Remover efeito de vento" : "Simular vento/sensação fria"}
                   >
-                    <Wind className="w-3.5 h-3.5" />
+                    <Wind className="w-3.5 h-3.5 stroke-[2.5]" />
                   </button>
                 </div>
               </div>
-
+ 
               {/* COGNITIVE VISUAL THERMOMETER */}
-              <div className="bg-white/80 backdrop-blur-xs rounded-2xl p-5 border border-[#FAEDE2] flex flex-col items-center shadow-3xs">
-                <span className="text-[10px] font-semibold text-gray-450 uppercase tracking-widest mb-3 flex items-center gap-1.5 leading-none">
-                  <Thermometer className="w-3.5 h-3.5 text-brand-rose" /> Termômetro de Conforto Térmico
+              <div className="bg-white rounded-3xl p-4.5 border-2 border-pink-100 flex flex-col items-center shadow-xs">
+                <span className="text-[10px] font-display font-semibold text-pink-600 uppercase tracking-wider mb-3 flex items-center gap-1.5 leading-none">
+                  <Thermometer className="w-3.5 h-3.5 text-pink-550" /> Termômetro de Conforto Térmico
                 </span>
                 {(() => {
                   const effectiveTemp = answers.temperature !== null ? answers.temperature : (() => {
@@ -1128,29 +1146,29 @@ export default function App() {
                   })();
                   return (
                     <div className="grid grid-cols-3 gap-2.5 w-full max-w-sm">
-                      <div className={`py-2.5 px-3 rounded-2xl text-center flex flex-col items-center justify-center transition-all duration-300 w-full ${
+                       <div className={`py-2.5 px-3 rounded-2xl text-center flex flex-col items-center justify-center transition-all duration-300 w-full border-2 ${
                         effectiveTemp < 19 
-                          ? 'bg-gradient-to-tr from-sky-100 to-sky-50 border border-sky-300 text-sky-850 shadow-2xs font-semibold glow-sky' 
-                          : 'bg-[#FAF6F0]/50 border border-transparent text-gray-400 opacity-60 font-light'
+                          ? 'bg-gradient-to-br from-indigo-50 to-blue-100 border-blue-300 text-blue-900 shadow-xs font-semibold' 
+                          : 'bg-[#FFFCFA] border-pink-50 text-slate-300 font-medium opacity-60'
                       }`}>
                         <span className="text-xl">🥶</span>
-                        <span className="text-[11px] mt-1 font-medium">Frio</span>
+                        <span className="text-[11px] mt-1 font-display font-medium">Frio</span>
                       </div>
-                      <div className={`py-2.5 px-3 rounded-2xl text-center flex flex-col items-center justify-center transition-all duration-300 w-full ${
+                      <div className={`py-2.5 px-3 rounded-2xl text-center flex flex-col items-center justify-center transition-all duration-300 w-full border-2 ${
                         effectiveTemp >= 19 && effectiveTemp < 27
-                          ? 'bg-gradient-to-tr from-emerald-100 to-emerald-50 border border-emerald-300 text-emerald-850 shadow-2xs font-semibold glow-emerald' 
-                          : 'bg-[#FAF6F0]/50 border border-transparent text-gray-400 opacity-60 font-light'
+                          ? 'bg-gradient-to-br from-emerald-50 to-teal-100 border-emerald-300 text-emerald-950 shadow-xs font-semibold' 
+                          : 'bg-[#FFFCFA] border-pink-50 text-slate-300 font-medium opacity-60'
                       }`}>
                         <span className="text-xl">😊</span>
-                        <span className="text-[11px] mt-1 font-medium">Normal</span>
+                        <span className="text-[11px] mt-1 font-display font-medium">Adequado</span>
                       </div>
-                      <div className={`py-2.5 px-3 rounded-2xl text-center flex flex-col items-center justify-center transition-all duration-300 w-full ${
+                      <div className={`py-2.5 px-3 rounded-2xl text-center flex flex-col items-center justify-center transition-all duration-300 w-full border-2 ${
                         effectiveTemp >= 27
-                          ? 'bg-gradient-to-tr from-rose-100 to-rose-50 border border-rose-300 text-rose-850 shadow-2xs font-semibold glow-rose' 
-                          : 'bg-[#FAF6F0]/50 border border-transparent text-gray-400 opacity-60 font-light'
+                          ? 'bg-gradient-to-br from-red-50 to-amber-100 border-red-300 text-red-955 shadow-xs font-semibold' 
+                          : 'bg-[#FFFCFA] border-pink-50 text-slate-300 font-medium opacity-60'
                       }`}>
                         <span className="text-xl">🥵</span>
-                        <span className="text-[11px] mt-1 font-medium">Muito Quente</span>
+                        <span className="text-[11px] mt-1 font-display font-medium">Calor</span>
                       </div>
                     </div>
                   );
@@ -1158,122 +1176,113 @@ export default function App() {
               </div>
 
               {/* CORE METRIC CARD: LAYER COUNT */}
-              <div className="bg-[#FAF3FF]/80 backdrop-blur-xs border border-purple-200/55 rounded-2xl p-5 flex flex-col md:flex-row items-center gap-4 glow-purple shadow-3xs">
+              <div className="bg-gradient-to-br from-yellow-50/80 via-white to-pink-50/80 border-2 border-pink-100 rounded-3xl p-5 flex flex-col md:flex-row items-center gap-4 shadow-xs">
                 <div className="flex-1">
-                  <div className="flex items-center gap-2 mb-1.5 text-xs text-brand-charcoal/70 uppercase font-semibold">
-                    <Layers className="w-4 h-4 text-purple-650" /> RECOMENDAÇÃO DE CAMADAS
+                  <div className="flex items-center gap-2 mb-1.5 text-xs text-rose-600 uppercase font-display font-semibold">
+                    <Layers className="w-4 h-4 text-rose-500" /> RECOMENDAÇÃO DE CAMADAS
                   </div>
-                  <h4 className="font-display font-bold text-2xl text-purple-950 mb-1">
+                  <h4 className="font-display font-semibold text-xl text-pink-700 mb-1">
                     {result.layerCount} {result.layerCount === 1 ? 'Camada única' : result.layerCount === 2 ? 'Camadas leves' : 'Camadas aconchegantes'}
                   </h4>
-                  <p className="text-xs text-purple-900/80 font-light leading-relaxed">
+                  <p className="text-xs text-amber-950 font-medium leading-relaxed">
                     {result.layersDescription}
                   </p>
                 </div>
 
                 {/* Layer visual stack pills */}
-                <div className="flex flex-col gap-1 w-full md:w-32">
+                <div className="flex flex-col gap-1.5 w-full md:w-36">
                   {Array.from({ length: result.layerCount }).map((_, i) => (
                     <motion.div
                       key={i}
                       initial={{ scaleX: 0 }}
                       animate={{ scaleX: 1 }}
                       transition={{ delay: i * 0.1 }}
-                      className={`h-6 rounded-lg flex items-center justify-between px-3 text-[10px] font-bold tracking-tight text-white shadow-2xs ${
-                        i === 0 ? 'bg-gradient-to-r from-indigo-500 to-indigo-600 border border-indigo-400/20' : i === 1 ? 'bg-gradient-to-r from-purple-500 to-purple-600 border border-purple-400/20' : 'bg-gradient-to-r from-pink-400 to-pink-500 border border-pink-300/20'
-                      }`}
+                      className="h-7.5 rounded-xl flex items-center justify-between px-3 text-[10px] font-display font-semibold uppercase text-pink-700 bg-gradient-to-r from-[#FFF0F2] to-[#FFD2D7] shadow-xxs border border-pink-200"
                     >
-                      <span>💡 Camada {i + 1}</span>
-                      <span className="font-light opacity-90">
-                        {i === 0 && 'Base / Toque'}
-                        {i === 1 && 'Intermediária'}
-                        {i === 2 && 'Isolamento'}
+                      <span>Camada {i + 1}</span>
+                      <span className="font-semibold opacity-90 text-[9px] bg-pink-100/80 px-1.5 py-0.5 rounded-md text-pink-700">
+                        {i === 0 && 'Base'}
+                        {i === 1 && 'Feltro'}
+                        {i === 2 && 'Manto'}
                       </span>
                     </motion.div>
                   ))}
                 </div>
               </div>
-
-              {/* 🍼 LOOK RECOMENDADO PARA ESTA TEMPERATURA */}
-              <div className="bg-white rounded-2xl p-4.5 border border-[#FAEDE2] shadow-3xs space-y-3.5">
-                <div className="flex items-center gap-2 pb-2.5 border-b border-[#FAF6F0]">
-                  <div className="p-1.5 bg-brand-pink text-brand-rose rounded-lg shadow-4xs">
-                    <Shirt className="w-4.5 h-4.5" />
+              <div className="bg-white rounded-3xl p-5 border-2 border-pink-100 shadow-xs space-y-4">
+                <div className="flex items-center gap-2 pb-2.5 border-b border-pink-150">
+                  <div className="p-1.5 bg-pink-50 text-pink-700 border border-pink-100 rounded-xl shadow-xs">
+                    <Shirt className="w-4.5 h-4.5 stroke-[2]" />
                   </div>
                   <div>
-                    <h4 className="font-display font-semibold text-sm sm:text-base text-brand-charcoal">
-                      🍼 Look Recomendado para esta Temperatura
+                    <h4 className="font-display font-semibold text-sm sm:text-base text-pink-750">
+                      Look Recomendado para esta Temperatura
                     </h4>
-                    <p className="text-[11px] text-gray-500 font-light">
-                      O enxoval perfeito combinado para se livrar das dúvidas de imediato.
+                    <p className="text-[11px] text-amber-900 font-medium opacity-85">
+                      O conjunto perfeito combinado para vestir seu bebê com facilidade.
                     </p>
                   </div>
                 </div>
-
+ 
                 <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
                   {result.visualItems.map((itemId) => {
                     const itemInfo = CLOTHING_DATABASE[itemId];
                     if (!itemInfo) return null;
                     
-                    // Specific helper for color-coded heating badges
-                    let badgeStyles = 'bg-emerald-50 text-emerald-700 border-emerald-200/60';
+                    let badgeStyles = 'bg-[#F0FDF4] text-emerald-700 border-emerald-200';
                     if (itemInfo.heatingLevel === 'Médio') {
-                      badgeStyles = 'bg-indigo-50 text-indigo-700 border-indigo-200/60';
+                      badgeStyles = 'bg-[#FEF3C7] text-amber-800 border-amber-250';
                     } else if (itemInfo.heatingLevel === 'Alto') {
-                      badgeStyles = 'bg-amber-50 text-amber-700 border-amber-250/60';
+                      badgeStyles = 'bg-[#FFF1F2] text-rose-700 border-rose-250';
                     } else if (itemInfo.heatingLevel === 'Muito Alto') {
-                      badgeStyles = 'bg-rose-50 text-rose-700 border-rose-200/60';
+                      badgeStyles = 'bg-[#F5F3FF] text-indigo-700 border-indigo-250';
                     }
-
+ 
                     return (
                       <motion.div
                         key={itemId}
                         initial={{ opacity: 0, y: 12 }}
                         animate={{ opacity: 1, y: 0 }}
-                        whileHover={{ y: -3, scale: 1.015 }}
-                        transition={{ type: "spring", stiffness: 350, damping: 25 }}
-                        className="bg-brand-beige border border-[#FAEDE2] rounded-2xl overflow-hidden flex flex-col group shadow-sm hover:shadow-md transition-all duration-300"
+                        whileHover={{ y: -2, scale: 1.02 }}
+                        transition={{ duration: 0.2 }}
+                        className="bg-gradient-to-b from-white to-pink-50/10 border-2 border-pink-150 rounded-2xl overflow-hidden flex flex-col group shadow-xs hover:border-pink-300 transition-all duration-300"
                       >
                         {/* Cloth picture wrapper */}
-                        <div className="relative aspect-square w-full bg-white overflow-hidden flex items-center justify-center border-b border-[#FAF0E6]">
+                        <div className="relative aspect-square w-full bg-[#FCFDFE] overflow-hidden flex items-center justify-center border-b-2 border-pink-100/50">
                           <img
                             src={itemInfo.url}
                             alt={itemInfo.name}
                             referrerPolicy="no-referrer"
-                            className="w-full h-full object-contain p-2 transition-transform duration-500 group-hover:scale-105"
+                            className="w-full h-full object-contain p-2 transition-transform duration-300 group-hover:scale-104 select-none"
                             onError={(e) => {
                               e.currentTarget.style.display = 'none';
                               const fallback = e.currentTarget.parentElement?.querySelector('.fallback-icon') as HTMLDivElement;
                               if (fallback) fallback.style.display = 'flex';
                             }}
                           />
-                          {/* Sparing Fallback SVG/Icon */}
-                          <div className="fallback-icon absolute inset-0 bg-[#FFFDFB] flex flex-col items-center justify-center p-3 text-center pointer-events-none" style={{ display: 'none' }}>
-                            <Shirt className="w-10 h-10 text-[#E2C7B3] mb-1.5 animate-pulse" />
-                            <span className="text-[10px] text-[#A69799] italic uppercase font-semibold">Sem Foto</span>
+                          <div className="fallback-icon absolute inset-0 bg-pink-50/20 flex flex-col items-center justify-center p-3 text-center pointer-events-none" style={{ display: 'none' }}>
+                            <Shirt className="w-8 h-8 text-pink-350 mb-1.5" />
+                            <span className="text-[9px] text-pink-500 font-semibold uppercase">Sem foto</span>
                           </div>
                           
-                          {/* Little visual verification status */}
-                          <div className="absolute top-2 right-2 bg-white/90 backdrop-blur-xs text-[9px] font-bold text-emerald-700 px-1.5 py-0.5 rounded-full select-none shadow-3xs border border-emerald-100 flex items-center gap-0.5">
-                            <span className="w-1.5 h-1.5 rounded-full bg-emerald-55 bg-emerald-400 animate-pulse"></span>
+                          <div className="absolute top-2 right-2 bg-pink-500 text-[8px] font-display font-semibold text-white px-2 py-0.5 rounded-full select-none shadow-xs">
                             Look ✓
                           </div>
                         </div>
-
-                        <div className="p-2 sm:p-3 flex-1 flex flex-col justify-between space-y-2">
+ 
+                        <div className="p-3 flex-1 flex flex-col justify-between space-y-2">
                           <div>
-                            <h5 className="font-display text-[11px] sm:text-xs md:text-sm font-bold text-brand-charcoal leading-snug group-hover:text-amber-850 transition-colors break-words hyphens-auto">
+                            <h5 className="font-display text-[11px] sm:text-xs md:text-sm font-semibold text-rose-700 leading-snug break-words group-hover:text-pink-650 transition-colors">
                               {itemInfo.name}
                             </h5>
-                            <p className="text-[10px] sm:text-[10.5px] text-gray-500 font-light leading-snug sm:leading-relaxed mt-1 break-words line-clamp-3 sm:line-clamp-none">
+                            <p className="text-[10px] sm:text-[10.5px] text-slate-500 font-medium leading-snug sm:leading-relaxed mt-1 break-words line-clamp-3 sm:line-clamp-none">
                               {itemInfo.desc}
                             </p>
                           </div>
                           
-                          {/* Heating level */}
-                          <div className="pt-1.5 border-t border-[#FAF6F0] flex flex-col xs:flex-row xs:items-center justify-between gap-1">
-                            <span className="text-[8.5px] sm:text-[9px] text-gray-400 uppercase tracking-wide">Calor</span>
-                            <span className={`text-[9.5px] sm:text-[10px] font-semibold uppercase px-1.5 sm:px-2 py-0.5 rounded-md border text-center self-start xs:self-auto ${badgeStyles}`}>
+                          <div className="pt-2 border-t border-pink-100/50 flex flex-row items-center justify-between gap-1">
+                            <span className="text-[8.5px] sm:text-[9px] text-slate-400 font-semibold uppercase tracking-wide">Aquecer</span>
+                            <span className={`text-[9px] sm:text-[9.5px] font-display font-semibold px-1.5 sm:px-2 py-0.5 rounded-lg border-2 text-center whitespace-nowrap ${badgeStyles}`}>
                               {itemInfo.heatingLevel}
                             </span>
                           </div>
@@ -1283,92 +1292,92 @@ export default function App() {
                   })}
                 </div>
               </div>
-
+ 
               {/* THREE COLUMNS GRID: OUTFITS, FABRICS, ACCESSORIES */}
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4.5">
                 
                 {/* OUTFIT RECOMMENDATION */}
-                <div className="bg-white rounded-2xl p-4 border-t-4 border-t-brand-rose border-[#FAEDE2] shadow-3xs hover:shadow-2xs transition-shadow">
-                  <span className="text-xs font-semibold text-brand-rose flex items-center gap-1.5 mb-2.5">
-                    <Shirt className="w-3.5 h-3.5" /> Peças Sugeridas:
+                <div className="bg-gradient-to-br from-[#FFFDF9] to-[#FEF3C7]/10 rounded-2xl p-4.5 border-2 border-amber-200 shadow-xs hover:border-amber-300 transition-all duration-300">
+                  <span className="text-xs font-display font-bold text-[#B45309] flex items-center gap-1.5 mb-2.5">
+                    <Shirt className="w-4 h-4 text-amber-600 shrink-0" /> Peças Sugeridas:
                   </span>
-                  <ul className="space-y-1.5">
+                  <ul className="space-y-2">
                     {result.outfitSuggestions.map((item, idx) => (
-                      <li key={idx} className="text-xs text-brand-charcoal/80 flex items-start gap-1 leading-snug font-light">
-                        <span className="text-brand-rose shrink-0 select-none">•</span>
+                      <li key={idx} className="text-xs text-amber-950 flex items-start gap-1.5 leading-relaxed font-bold">
+                        <span className="text-amber-500 shrink-0 select-none">🌸</span>
                         <span>{item}</span>
                       </li>
                     ))}
                   </ul>
                 </div>
-
+ 
                 {/* RECOMMENDED FABRICS */}
-                <div className="bg-white rounded-2xl p-4 border-t-4 border-t-emerald-300 border-[#FAEDE2] shadow-3xs hover:shadow-2xs transition-shadow">
-                  <span className="text-xs font-semibold text-teal-700 flex items-center gap-1.5 mb-2.5">
-                    <Sparkles className="w-3.5 h-3.5" /> Tecidos Recomendados:
+                <div className="bg-gradient-to-br from-[#FFFDFD] to-pink-50/10 rounded-2xl p-4.5 border-2 border-pink-100 shadow-xs hover:border-pink-300 transition-all duration-300">
+                  <span className="text-xs font-display font-bold text-pink-700 flex items-center gap-1.5 mb-2.5">
+                    <Sparkles className="w-4 h-4 text-pink-500 shrink-0" /> Tecidos Recomendados:
                   </span>
-                  <ul className="space-y-1.5">
+                  <ul className="space-y-2">
                     {result.recommendedFabrics.map((item, idx) => (
-                      <li key={idx} className="text-xs text-brand-charcoal/80 flex items-start gap-1 leading-snug font-light">
-                        <span className="text-teal-600 shrink-0 select-none">✓</span>
-                        <span className="font-semibold text-teal-900">{item}</span>
+                      <li key={idx} className="text-xs text-pink-950 flex items-start gap-1.5 leading-relaxed font-medium">
+                        <span className="text-pink-550 shrink-0 select-none">✓</span>
+                        <span className="text-pink-900">{item}</span>
                       </li>
                     ))}
                   </ul>
-                  <p className="text-[10px] text-gray-500 font-light mt-2 leading-tight">
-                    *Prefira sempre fibras naturais para deixar a pele respirar livremente.
+                  <p className="text-[10px] text-pink-600 font-semibold mt-2.5 leading-tight">
+                    *Prefira fibras naturais como o algodão para deixar a pele respirar livremente.
                   </p>
                 </div>
-
+ 
                 {/* ACCESSORIES */}
-                <div className="bg-white rounded-2xl p-4 border-t-4 border-t-amber-300 border-[#FAEDE2] shadow-3xs hover:shadow-2xs transition-shadow">
-                  <span className="text-xs font-semibold text-amber-700 flex items-center gap-1.5 mb-2.5">
-                    <Footprints className="w-3.5 h-3.5" /> Acessórios Indicados:
+                <div className="bg-gradient-to-br from-[#FCFDFE] to-sky-50/10 rounded-2xl p-4.5 border-2 border-sky-100 shadow-xs hover:border-sky-300 transition-all duration-300">
+                  <span className="text-xs font-display font-semibold text-sky-800 flex items-center gap-1.5 mb-2.5">
+                    <Footprints className="w-4 h-4 text-sky-500 shrink-0" /> Acessórios Indicados:
                   </span>
                   {result.accessories.length > 0 ? (
-                    <ul className="space-y-1.5">
-                      {result.accessories.map((item, idx) => (
-                        <li key={idx} className="text-xs text-brand-charcoal/80 flex items-start gap-1 leading-snug font-light">
-                          <span className="text-amber-600 shrink-0 select-none">✦</span>
+                    <ul className="space-y-2">
+                       {result.accessories.map((item, idx) => (
+                        <li key={idx} className="text-xs text-sky-950 flex items-start gap-1.5 leading-relaxed font-medium">
+                          <span className="text-sky-400 shrink-0 select-none">✦</span>
                           <span>{item}</span>
                         </li>
                       ))}
                     </ul>
                   ) : (
-                    <div className="text-xs text-gray-400 italic">
-                      Nenhum acessório extravagante necessário neste clima. Pés soltos!
+                    <div className="text-xs text-sky-500 italic font-semibold">
+                      Nenhum acessório extravagante indicado. Pés livres! 👣
                     </div>
                   )}
                 </div>
 
               </div>
 
-              {/* COZY VOICE COUNSEL BUBBLE + EXTRA TIPS (Conselhos) */}
-              <div className="space-y-3">
+              {/* COZY VOICE COUNSEL BUBBLE + EXTRA TIPS */}
+              <div className="space-y-4">
                 {/* COZY VOICE COUNSEL BUBBLE */}
-                <div className="bg-[#FFF9F2] rounded-2xl p-4 border border-[#FAEDE2]/60 relative shadow-2xs">
-                  <div className="absolute -top-2 left-5 px-3 py-0.5 bg-brand-rose text-white text-[10px] font-semibold tracking-wider rounded-full uppercase flex items-center gap-1">
+                <div className="bg-gradient-to-r from-pink-50 via-amber-50 to-pink-50 rounded-3xl p-5 border-2 border-pink-100 relative shadow-xs">
+                  <div className="absolute -top-3 left-5 px-3 py-1 bg-gradient-to-r from-[#FFB7CA] to-[#FFA3B1] text-white text-[10px] font-display font-semibold uppercase tracking-wider rounded-full flex items-center gap-1 shadow-sm border border-pink-200">
                     <Heart className="w-2.5 h-2.5 fill-white" /> Conselho do Coração
                   </div>
                   <div className="space-y-2 mt-1.5">
                     {result.cozyParagraphs.map((para, i) => (
-                      <p key={i} className="text-brand-charcoal/90 text-sm font-light leading-relaxed">
+                      <p key={i} className="text-amber-950 font-sans text-xs md:text-sm font-medium leading-relaxed opacity-95">
                         {para}
                       </p>
                     ))}
                   </div>
                 </div>
 
-                {/* EXTRA ADVICES (optional output block) */}
+                {/* EXTRA ADVICES */}
                 {result.extraTips && (
-                  <div className="bg-brand-sage/40 rounded-2xl p-4 border border-brand-sage">
-                    <span className="text-xs font-semibold text-emerald-800 flex items-center gap-1.5 mb-2">
-                      <Info className="w-4 h-4 text-emerald-700" /> Dicas de Cuidados com o Bebê e Conselhos Extras:
+                  <div className="bg-[#FCFAFF] rounded-3xl p-5 border-2 border-purple-100 shadow-xs">
+                    <span className="text-xs font-display font-semibold text-purple-800 flex items-center gap-1.5 mb-3">
+                      <Heart className="w-4 h-4 text-purple-600" /> Dicas Extras e Cuidados:
                     </span>
                     <ul className="space-y-2">
                       {result.extraTips.map((tip, idx) => (
-                        <li key={idx} className="text-xs text-emerald-950/90 leading-relaxed flex items-start gap-1.5 font-light">
-                          <span className="text-[#10B981] shrink-0 mt-0.5">💡</span>
+                        <li key={idx} className="text-xs text-purple-950 leading-relaxed flex items-start gap-2.5 font-medium">
+                          <span className="text-purple-400 shrink-0 mt-0.5">🧸</span>
                           <span>{tip}</span>
                         </li>
                       ))}
@@ -1378,14 +1387,14 @@ export default function App() {
               </div>
 
               {/* SECURITY ALERTS BLOCK */}
-              <div className="bg-[#FFF5F5] rounded-2xl p-4 border border-[#FFE3E3]">
-                <span className="text-xs font-bold text-red-700 flex items-center gap-1.5 mb-2 uppercase tracking-wide">
-                  <AlertTriangle className="w-4 h-4 text-red-650" /> Alertas Importantes de Segurança:
+              <div className="bg-[#FFF5F5] rounded-3xl p-5 border-2 border-rose-200">
+                <span className="text-xs font-display font-semibold text-rose-950 flex items-center gap-1.5 mb-2.5 uppercase tracking-wide">
+                  <AlertTriangle className="w-4 h-4 text-rose-700" /> Alertas de Segurança:
                 </span>
                 <ul className="space-y-2">
                   {result.importantAlerts.map((alert, idx) => (
-                    <li key={idx} className="text-xs text-red-900/90 leading-relaxed flex items-start gap-1.5 font-light">
-                      <span className="text-red-500 font-bold shrink-0 mt-0.5">⚠️</span>
+                    <li key={idx} className="text-xs text-rose-950 leading-relaxed flex items-start gap-2 font-medium">
+                      <span className="text-rose-500 font-semibold shrink-0 mt-0.5">⚠️</span>
                       <span>{alert}</span>
                     </li>
                   ))}
@@ -1393,12 +1402,12 @@ export default function App() {
               </div>
 
               {/* VERIFIED COMFORT CHECKBOX BOX */}
-              <div className="text-center text-xs text-brand-charcoal/60 italic bg-brand-beige border border-[#EEDBCD]/30 py-2.5 px-4 rounded-xl flex items-center justify-center gap-1.5">
-                <CheckCircle className="w-4 h-4 text-brand-rose fill-white shrink-0" />
+              <div className="text-center text-xs text-amber-900 font-semibold bg-[#FEFBF6] border-2 border-amber-100 py-3 px-5 rounded-2xl flex items-center justify-center gap-2 leading-relaxed shadow-xs">
+                <CheckCircle className="w-5 h-5 text-pink-500 shrink-0" />
                 <span>Sempre observe a nuca e o peito para avaliar de fato o conforto térmico de seu bebê.</span>
               </div>
 
-              {/* BOTTOM CONTROL ACTIONS */}
+              {/* BOTTOM CONTROL ACTIONS WITH PLAYFUL BABY LOOK */}
               <div className="pt-2 flex flex-col sm:flex-row gap-3">
                 <button
                   type="button"
@@ -1407,9 +1416,9 @@ export default function App() {
                     setStep(1);
                     setScreen('wizard');
                   }}
-                  className="flex-1 py-3.5 bg-gradient-to-r from-[#E58793] to-[#D4717E] hover:from-[#EC9CA7] hover:to-[#E58793] text-white text-sm font-bold rounded-xl cursor-pointer flex items-center justify-center gap-2 transition-all shadow-md shadow-brand-rose/25"
+                  className="flex-1 py-4 bg-gradient-to-r from-pink-600 to-rose-500 hover:from-pink-700 hover:to-rose-600 text-white text-sm font-display font-semibold rounded-3xl cursor-pointer flex items-center justify-center gap-2 shadow-md active:translate-y-[1px]"
                 >
-                  <RefreshCw className="w-4 h-4" /> Alterar Dados de Entrada
+                  <RefreshCw className="w-4 h-4 shrink-0 animate-spin-reverse" /> Alterar Dados
                 </button>
                 
                 <button
@@ -1418,18 +1427,19 @@ export default function App() {
                   onClick={() => {
                     setAnswers({
                       age: '0-3-meses',
-                      state: 'acordado-casa',
+                      state: 'acordado',
                       period: 'dia',
                       temperature: 22,
                       hasWind: false,
                       sensitivity: 'normal',
-                      location: 'interno',
+                      location: 'fechado',
+                      condition: 'fechado',
                       wantsExtras: true,
                     });
                     setStep(1);
                     setScreen('welcome');
                   }}
-                  className="px-5 py-3.5 bg-[#FAF6F0]/80 hover:bg-gray-150 text-brand-charcoal border border-[#EEDBCD]/60 text-sm font-semibold rounded-xl cursor-pointer transition-all shadow-3xs"
+                  className="px-6 py-4 bg-white hover:bg-pink-50/25 text-pink-650 border-2 border-pink-200 hover:border-pink-350 text-xs sm:text-sm font-display font-semibold rounded-3xl cursor-pointer flex items-center justify-center gap-1.5 shadow-xs transition-all active:scale-[0.98]"
                 >
                   Reiniciar Tudo
                 </button>
@@ -1457,7 +1467,7 @@ export default function App() {
               animate={{ opacity: 0.4 }}
               exit={{ opacity: 0 }}
               onClick={() => setIsMenuOpen(false)}
-              className="fixed inset-0 bg-brand-charcoal z-40 cursor-pointer"
+              className="fixed inset-0 bg-gray-955 z-40 cursor-pointer"
             />
 
             {/* Pastel Drawer Panel Custom Slide */}
@@ -1466,14 +1476,14 @@ export default function App() {
               animate={{ x: 0 }}
               exit={{ x: '-100%' }}
               transition={{ type: 'spring', damping: 25, stiffness: 180 }}
-              className="fixed top-0 left-0 bottom-0 w-[85%] max-w-[340px] bg-[#FAF6F0] z-50 shadow-2xl flex flex-col justify-between rounded-r-3xl border-r border-[#FAEDE2]"
+              className="fixed top-0 left-0 bottom-0 w-[85%] max-w-[340px] bg-white z-50 shadow-2xl flex flex-col justify-between rounded-r-2xl border-r border-gray-255"
             >
               {/* Drawer Content */}
               <div className="p-6 flex-1 flex flex-col overflow-y-auto">
                 {/* Header of Drawer */}
-                <div className="flex justify-between items-center pb-5 border-b border-[#FAEDE2] mb-6">
+                <div className="flex justify-between items-center pb-5 border-b border-gray-100 mb-6">
                   <div className="flex items-center gap-2">
-                    <div className="w-8 h-8 rounded-full overflow-hidden flex items-center justify-center border border-brand-rose/20 shrink-0">
+                    <div className="w-8 h-8 rounded-full overflow-hidden flex items-center justify-center border border-gray-200 shrink-0">
                       <img 
                         src={menuClothesLogo} 
                         alt="Logo Como Vestir o Bebê" 
@@ -1482,14 +1492,14 @@ export default function App() {
                       />
                     </div>
                     <div>
-                      <h4 className="font-display font-semibold text-sm text-brand-charcoal">BebêClima 💛</h4>
-                      <span className="text-[10px] text-gray-400 font-light block">Como Vestir o Bebê PWA</span>
+                      <h4 className="font-sans font-semibold text-sm text-gray-900">Como Vestir o Bebê</h4>
+                      <span className="text-[10px] text-gray-405 font-normal block leading-tight">BebêClima PWA</span>
                     </div>
                   </div>
                   <motion.button
                     whileTap={{ scale: 0.9 }}
                     onClick={() => setIsMenuOpen(false)}
-                    className="p-1.5 hover:bg-brand-pink/20 text-brand-rose rounded-full transition-all cursor-pointer"
+                    className="p-1.5 hover:bg-gray-100 text-gray-850 rounded-full transition-all cursor-pointer"
                   >
                     <X className="w-5 h-5" />
                   </motion.button>
@@ -1504,9 +1514,9 @@ export default function App() {
                       setScreen('welcome');
                       setStep(1);
                     }}
-                    className="w-full flex items-center gap-3.5 p-3 rounded-2xl text-left font-display font-medium text-sm text-[#5C4D4D] hover:bg-brand-pink/25 hover:text-brand-rose transition-all group cursor-pointer"
+                    className="w-full flex items-center gap-3.5 p-2 rounded-xl text-left font-sans font-medium text-sm text-gray-700 hover:bg-gray-50 hover:text-black transition-all group cursor-pointer"
                   >
-                    <div className="p-1.5 bg-white border border-[#EEDBCD]/40 rounded-xl group-hover:bg-brand-rose group-hover:text-white transition-all text-[#8C7A7A]">
+                    <div className="p-1.5 bg-gray-50 border border-gray-200 rounded-xl group-hover:bg-gray-950 group-hover:text-white transition-all text-gray-600">
                       <Home className="w-4 h-4" />
                     </div>
                     <span>Início</span>
@@ -1519,14 +1529,14 @@ export default function App() {
                         setIsMenuOpen(false);
                         handleInstallApp();
                       }}
-                      className="w-full flex items-center gap-3.5 p-3 rounded-2xl text-left font-display font-medium text-sm text-[#5C4D4D] hover:bg-brand-pink/25 hover:text-brand-rose transition-all group cursor-pointer"
+                      className="w-full flex items-center gap-3.5 p-2 rounded-xl text-left font-sans font-medium text-sm text-gray-705 hover:bg-gray-50 hover:text-black transition-all group cursor-pointer"
                     >
-                      <div className="p-1.5 bg-white border border-[#EEDBCD]/40 rounded-xl group-hover:bg-brand-rose group-hover:text-white transition-all text-[#8C7A7A]">
+                      <div className="p-1.5 bg-gray-50 border border-gray-200 rounded-xl group-hover:bg-gray-950 group-hover:text-white transition-all text-gray-600">
                         <Download className="w-4 h-4" />
                       </div>
                       <div className="flex-1">
-                        <span className="block">Adicionar à Tela Inicial</span>
-                        <span className="text-[10px] font-light text-brand-rose/80 block">Instalação aplicativo rápida</span>
+                        <span className="block font-bold">Adicionar à Tela Inicial</span>
+                        <span className="text-[10px] font-normal text-gray-500 block leading-tight">Instalação aplicativo rápida</span>
                       </div>
                     </button>
                   )}
@@ -1537,14 +1547,14 @@ export default function App() {
                     target="_blank"
                     rel="noreferrer"
                     onClick={() => setIsMenuOpen(false)}
-                    className="w-full flex items-center gap-3.5 p-3 rounded-2xl text-left font-display font-medium text-sm text-[#5C4D4D] hover:bg-emerald-50 hover:text-emerald-800 transition-all group cursor-pointer"
+                    className="w-full flex items-center gap-3.5 p-2 rounded-xl text-left font-sans font-medium text-sm text-gray-700 hover:bg-gray-50 hover:text-black transition-all group cursor-pointer"
                   >
-                    <div className="p-1.5 bg-white border border-[#EEDBCD]/40 rounded-xl group-hover:bg-emerald-600 group-hover:text-white transition-all text-[#8C7A7A]">
+                    <div className="p-1.5 bg-gray-50 border border-gray-200 rounded-xl group-hover:bg-gray-950 group-hover:text-white transition-all text-gray-600">
                       <HelpCircle className="w-4 h-4" />
                     </div>
                     <div>
-                      <span>Suporte ou sugestões</span>
-                      <span className="text-[10px] font-light text-emerald-600 block">Fale Conosco pelo WhatsApp</span>
+                      <span className="block text-gray-900 font-medium">Suporte ou sugestões</span>
+                      <span className="text-[10px] font-normal text-gray-500 block leading-tight">Fale conosco pelo WhatsApp</span>
                     </div>
                   </a>
 
@@ -1554,14 +1564,14 @@ export default function App() {
                     target="_blank"
                     rel="noreferrer"
                     onClick={() => setIsMenuOpen(false)}
-                    className="w-full flex items-center gap-3.5 p-3 rounded-2xl text-left font-display font-medium text-sm text-[#5C4D4D] hover:bg-amber-50 hover:text-amber-850 transition-all group cursor-pointer"
+                    className="w-full flex items-center gap-3.5 p-2 rounded-xl text-left font-sans font-medium text-sm text-gray-700 hover:bg-gray-50 hover:text-black transition-all group cursor-pointer"
                   >
-                    <div className="p-1.5 bg-white border border-[#EEDBCD]/40 rounded-xl group-hover:bg-amber-400 group-hover:text-white transition-all text-[#8C7A7A]">
+                    <div className="p-1.5 bg-gray-50 border border-gray-200 rounded-xl group-hover:bg-gray-950 group-hover:text-white transition-all text-gray-600">
                       <Gift className="w-4 h-4" />
                     </div>
                     <div>
-                      <span>Grupo de Ofertas</span>
-                      <span className="text-[10px] font-light text-amber-700 block">Dicas e promoções especiais</span>
+                      <span className="block text-gray-900 font-medium">Grupo de Ofertas</span>
+                      <span className="text-[10px] font-normal text-gray-500 block leading-tight">Dicas e promoções especiais</span>
                     </div>
                   </a>
 
@@ -1571,9 +1581,9 @@ export default function App() {
                       setIsMenuOpen(false);
                       setIsAboutOpen(true);
                     }}
-                    className="w-full flex items-center gap-3.5 p-3 rounded-2xl text-left font-display font-medium text-sm text-[#5C4D4D] hover:bg-blue-50 hover:text-blue-800 transition-all group cursor-pointer"
+                    className="w-full flex items-center gap-3.5 p-2 rounded-xl text-left font-sans font-medium text-sm text-gray-700 hover:bg-gray-50 hover:text-black transition-all group cursor-pointer"
                   >
-                    <div className="p-1.5 bg-white border border-[#EEDBCD]/40 rounded-xl group-hover:bg-blue-600 group-hover:text-white transition-all text-[#8C7A7A]">
+                    <div className="p-1.5 bg-gray-50 border border-gray-200 rounded-xl group-hover:bg-gray-950 group-hover:text-white transition-all text-gray-600">
                       <Info className="w-4 h-4" />
                     </div>
                     <span>Sobre o App</span>
@@ -1582,16 +1592,16 @@ export default function App() {
 
                 {/* Lovely Pastel App Installer Mini Banner inside Drawer */}
                 {isInstallable && (
-                  <div className="mt-auto bg-brand-pink/30 p-4 rounded-2xl border border-brand-rose/25 text-center shadow-3xs">
-                    <p className="text-[11.5px] text-[#8C5555] font-light leading-relaxed mb-3">
-                      Instale o app na sua tela inicial para acessar mais rápido no dia a dia 💛
+                  <div className="mt-auto bg-gray-50 p-4 rounded-xl border border-gray-200 text-center shadow-xs">
+                    <p className="text-[11.5px] text-gray-600 font-normal leading-relaxed mb-3">
+                      Instale o app na sua tela inicial para acessar mais rápido no dia a dia.
                     </p>
                     <button
                       onClick={() => {
                         setIsMenuOpen(false);
                         handleInstallApp();
                       }}
-                      className="w-full py-2.5 bg-brand-rose text-white text-xs font-semibold rounded-xl hover:bg-[#D4717E] transition-colors cursor-pointer"
+                      className="w-full py-2 bg-gray-950 text-white text-xs font-semibold rounded-xl hover:bg-black transition-colors cursor-pointer"
                     >
                       Instalar Agora
                     </button>
@@ -1600,9 +1610,9 @@ export default function App() {
               </div>
 
               {/* Drawer Footer Details */}
-              <div className="p-5 border-t border-[#FAEDE2] bg-[#FAF3EA] text-center rounded-br-3xl">
-                <span className="text-[10px] text-gray-400 block uppercase tracking-widest font-mono">BebêClima v3.2</span>
-                <span className="text-[9.5px] text-gray-400 font-light block leading-relaxed mt-1">Carrega atualizações em tempo real</span>
+              <div className="p-5 border-t border-gray-100 bg-gray-50 text-center rounded-br-2xl">
+                <span className="text-[10px] text-gray-400 block uppercase tracking-wide font-mono">BebêClima v3.2</span>
+                <span className="text-[9.5px] text-gray-400 font-normal block leading-relaxed mt-1">Carrega atualizações em tempo real</span>
               </div>
             </motion.div>
           </React.Fragment>
@@ -1612,32 +1622,32 @@ export default function App() {
           <React.Fragment key="about-modal">
             <motion.div
               initial={{ opacity: 0 }}
-              animate={{ opacity: 0.5 }}
+              animate={{ opacity: 0.4 }}
               exit={{ opacity: 0 }}
               onClick={() => setIsAboutOpen(false)}
-              className="fixed inset-0 bg-brand-charcoal z-50 cursor-pointer"
+              className="fixed inset-0 bg-gray-955 z-50 cursor-pointer"
             />
             <motion.div
               initial={{ opacity: 0, scale: 0.95, y: 20 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.95, y: 20 }}
               transition={{ type: 'spring', damping: 25, stiffness: 200 }}
-              className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[90%] max-w-md bg-white rounded-3xl p-6 shadow-2xl z-55 border border-[#FAEDE2] flex flex-col gap-4 text-center"
+              className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[90%] max-w-sm bg-white rounded-2xl p-6 shadow-2xl z-55 border border-gray-150 flex flex-col gap-4 text-center"
             >
-              <div className="w-12 h-12 bg-blue-50 text-blue-700 rounded-full flex items-center justify-center mx-auto">
+              <div className="w-12 h-12 bg-gray-50 text-gray-800 rounded-full flex items-center justify-center mx-auto border border-gray-150">
                 <Info className="w-6 h-6" />
               </div>
-              <h3 className="font-display font-semibold text-lg text-brand-charcoal">Sobre o BebêClima</h3>
-              <p className="text-xs sm:text-sm text-gray-600 font-light leading-relaxed">
+              <h3 className="font-sans font-bold text-lg text-gray-900 border-none outline-none leading-tight">Sobre o BebêClima</h3>
+              <p className="text-xs sm:text-sm text-gray-650 font-normal leading-relaxed">
                 O <strong>BebêClima / Como Vestir o Bebê</strong> é um aplicativo progressivo (PWA) de utilidade prática criado para de forma descomplicada apoiar cuidadores a escolherem as camadas perfeitas de vestimenta para os pequenos.
               </p>
-              <p className="text-[11.5px] text-gray-500 font-light leading-relaxed bg-[#FAF6F0] p-3 rounded-2xl border border-[#FAEDE2]">
+              <p className="text-[11.5px] text-gray-600 font-normal leading-relaxed bg-gray-50 p-3 rounded-xl border border-gray-150">
                 Utilizamos algoritmos térmicos baseados em consensos de pediatria e neonatologia para guiar o sono seguro, a transpiração livre e minimizar riscos de superaquecimento.
               </p>
-              <div className="flex flex-col gap-2 pt-2">
+              <div className="flex flex-col gap-2 pt-2 border-none">
                 <button
                   onClick={() => setIsAboutOpen(false)}
-                  className="w-full py-2.5 bg-brand-rose hover:bg-[#D4717E] text-white text-sm font-medium rounded-xl cursor-pointer transition-colors"
+                  className="w-full py-2.5 bg-gray-955 hover:bg-black text-white text-sm font-semibold rounded-xl cursor-pointer transition-colors"
                 >
                   Entendi, obrigado!
                 </button>
@@ -1650,52 +1660,52 @@ export default function App() {
           <React.Fragment key="install-modal">
             <motion.div
               initial={{ opacity: 0 }}
-              animate={{ opacity: 0.5 }}
+              animate={{ opacity: 0.4 }}
               exit={{ opacity: 0 }}
               onClick={() => setIsPwaInstructionOpen(false)}
-              className="fixed inset-0 bg-brand-charcoal z-50 cursor-pointer"
+              className="fixed inset-0 bg-gray-955 z-50 cursor-pointer"
             />
             <motion.div
               initial={{ opacity: 0, scale: 0.95, y: 20 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.95, y: 20 }}
               transition={{ type: 'spring', damping: 25, stiffness: 200 }}
-              className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[90%] max-w-md bg-white rounded-3xl p-6 shadow-2xl z-55 border border-[#FAEDE2] flex flex-col gap-4 focus:outline-none"
+              className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[90%] max-w-sm bg-white rounded-2xl p-6 shadow-2xl z-55 border border-gray-150 flex flex-col gap-4 focus:outline-none"
             >
-              <div className="w-12 h-12 bg-brand-pink text-brand-rose rounded-full flex items-center justify-center mx-auto">
+              <div className="w-12 h-12 bg-gray-50 text-gray-850 rounded-full flex items-center justify-center mx-auto border border-gray-200">
                 <Smartphone className="w-6 h-6" />
               </div>
-              <h3 className="font-display font-semibold text-center text-lg text-brand-charcoal">Instalar na Tela Inicial</h3>
+              <h3 className="font-sans font-bold text-center text-lg text-gray-900 leading-tight">Instalar na Tela Inicial</h3>
               
-              <div className="space-y-4 py-1 text-xs text-gray-600 font-light">
+              <div className="space-y-4 py-1 text-xs text-gray-600 font-normal">
                 <p className="text-center text-xs text-gray-500 leading-relaxed">
-                  Acesse com apenas um toque no seu celular! Funciona em tela cheia e offline de modo prático.
+                  Acesse com apenas um toque no seu celular! Funciona de modo prático inclusive offline.
                 </p>
 
                 {/* iPhone / Safari specific manual */}
-                <div className="bg-[#FAF6F0] p-4 rounded-2xl border border-[#FAEDE2] space-y-2">
-                  <span className="font-display font-semibold text-brand-rose text-xs block uppercase tracking-wide">No iPhone (iOS - Safari)</span>
-                  <ol className="list-decimal list-inside space-y-2 text-xs leading-relaxed">
-                    <li>Toque no botão de <strong>Compartilhar</strong> <Share2 className="w-3.5 h-3.5 inline inline-block text-brand-rose" /> no Safari (setinha no rodapé).</li>
+                <div className="bg-gray-50 p-4 rounded-xl border border-gray-150 space-y-2">
+                  <span className="font-sans font-bold text-gray-900 text-xs block uppercase tracking-wide">No iPhone (iOS - Safari)</span>
+                  <ol className="list-decimal list-inside space-y-2 text-xs leading-relaxed text-gray-700">
+                    <li>Toque no botão de <strong>Compartilhar</strong> <Share2 className="w-3.5 h-3.5 inline inline-block text-gray-850" /> no Safari (setinha no rodapé).</li>
                     <li>Role o menu de opções para baixo.</li>
                     <li>Clique em <strong>Adicionar à Tela de Início</strong>.</li>
                   </ol>
                 </div>
 
                 {/* Android / Chrome specific manual */}
-                <div className="bg-[#EAF5EC] p-4 rounded-2xl border border-emerald-100 space-y-2">
-                  <span className="font-display font-semibold text-emerald-800 text-xs block uppercase tracking-wide">No Android (Chrome)</span>
-                  <ol className="list-decimal list-inside space-y-2 text-xs text-emerald-950 leading-relaxed">
+                <div className="bg-gray-50 p-4 rounded-xl border border-gray-155 space-y-2">
+                  <span className="font-sans font-bold text-gray-900 text-xs block uppercase tracking-wide">No Android (Chrome)</span>
+                  <ol className="list-decimal list-inside space-y-2 text-xs text-gray-700 leading-relaxed">
                     <li>Toque no botão de <strong>3 pontinhos</strong> do navegador.</li>
                     <li>Selecione <strong>Adicionar à Tela Inicial</strong> ou <strong>Instalar Aplicativo</strong>.</li>
                   </ol>
                 </div>
               </div>
 
-              <div className="flex flex-col gap-2 pt-2">
+              <div className="flex flex-col gap-2 pt-2 border-none">
                 <button
                   onClick={() => setIsPwaInstructionOpen(false)}
-                  className="w-full py-2.5 bg-brand-rose hover:bg-[#D4717E] text-white text-sm font-medium rounded-xl cursor-pointer transition-colors text-center"
+                  className="w-full py-2.5 bg-gray-955 hover:bg-black text-white text-sm font-semibold rounded-xl cursor-pointer transition-colors text-center"
                 >
                   Entendi, vou instalar!
                 </button>
