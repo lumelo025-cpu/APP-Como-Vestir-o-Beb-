@@ -327,19 +327,19 @@ export default function App() {
         {/* Small Centralized Brand Logo */}
         <motion.div 
           onClick={() => { setActiveTab('inicio'); setScreen('welcome'); }}
-          className="cursor-pointer flex items-center gap-1.5 focus:outline-none"
+          className="cursor-pointer flex items-center gap-1 focus:outline-none"
           whileHover={{ scale: 1.02 }}
           whileTap={{ scale: 0.98 }}
         >
           <img 
             src={menuClothesLogoImg} 
             alt="Logo ClimaBaby" 
-            className="h-6.5 w-auto object-contain shrink-0"
+            className="h-5 w-auto object-contain shrink-0"
             referrerPolicy="no-referrer"
           />
-          <div className="flex items-center font-logo tracking-tight text-lg leading-none select-none">
-            <span className="font-semibold text-[#8EB79F]">Clima</span>
-            <span className="font-semibold text-[#E49F8C]">Baby</span>
+          <div className="flex items-center font-logo tracking-tight text-base leading-none select-none">
+            <span className="font-bold text-[#8EB79F]">Clima</span>
+            <span className="font-bold text-[#E49F8C]">Baby</span>
           </div>
         </motion.div>
 
@@ -404,69 +404,75 @@ export default function App() {
                 id="screen-welcome"
               >
                 
-                {/* NEW INTEGRATED LANDING HERO (NO HEAVY CARDS, BIO-GRADIENT BG, OVERLAPPING ORGANIC FLOAT BABY) */}
-                <div className="w-full relative overflow-hidden rounded-[2.25rem] bg-gradient-to-br from-[#FFFDF9] via-[#F8F4EE] to-[#F4C7B8]/30 border border-[#EDE5DB]/25 p-5 sm:p-6 mb-2 flex flex-col justify-center min-h-[148px] sm:min-h-[160px]">
+                {/* NEW INTEGRATED LANDING HERO (SEAMLESSLY DE-CARDED, BLENDS INTO PAGE BACKGROUND - Ajuste 1) */}
+                <div className="w-full relative overflow-hidden py-4 sm:py-6 mb-1.5 flex flex-col justify-center min-h-[135px] sm:min-h-[145px] select-none">
                   
+                  {/* Floating ambient glow wash behind the text and baby - Soft ethereal background (Ajuste 1, 3) */}
+                  <div className="absolute right-[-10%] top-1/2 -translate-y-1/2 w-[85%] h-[150%] rounded-full bg-gradient-to-br from-[#FFFDF9] via-[#FAF6F0] to-[#F4C7B8]/30 blur-[28px] opacity-90 -z-10 pointer-events-none" />
+
                   {/* Floating ornaments surrounding the baby on the right side */}
-                  <div className="absolute right-0 top-0 bottom-0 w-[55%] pointer-events-none select-none z-10 overflow-hidden">
+                  <div className="absolute right-[-4%] top-0 bottom-0 w-[58%] pointer-events-none select-none z-10 overflow-hidden">
                     
-                    {/* The baby image - aligned right, borderless, organic float transition */}
-                    <div className="absolute -right-5 top-1/2 -translate-y-1/2 w-full h-[125%] max-h-[180px] rounded-l-[3.5rem] overflow-hidden transform rotate-[-2deg]">
+                    {/* The baby image - aligned right, borderless, organic float transition, enlarged ~15% (Ajuste 2) */}
+                    <div className="absolute -right-3 top-1/2 -translate-y-1/2 w-[115%] h-[140%] max-h-[210px] overflow-hidden transform rotate-[-1deg]">
                       <img 
                         src={babyHeroImg} 
                         alt="Bebê dormindo" 
-                        className="w-full h-full object-cover object-center transform scale-[1.05]"
+                        className="w-full h-full object-cover object-center transform scale-[1.08]"
                         referrerPolicy="no-referrer"
                       />
-                      {/* Left soft wash transparency layer to dissolve the image into the layout gradient seamlessly */}
-                      <div className="absolute inset-y-0 left-0 w-20 bg-gradient-to-r from-[#F8F4EE] via-[#F8F4EE]/90 to-transparent" />
-                      <div className="absolute inset-0 bg-gradient-to-t from-[#F4C7B8]/10 via-transparent to-transparent pointer-events-none" />
+                      {/* Left soft wash transparency layer to dissolve the image into the layout gradient seamlessly (Ajuste 3) */}
+                      <div className="absolute inset-y-0 left-0 w-24 bg-gradient-to-r from-[#F8F4EE] via-[#F8F4EE]/90 to-transparent pointer-events-none" />
+                      <div className="absolute inset-x-0 top-0 h-10 bg-gradient-to-b from-[#F8F4EE] to-transparent pointer-events-none" />
+                      <div className="absolute inset-x-0 bottom-0 h-10 bg-gradient-to-t from-[#F8F4EE] to-transparent pointer-events-none" />
+                      {/* Ethereal light peach overlay */}
+                      <div className="absolute inset-0 bg-gradient-to-t from-[#F4C7B8]/15 via-transparent to-transparent pointer-events-none" />
                     </div>
 
-                    {/* Highly discreet, premium floating graphic shapes */}
+                    {/* Highly discreet, premium floating graphic shapes (Ajuste 6) */}
                     <motion.div 
-                      animate={{ y: [0, -5, 0], rotate: [0, 5, 0] }}
+                      animate={{ y: [0, -4, 0], rotate: [0, 4, 0] }}
                       transition={{ repeat: Infinity, duration: 4, ease: "easeInOut" }}
-                      className="absolute left-[8%] top-[15%] text-amber-400 opacity-60 flex items-center justify-center"
+                      className="absolute left-[5%] top-[18%] text-amber-400/70 opacity-60 flex items-center justify-center pointer-events-none"
                     >
                       <Star className="w-3.5 h-3.5 fill-amber-300 text-amber-300" />
                     </motion.div>
 
                     <motion.div 
-                      animate={{ y: [0, 4, 0] }}
+                      animate={{ y: [0, 3, 0] }}
                       transition={{ repeat: Infinity, duration: 5, ease: "easeInOut" }}
-                      className="absolute right-[12%] top-[8%] text-[#E29A88] opacity-70"
+                      className="absolute right-[8%] top-[10%] text-[#E29A88]/80 opacity-70 pointer-events-none"
                     >
-                      <Heart className="w-3 h-3 fill-[#E29A88] text-[#E29A88]" />
+                      <Heart className="w-2.5 h-2.5 fill-[#E29A88] text-[#E29A88]" />
                     </motion.div>
 
                     <motion.div 
                       animate={{ y: [0, -3, 0], scale: [0.95, 1.05, 0.95] }}
                       transition={{ repeat: Infinity, duration: 4.5, ease: "easeInOut" }}
-                      className="absolute left-[15%] bottom-[15%] text-indigo-300 opacity-55"
+                      className="absolute left-[12%] bottom-[18%] text-[#6E8FBE] opacity-50 pointer-events-none"
                     >
-                      <Moon className="w-4 h-4 fill-indigo-100/50 text-indigo-300" />
+                      <Moon className="w-3.5 h-3.5 fill-[#6E8FBE]/20 text-[#6E8FBE]" />
                     </motion.div>
 
                     <motion.div 
-                      animate={{ scale: [1, 1.15, 1] }}
+                      animate={{ scale: [1, 1.12, 1] }}
                       transition={{ repeat: Infinity, duration: 3, ease: "easeInOut" }}
-                      className="absolute right-[22%] bottom-[12%] text-amber-400 opacity-70"
+                      className="absolute right-[18%] bottom-[15%] text-amber-400 opacity-70 pointer-events-none"
                     >
                       <Sparkles className="w-3.5 h-3.5" />
                     </motion.div>
 
                     <motion.div 
-                      animate={{ x: [0, 3, 0] }}
+                      animate={{ x: [0, 2, 0] }}
                       transition={{ repeat: Infinity, duration: 6, ease: "easeInOut" }}
-                      className="absolute left-[3%] top-[45%] text-[#8CB69F] opacity-50 flex items-center justify-center font-black"
+                      className="absolute left-[1%] top-[45%] text-emerald-400/60 opacity-55 flex items-center justify-center pointer-events-none"
                     >
-                      <Cloud className="w-3.5 h-3.5 fill-emerald-50/50 text-emerald-300" />
+                      <Cloud className="w-3.5 h-3.5 fill-emerald-50/40 text-emerald-400" />
                     </motion.div>
                   </div>
 
-                  {/* LEFT TEXT PANEL — occupying ~50% width to prevent overlap */}
-                  <div className="w-[52%] sm:w-[50%] z-20 text-left space-y-1.5 relative select-none pr-1">
+                  {/* LEFT TEXT PANEL — occupying ~50% width to prevent overlap (Ajuste 8) */}
+                  <div className="w-[52%] sm:w-[50%] z-20 text-left space-y-1 relative select-none pr-1">
                     <span className="inline-block text-[8.5px] font-black text-[#CB7C69] bg-[#FFF3EE] px-2.5 py-0.5 rounded-full border border-[#F4C7B8]/40 tracking-wider uppercase">
                       🍼 Guia Inteligente
                     </span>
@@ -506,23 +512,23 @@ export default function App() {
                   </div>
                 </div>
 
-                {/* BENEFÍCIOS REALÇADORES DO APP (Ajuste 7) */}
-                <div className="grid grid-cols-2 gap-1.5 max-w-[440px] sm:max-w-md mx-auto px-1 select-none">
-                  <div className="flex items-center gap-1.5 bg-white/50 backdrop-blur-[2px] border border-[#EDE5DB]/40 px-2.5 py-1 rounded-xl shadow-4xs transition-transform duration-300 hover:scale-[1.01]">
-                    <span className="text-[11px]" role="img" aria-label="Ambiente">🌡️</span>
-                    <span className="text-[9.5px] font-bold text-[#5F5A55]/75">Analisa o ambiente real</span>
+                {/* COMPACT DE-CLUTTERED BENEFIT CHIPS (Ajuste 5, 7) */}
+                <div className="flex flex-wrap items-center justify-center gap-1.5 max-w-[480px] sm:max-w-md mx-auto px-1 select-none">
+                  <div className="flex items-center gap-1.5 bg-[#FAF7F2] border border-[#EDE5DB]/70 px-2.5 py-1 rounded-full shadow-[0_1px_4px_rgba(95,90,85,0.01)] hover:scale-[1.02] transition-transform duration-200">
+                    <span className="text-[10.5px]" role="img" aria-label="Ambiente">🌡️</span>
+                    <span className="text-[9.5px] font-bold text-[#5F5A55]/80">Ambiente real</span>
                   </div>
-                  <div className="flex items-center gap-1.5 bg-white/50 backdrop-blur-[2px] border border-[#EDE5DB]/40 px-2.5 py-1 rounded-xl shadow-4xs transition-transform duration-300 hover:scale-[1.01]">
-                    <span className="text-[11px]" role="img" aria-label="Sono">😴</span>
-                    <span className="text-[9.5px] font-bold text-[#5F5A55]/75">Considera o sono</span>
+                  <div className="flex items-center gap-1.5 bg-[#FAF7F2] border border-[#EDE5DB]/70 px-2.5 py-1 rounded-full shadow-[0_1px_4px_rgba(95,90,85,0.01)] hover:scale-[1.02] transition-transform duration-200">
+                    <span className="text-[10.5px]" role="img" aria-label="Sono">😴</span>
+                    <span className="text-[9.5px] font-bold text-[#5F5A55]/80">Sono</span>
                   </div>
-                  <div className="flex items-center gap-1.5 bg-white/50 backdrop-blur-[2px] border border-[#EDE5DB]/40 px-2.5 py-1 rounded-xl shadow-4xs transition-transform duration-300 hover:scale-[1.01]">
-                    <span className="text-[11px]" role="img" aria-label="Colo">🤱</span>
-                    <span className="text-[9.5px] font-bold text-[#5F5A55]/75">Entende colo e sling</span>
+                  <div className="flex items-center gap-1.5 bg-[#FAF7F2] border border-[#EDE5DB]/70 px-2.5 py-1 rounded-full shadow-[0_1px_4px_rgba(95,90,85,0.01)] hover:scale-[1.02] transition-transform duration-200">
+                    <span className="text-[10.5px]" role="img" aria-label="Colo">🤱</span>
+                    <span className="text-[9.5px] font-bold text-[#5F5A55]/80">Colo e sling</span>
                   </div>
-                  <div className="flex items-center gap-1.5 bg-white/50 backdrop-blur-[2px] border border-[#EDE5DB]/40 px-2.5 py-1 rounded-xl shadow-4xs transition-transform duration-300 hover:scale-[1.01]">
-                    <span className="text-[11px]" role="img" aria-label="Seguro">💛</span>
-                    <span className="text-[9.5px] font-bold text-[#5F5A55]/75">Recomendações seguras</span>
+                  <div className="flex items-center gap-1.5 bg-[#FAF7F2] border border-[#EDE5DB]/70 px-2.5 py-1 rounded-full shadow-[0_1px_4px_rgba(95,90,85,0.01)] hover:scale-[1.02] transition-transform duration-200">
+                    <span className="text-[10.5px]" role="img" aria-label="Seguro">💛</span>
+                    <span className="text-[9.5px] font-bold text-[#5F5A55]/80">Segurança</span>
                   </div>
                 </div>
  
