@@ -345,11 +345,12 @@ export function calculateClothing(answers: QuestionnaireAnswers): Recommendation
 
   // 5. Build Smart Alerts and Extra Tips
   const importantAlerts = [
+    'Segurança do Sono Crítica: O bebê NUNCA deve dormir de touca ou com cobertores soltos sem supervisão direta para evitar qualquer risco de asfixia e superaquecimento.',
+    'Recomendação Especial: Uma excelente opção é o uso de um saco de dormir quentinho com mangas ao invés de cobertores soltos. Ele mantém o pequeno seguro, aquecido e sem o risco de cobrir o rostinho!',
     'A nuca do bebê é o melhor indicador de conforto térmico: sinta ali para saber se ele realmente está suando ou com frio.',
     'Mãos frias nem sempre significam frio! A circulação das extremidades nos pequenos ainda está amadurecendo.',
     'Evite excesso de camadas! Superaquecimento é desconfortável e aumenta os riscos térmicos associados ao sono.',
-    'Observe sempre sinais importantes como suor excessivo, bochechas avermelhadas, irritabilidade inexplicável ou pele muito quente.',
-    'Prefira saco de dormir de segurança ao invés de cobertores soltos para garantir noites tranquilas de sono 100% seguro.'
+    'Observe sempre sinais importantes como suor excessivo, bochechas avermelhadas, irritabilidade inexplicável ou pele muito quente.'
   ];
 
   if (state === 'dormindo') {

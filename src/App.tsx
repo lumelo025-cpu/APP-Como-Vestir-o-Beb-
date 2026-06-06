@@ -431,15 +431,15 @@ export default function App() {
             >
               <div className="pt-4 flex-1 flex flex-col justify-center items-center">
                 {/* Playful & Soft Premium App Icon Container */}
-                <div className="relative mb-6">
-                  <div className="absolute -inset-1 bg-pink-100/60 rounded-[2.5rem] blur-sm opacity-60" />
-                  <div className="relative w-24 h-24 mx-auto bg-white rounded-[2rem] flex items-center justify-center overflow-hidden border border-slate-200 shadow-sm z-1">
+                <div className="relative mb-8">
+                  <div className="absolute -inset-2 bg-gradient-to-tr from-pink-300 to-rose-300 rounded-[3rem] blur-md opacity-40 animate-pulse" />
+                  <div className="relative w-32 h-32 sm:w-36 sm:h-36 mx-auto bg-white rounded-[2.8rem] flex items-center justify-center overflow-hidden border-2 border-pink-200/60 shadow-md z-1">
                     <motion.img
-                      animate={{ y: [0, -2, 0] }}
-                      transition={{ repeat: Infinity, duration: 5, ease: 'easeInOut' }}
+                      animate={{ y: [0, -3, 0], scale: [1, 1.02, 1] }}
+                      transition={{ repeat: Infinity, duration: 6, ease: 'easeInOut' }}
                       src={menuClothesLogo}
                       alt="Logo ClimaBaby"
-                      className="w-18 h-18 object-cover"
+                      className="w-full h-full object-cover"
                       referrerPolicy="no-referrer"
                     />
                   </div>
@@ -1231,7 +1231,7 @@ export default function App() {
                         <span className="text-[8.5px] bg-white/60 px-1.5 py-0.5 rounded-md border border-white/80 font-bold uppercase tracking-wide">
                           {i === 0 && 'Base'}
                           {i === 1 && 'Aquecer'}
-                          {i === 2 && 'Manto'}
+                          {i === 2 && 'Manter'}
                         </span>
                       </motion.div>
                     );
@@ -1413,6 +1413,31 @@ export default function App() {
                     </ul>
                   </div>
                 )}
+              </div>
+ 
+              {/* SAFE SLEEP PERMANENT ADVISORY (CRITICAL USER REQUEST) */}
+              <div className="bg-gradient-to-br from-purple-100 via-white to-purple-50/50 border-2 border-purple-300 rounded-3xl p-5 sm:p-5.5 shadow-sm relative overflow-hidden">
+                <div className="absolute -top-12 -right-12 w-24 h-24 bg-purple-300/20 rounded-full blur-xl pointer-events-none" />
+                <div className="relative z-10 flex flex-col sm:flex-row items-start gap-3.5">
+                  <div className="w-10 h-10 rounded-2xl bg-purple-100 border border-purple-200 flex items-center justify-center text-purple-700 shadow-xxs shrink-0 mt-0.5 animate-pulse">
+                    <Moon className="w-5 h-5 text-purple-600" />
+                  </div>
+                  <div className="space-y-2 flex-1">
+                    <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-purple-300 text-purple-900 text-[9.5px] font-display font-extrabold uppercase tracking-wide border border-purple-300/20 shadow-xxs">
+                      🚨 Alerta de Sono Seguro
+                    </div>
+                    <h5 className="font-display font-bold text-sm text-slate-800 tracking-tight leading-snug">
+                      Lembrete de Proteção: Nunca deixe o bebê dormir de touca nem cobertor sem supervisão
+                    </h5>
+                    <p className="text-xs text-slate-705 leading-relaxed font-sans font-medium">
+                      Colocar toucas, gorros ou cobertores soltos enquanto o bebê dorme sem vigilância direta aumenta expressivamente os riscos de superaquecimento e asfixia mecânica acidental.
+                    </p>
+                    <div className="mt-2 text-[11px] leading-relaxed p-3 rounded-2xl bg-[#FFFDF9] border border-purple-200/60 shadow-xxs font-sans text-slate-700">
+                      <span className="font-semibold text-purple-800 block mb-1">💡 Dica de Conforto & Segurança:</span>
+                      Uma excelente opção é usar um <strong className="text-purple-950 font-bold">saco de dormir quentinho com mangas</strong> ao invés de cobertores. Ele mantém seu bebê totalmente protegido, livre de perigo e super aconchegante a noite toda!
+                    </div>
+                  </div>
+                </div>
               </div>
  
               {/* SECURITY ALERTS BLOCK */}
