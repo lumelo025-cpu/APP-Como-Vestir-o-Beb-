@@ -1,5 +1,4 @@
 /**
- * @license
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -12,7 +11,6 @@ import {
   Sun,
   Moon,
   Home,
-  Compass,
   Sparkles,
   Heart,
   Info,
@@ -20,30 +18,35 @@ import {
   RefreshCw,
   Check,
   ChevronRight,
-  ChevronLeft,
-  Tv,
-  Layers,
   Shirt,
   HelpCircle,
   Clock,
-  ExternalLink,
-  Plus,
-  Minus,
-  CheckCircle,
-  VolumeX,
-  Footprints,
-  Menu,
-  X,
-  Gift,
   Download,
   Share2,
-  Smartphone
+  Smartphone,
+  CheckCircle,
+  X,
+  Gift,
+  Bell,
+  Sliders,
+  Award
 } from 'lucide-react';
-import { QuestionnaireAnswers, RecommendationResult, BabyAge, BabyState, PeriodOfDay, ThermalSensitivity, EnvironmentCondition, AmbientFeeling } from './types.ts';
+import {
+  QuestionnaireAnswers,
+  RecommendationResult,
+  BabyAge,
+  BabyState,
+  PeriodOfDay,
+  EnvironmentCondition,
+  AmbientFeeling
+} from './types.ts';
 import { calculateClothing } from './babyLogic.ts';
-const menuClothesLogo = "https://site.maecompleta.com/wp-content/uploads/2026/05/Design-sem-nome-34.png";
 
-// Illustrative baby clothes catalog with exact premium image assets and heating levels
+// Import local premium asset paths
+import babyHeroImg from './assets/images/baby_sleeping_hero_1780707097305.png';
+import menuClothesLogoImg from './assets/images/menu_clothes_logo_1779899134603.png';
+
+// Database of clothes matching Portuguese logical codes
 const CLOTHING_DATABASE: Record<string, { name: string; desc: string; url: string; heatingLevel: string }> = {
   'body-manga-longa': {
     name: 'Body Manga Longa',
@@ -59,7 +62,7 @@ const CLOTHING_DATABASE: Record<string, { name: string; desc: string; url: strin
   },
   'calca': {
     name: 'Calça Culote (Mijão)',
-    desc: 'Algodão ultra flexível para cobrir e dar total mobilidade às perninhas.',
+    desc: 'Algodão macio para cobrir e dar total mobilidade às perninhas.',
     url: 'https://site.maecompleta.com/wp-content/uploads/2026/05/Captura-de-tela-2026-05-27-114519.png',
     heatingLevel: 'Leve'
   },
@@ -70,32 +73,32 @@ const CLOTHING_DATABASE: Record<string, { name: string; desc: string; url: strin
     heatingLevel: 'Leve'
   },
   'macacao-soft': {
-    name: 'Macacão Soft/Peluciado (meia-estação)',
+    name: 'Macacão Soft/Peluciado',
     desc: 'Ideal para dias frescos e de meia-estação.',
     url: 'https://site.maecompleta.com/wp-content/uploads/2026/05/Captura-de-tela-2026-05-27-115407.png',
     heatingLevel: 'Médio'
   },
   'macacao-plush': {
-    name: 'Macacão Plush (inverno intenso)',
+    name: 'Macacão Plush',
     desc: 'Aconchegante camada aveludada para combater o frio intenso.',
     url: 'https://site.maecompleta.com/wp-content/uploads/2026/05/Captura-de-tela-2026-05-27-114550.png',
     heatingLevel: 'Alto'
   },
   'saco-dormir-leve': {
-    name: 'Saco de dormir leve (verão)',
+    name: 'Saco de dormir leve',
     desc: 'Mantém o bebê coberto a noite toda com frescor ideal.',
     url: 'https://site.maecompleta.com/wp-content/uploads/2026/05/Captura-de-tela-2026-05-27-115515.png',
     heatingLevel: 'Leve'
   },
   'saco-dormir-soft': {
-    name: 'Saco de dormir soft (meia-estação)',
+    name: 'Saco de dormir soft',
     desc: 'Protege o bebê contra friagens moderadas durante o sono.',
     url: 'https://site.maecompleta.com/wp-content/uploads/2026/05/Captura-de-tela-2026-05-27-115422.png',
     heatingLevel: 'Médio'
   },
   'saco-dormir-plush': {
-    name: 'Saco de dormir plush com mangas (inverno)',
-    desc: 'Proteção térmica total e segura para o bebê nos dias mais frios do ano.',
+    name: 'Saco de dormir plush com mangas',
+    desc: 'Proteção térmica total e segura para o bebê nos dias mais frios.',
     url: 'https://site.maecompleta.com/wp-content/uploads/2026/05/Captura-de-tela-2026-05-27-115437.png',
     heatingLevel: 'Muito Alto'
   },
@@ -119,87 +122,87 @@ const CLOTHING_DATABASE: Record<string, { name: string; desc: string; url: strin
   }
 };
 
-// Main Application Component
 export default function App() {
-  // Navigation Screens: 'welcome' | 'wizard' | 'loading' | 'result'
-  const [screen, setScreen] = useState<'welcome' | 'wizard' | 'loading' | 'result'>('welcome');
-  
-  // Current step inside the wizard: 1 | 2 | 3 | 4
-  const [step, setStep] = useState<number>(1);
+  const [activeTab, setActiveTab] = useState<'inicio' | 'historico' | 'favoritos' | 'mais'>('inicio');
+  const [screen, setScreen] = useState<'welcome' | 'loading' | 'result'>('welcome');
 
-  // Default values for Questionnaire
+  // Unified Form input matching the visual mockup
   const [answers, setAnswers] = useState<QuestionnaireAnswers>({
-    age: '0-3-meses',
-    state: 'acordado',
-    period: 'dia',
-    sensitivity: 'normal',
-    condition: 'fechado',
     feeling: 'agradavel',
-    temperature: null,
-    wantsExtras: true,
+    period: 'dia',
+    state: 'acordado',
+    age: '1-6-meses',
+    condition: 'fechado',
+    temperature: null
   });
 
-  // Compiled result state
+  const [tempInputValue, setTempInputValue] = useState<string>('');
   const [result, setResult] = useState<RecommendationResult | null>(null);
 
-  // Quick Check states
-  const [quickTemp, setQuickTemp] = useState<number>(22);
+  // loading screen text loop
+  const [loadingText, setLoadingText] = useState('Analisando as variáveis de clima...');
 
-  // PWA & Navigation Menu States
+  // Overlays / notifications / sidebar states
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isAboutOpen, setIsAboutOpen] = useState(false);
   const [isPwaInstructionOpen, setIsPwaInstructionOpen] = useState(false);
-  const [deferredPrompt, setDeferredPrompt] = useState<any>(null);
-  const [isInstallable, setIsInstallable] = useState(true); // Default to true so iOS instruction button always shows in menu
+  const [bellNotification, setBellNotification] = useState<string | null>(null);
 
-  // Hook to handle PWA installation eligibility
+  // Local storage lists for history + favorites
+  const [historyList, setHistoryList] = useState<Array<{ id: string; timestamp: string; answers: QuestionnaireAnswers; result: RecommendationResult }>>([]);
+  const [favoritesList, setFavoritesList] = useState<Array<{ id: string; answers: QuestionnaireAnswers; result: RecommendationResult }>>([]);
+
+  // Load history/favorites from localStorage on run
   useEffect(() => {
-    const handleBeforeInstallPrompt = (e: any) => {
-      e.preventDefault();
-      setDeferredPrompt(e);
-      setIsInstallable(true);
-    };
-
-    window.addEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
-
-    // If already standalone, we hide button
-    if (window.matchMedia('(display-mode: standalone)').matches || (navigator as any).standalone) {
-      setIsInstallable(false);
+    try {
+      const savedHistory = localStorage.getItem('climababy_history');
+      if (savedHistory) setHistoryList(JSON.parse(savedHistory));
+      
+      const savedFavorites = localStorage.getItem('climababy_favorites');
+      if (savedFavorites) setFavoritesList(JSON.parse(savedFavorites));
+    } catch (e) {
+      console.error('Error loading state from localStorage:', e);
     }
-
-    return () => {
-      window.removeEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
-    };
   }, []);
 
-  const handleInstallApp = async () => {
-    if (deferredPrompt) {
-      deferredPrompt.prompt();
-      const { outcome } = await deferredPrompt.userChoice;
-      if (outcome === 'accepted') {
-        setDeferredPrompt(null);
-        setIsInstallable(false);
-      }
+  const saveHistory = (newHistory: typeof historyList) => {
+    setHistoryList(newHistory);
+    localStorage.setItem('climababy_history', JSON.stringify(newHistory));
+  };
+
+  const saveFavorites = (newFavorites: typeof favoritesList) => {
+    setFavoritesList(newFavorites);
+    localStorage.setItem('climababy_favorites', JSON.stringify(newFavorites));
+  };
+
+  const toggleFavorite = (answersObj: QuestionnaireAnswers, resultObj: RecommendationResult) => {
+    const key = JSON.stringify(answersObj);
+    const exists = favoritesList.find(f => JSON.stringify(f.answers) === key);
+    if (exists) {
+      const filtered = favoritesList.filter(f => JSON.stringify(f.answers) !== key);
+      saveFavorites(filtered);
     } else {
-      setIsPwaInstructionOpen(true);
+      const added = [...favoritesList, { id: 'fav_' + Date.now(), answers: answersObj, result: resultObj }];
+      saveFavorites(added);
     }
   };
-  const [quickPeriod, setQuickPeriod] = useState<PeriodOfDay>('dia');
 
-  // Loading text cycling effect state
-  const [loadingText, setLoadingText] = useState('Analisando as variáveis de clima...');
+  const isCurrentFavorite = () => {
+    if (!result) return false;
+    const key = JSON.stringify(answers);
+    return favoritesList.some(f => JSON.stringify(f.answers) === key);
+  };
 
-  // Effect to cycle warm motherly comments during loading
+  // Loading animation message sequence
   useEffect(() => {
     if (screen !== 'loading') return;
-    
+
     const messages = [
-      'Analisando as variáveis de clima... 🌡️',
-      'Dobrando as roupinhas com carinho... 🧺',
       'Sentindo se há brisa ou vento lá fora... 🍃',
-      'Calculando o equilíbrio ideal de camadas... ⚖️',
-      'Preparando dicas práticas para o seu dia... ✨',
-      'Prontinho! Gerando conforto para o seu bebê... ❤️'
+      'Dobrando as roupinhas com carinho... 🧺',
+      'Analisando as variáveis de clima... 🌡️',
+      'Calculando o equilíbrio seguro de camadas... ⚖️',
+      'Prontinho! Preparando as orientações... ❤️'
     ];
 
     let messageIndex = 0;
@@ -208,1562 +211,1389 @@ export default function App() {
         messageIndex++;
         setLoadingText(messages[messageIndex]);
       }
-    }, 800);
+    }, 450);
 
-    // Transition to result screen after 2.6 seconds
     const timeout = setTimeout(() => {
-      const calculation = calculateClothing(answers);
-      setResult(calculation);
+      const parsedTemp = tempInputValue && !isNaN(Number(tempInputValue)) ? Number(tempInputValue) : null;
+      const finalAnswers = { ...answers, temperature: parsedTemp };
+      const calcResult = calculateClothing(finalAnswers);
+      
+      setResult(calcResult);
+      
+      // Save to history storage
+      const historyItem = {
+        id: 'hist_' + Date.now(),
+        timestamp: new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' }) + ' - ' + new Date().toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit' }),
+        answers: finalAnswers,
+        result: calcResult
+      };
+      const updatedHistory = [historyItem, ...historyList].slice(0, 20); // Keep last 20
+      saveHistory(updatedHistory);
+      
       setScreen('result');
-    }, 2800);
+    }, 1800);
 
     return () => {
       clearInterval(interval);
       clearTimeout(timeout);
     };
-  }, [screen, answers]);
+  }, [screen, answers, tempInputValue]);
 
-  // Handle immediate form calculation triggers
-  const startWizard = () => {
-    setStep(1);
-    setScreen('wizard');
-  };
-
-  const handleQuickCheck = (temp: number, pOfDay: PeriodOfDay) => {
-    let feel: AmbientFeeling = 'agradavel';
-    if (temp < 12) feel = 'muito-frio';
-    else if (temp < 16) feel = 'frio';
-    else if (temp < 19) feel = 'fresquinho';
-    else if (temp < 25) feel = 'agradavel';
-    else if (temp < 31) feel = 'quente';
-    else feel = 'muito-quente';
-
-    setAnswers({
-      age: '0-3-meses',
-      state: 'acordado',
-      period: pOfDay,
-      sensitivity: 'normal',
-      condition: 'fechado',
-      feeling: feel,
-      temperature: temp,
-      wantsExtras: true,
-    });
+  const handleGetRecommendation = () => {
+    setLoadingText('Consultando roupinha ideal...');
     setScreen('loading');
   };
 
-  const handleNextStep = () => {
-    if (step < 3) {
-      setStep(step + 1);
-    } else {
-      setScreen('loading');
-    }
+  const handleLoadFromHistoryOrFavorites = (savedAns: QuestionnaireAnswers, savedRes: RecommendationResult) => {
+    setAnswers(savedAns);
+    setTempInputValue(savedAns.temperature !== null ? String(savedAns.temperature) : '');
+    setResult(savedRes);
+    setActiveTab('inicio');
+    setScreen('result');
   };
 
-  const handlePrevStep = () => {
-    if (step > 1) {
-      setStep(step - 1);
-    } else {
-      setScreen('welcome');
-    }
-  };
-
-  // Quick adjusters inside final result screen (quality of life feature for moms)
-  const adjustResultTemperature = (delta: number) => {
-    setAnswers(prev => {
-      let currentTemp = prev.temperature;
-      if (currentTemp === null) {
-        // default based on feeling
-        if (prev.feeling === 'muito-quente') currentTemp = 33;
-        else if (prev.feeling === 'quente') currentTemp = 28;
-        else if (prev.feeling === 'agradavel') currentTemp = 23;
-        else if (prev.feeling === 'fresquinho') currentTemp = 19;
-        else if (prev.feeling === 'frio') currentTemp = 14;
-        else currentTemp = 9;
-      }
-      const newTemp = Math.max(5, Math.min(41, currentTemp + delta));
-      const updatedAnswers = { ...prev, temperature: newTemp };
-      // Recalculate result instantly
-      const calculation = calculateClothing(updatedAnswers);
-      setResult(calculation);
-      return updatedAnswers;
-    });
-  };
-
-  const toggleResultWind = () => {
-    setAnswers(prev => {
-      const isWind = prev.condition === 'vento-frio';
-      const updatedAnswers = { ...prev, condition: (isWind ? 'fechado' : 'vento-frio') as EnvironmentCondition };
-      const calculation = calculateClothing(updatedAnswers);
-      setResult(calculation);
-      return updatedAnswers;
-    });
-  };
-
-  // Convert key formats to readable labels
   const getAgeFriendlyName = (ageKey: BabyAge) => {
     switch (ageKey) {
-      case 'recem-nascido': return 'Recém-Nascido (até 28 dias)';
-      case '0-3-meses': return '0 a 3 meses';
-      case '3-6-meses': return '3 a 6 meses';
-      case '6-12-meses': return '6 a 12 meses';
-      case 'mais-de-1-ano': return 'Mais de 1 ano';
-    }
-  };
-
-  const getStateFriendlyName = (stateKey: BabyState) => {
-    switch (stateKey) {
-      case 'dormindo': return 'Dormindo bochechando';
-      case 'acordado': return 'Acordado e brincalhão';
-      case 'passeando': return 'Passeando lá fora';
-      case 'colo-sling': return 'No colo ou sling quentinho';
-      case 'carrinho': return 'Dentro do carrinho protegido';
+      case 'recem-nascido': return 'Recém-nas.';
+      case '1-6-meses': return '1 a 6 m';
+      case '6-12-meses': return '6 a 12 m';
+      case 'mais-de-1-ano': return 'Acima 1 ano';
     }
   };
 
   const getConditionFriendlyName = (condKey: EnvironmentCondition) => {
     switch (condKey) {
-      case 'fechado': return 'Fechado e aconchegante';
-      case 'ventilado': return 'Ventilado';
-      case 'ventilador': return 'Com ventilador';
-      case 'ar-condicionado': return 'Com ar-condicionado';
-      case 'externo': return 'Área externa';
-      case 'vento-frio': return 'Com vento frio';
+      case 'fechado': return 'Fechado';
+      case 'ventilador': return 'Ventilador';
+      case 'ar-condicionado': return 'Ar-cond.';
+      case 'vento-frio': return 'Vento Frio';
+      case 'externo': return 'Área ext.';
     }
   };
 
-  const getFeelingFriendlyName = (feelKey: AmbientFeeling) => {
+  const getFeelingFriendlyDescription = (feelKey: AmbientFeeling) => {
     switch (feelKey) {
-      case 'muito-quente': return '🥵 Muito quente';
-      case 'quente': return '☀️ Quente';
-      case 'agradavel': return '😊 Agradável';
-      case 'fresquinho': return '🌥️ Fresquinho';
-      case 'frio': return '🥶 Frio';
-      case 'muito-frio': return '❄️ Muito frio';
+      case 'muito-quente': return 'Muito quente';
+      case 'quente': return 'Quente';
+      case 'agradavel': return 'Agradável';
+      case 'fresquinho': return 'Fresquinho';
+      case 'frio': return 'Frio';
+      case 'muito-frio': return 'Muito frio';
     }
   };
 
-  // Dynamic Thermometer colors based on Celsius degree
-  const getTempColorStyle = (temp: number | null, feeling: AmbientFeeling) => {
-    let t = temp;
-    if (t === null) {
-      if (feeling === 'muito-quente') t = 33;
-      else if (feeling === 'quente') t = 28;
-      else if (feeling === 'agradavel') t = 23;
-      else if (feeling === 'fresquinho') t = 19;
-      else if (feeling === 'frio') t = 14;
-      else t = 9;
-    }
-    if (t < 16) return { bg: 'bg-blue-50 text-blue-700 border-blue-200', fill: 'bg-blue-500', pill: 'bg-blue-600 text-white' };
-    if (t >= 16 && t < 20) return { bg: 'bg-teal-50 text-teal-700 border-teal-200', fill: 'bg-teal-400', pill: 'bg-[#51a7b4] text-white' };
-    if (t >= 20 && t < 24) return { bg: 'bg-emerald-50 text-emerald-800 border-emerald-200', fill: 'bg-emerald-500', pill: 'bg-[#299c6f] text-white' };
-    if (t >= 24 && t < 28) return { bg: 'bg-amber-50 text-amber-800 border-amber-200', fill: 'bg-amber-500', pill: 'bg-[#d69324] text-white' };
-    if (t >= 28 && t < 32) return { bg: 'bg-orange-50 text-orange-850 border-orange-200', fill: 'bg-orange-500', pill: 'bg-[#df6a14] text-white' };
-    return { bg: 'bg-rose-50 text-rose-800 border-rose-200', fill: 'bg-rose-500', pill: 'bg-rose-600 text-white' };
+  // Instant update in results view
+  const handleImmediateAdjustment = (field: keyof QuestionnaireAnswers, value: any) => {
+    setAnswers(prev => {
+      const updated = { ...prev, [field]: value };
+      const calcResult = calculateClothing(updated);
+      setResult(calcResult);
+      return updated;
+    });
   };
 
   return (
-    <div className="min-h-screen bg-gradient-premium selection:bg-pink-100 selection:text-pink-900 text-slate-700 flex flex-col items-center justify-between pb-8 pt-4 px-4 sm:px-6 relative overflow-x-hidden">
+    <div className="min-h-screen bg-[#FAF5EE] text-[#4B4642] flex flex-col items-center justify-start pb-28 pt-4 px-4 sm:px-6 relative overflow-x-hidden antialiased">
       
-      {/* Playful & Cozy Header with pastel frames and PWA install shortcuts */}
-      <header className="w-full max-w-xl flex items-center justify-between py-1 mb-4 z-20">
-        <div className="flex items-center gap-2">
-          {/* Menu Trigger Button with baby-pink frame */}
+      {/* Decorative Warm Elements to Match Cozy Visual Aesthetic */}
+      <div className="absolute top-0 inset-x-0 h-[380px] bg-gradient-to-b from-[#F9F0E6] via-[#FAF5EE] to-transparent pointer-events-none z-0" />
+      <div className="absolute top-0 right-0 w-96 h-96 bg-gradient-to-bl from-[#F7E0D5]/50 via-[#E4EDE7]/30 to-transparent rounded-full blur-3xl pointer-events-none z-0" />
+      <div className="absolute top-24 left-10 w-24 h-24 rounded-full bg-[#FAF0E6]/70 blur-xl pointer-events-none" />
+
+      {/* Playful & Cozy Header with PWA install shortcuts */}
+      <header className="w-full max-w-xl flex items-center justify-between py-1.5 mb-5 z-20 relative px-1">
+        <div className="flex items-center">
+          {/* Menu Button precisely like picture (fully round, white/gray, clear lines) */}
           <motion.button 
             id="btn-open-menu"
             whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.92 }}
+            whileTap={{ scale: 0.95 }}
             onClick={() => setIsMenuOpen(true)}
-            className="p-2.5 bg-pink-50 border-2 border-pink-100 hover:bg-pink-100 text-pink-600 rounded-full shadow-sm transition-all cursor-pointer flex items-center justify-center relative"
+            className="w-12 h-12 bg-white border border-[#EDE5DB]/70 rounded-full shadow-[0_2px_12px_rgba(75,70,66,0.04)] hover:bg-[#FAF9F5] text-slate-700 transition-all cursor-pointer flex items-center justify-center shrink-0"
           >
-            <Menu className="w-4 h-4 stroke-[2.5]" />
+            <div className="flex flex-col gap-1 w-4.5 items-center justify-center">
+              <span className="w-4.5 h-[1.8px] bg-[#8B847C] rounded-full" />
+              <span className="w-4.5 h-[1.8px] bg-[#8B847C] rounded-full" />
+              <span className="w-4.5 h-[1.8px] bg-[#8B847C] rounded-full" />
+            </div>
           </motion.button>
         </div>
 
-        {/* Center application branding with clean pink frame */}
+        {/* Brand Hanger-Heart Wordmark Logo precisely matches ClimaBaby custom colors & bare image placement */}
         <motion.div 
-          onClick={() => { setScreen('welcome'); setStep(1); }}
-          className="cursor-pointer flex items-center justify-center gap-1.5 px-3.5 py-1.5 bg-white border border-slate-200 rounded-full shadow-xs group hover:bg-slate-50 hover:border-slate-300 transition-all"
-          whileHover={{ scale: 1.03 }}
-          whileTap={{ scale: 0.97 }}
+          onClick={() => { setActiveTab('inicio'); setScreen('welcome'); }}
+          className="cursor-pointer flex items-center gap-1.5"
+          whileHover={{ scale: 1.02 }}
+          whileTap={{ scale: 0.98 }}
         >
-          <div className="w-5.5 h-5.5 rounded-full overflow-hidden flex items-center justify-center shrink-0 border border-slate-200 shadow-xxs">
-            <img 
-              src={menuClothesLogo} 
-              alt="Logo ClimaBaby" 
-              className="w-full h-full object-cover"
-              referrerPolicy="no-referrer"
-            />
+          <img 
+            src={menuClothesLogoImg} 
+            alt="Logo ClimaBaby" 
+            className="h-10 w-auto object-contain shrink-0"
+            referrerPolicy="no-referrer"
+          />
+          <div className="flex items-center font-display tracking-tight text-[24px]">
+            <span className="font-semibold text-[#8EB79F]">Clima</span>
+            <span className="font-medium text-[#E49F8C]">Baby</span>
           </div>
-          <span className="font-display font-semibold text-xs sm:text-sm text-pink-600 select-none tracking-tight">
-            ClimaBaby 👶
-          </span>
         </motion.div>
 
-        {/* Right download PWA icon shortcut with clean neutral frame */}
+        {/* Right Active Bell Notification Button (fully round, exact inline position and orange badge) */}
         <div className="flex items-center">
           <motion.button 
-            id="header-btn-install"
+            id="header-btn-notification"
             whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.92 }}
-            onClick={handleInstallApp}
-            className="p-2.5 bg-white border-2 border-slate-200 hover:bg-slate-50 text-slate-750 rounded-full shadow-sm transition-all cursor-pointer flex items-center justify-center"
-            title="Instalar Aplicativo"
+            whileTap={{ scale: 0.95 }}
+            onClick={() => {
+              setBellNotification("🛡️ Tudo perfeito por aqui! Não há alertas climáticos severos para as próximas horas.");
+            }}
+            className="w-12 h-12 bg-white border border-[#EDE5DB]/70 rounded-full shadow-[0_2px_12px_rgba(75,70,66,0.04)] hover:bg-[#FAF9F5] text-slate-700 transition-all cursor-pointer flex items-center justify-center relative shrink-0"
+            title="Alertas do Dia"
           >
-            <Download className="w-4 h-4 stroke-[2.5]" />
+            <Bell className="w-5 h-5 text-[#8B847C] stroke-[2]" />
+            <span className="absolute top-2.5 right-2.5 w-2 h-2 bg-[#E49F8C] rounded-full ring-2 ring-white animate-pulse" />
           </motion.button>
         </div>
       </header>
 
-      {/* Primary Card Viewport styled with generous roundedness, sleek charcoal border, clean shadows */}
-      <main className="w-full max-w-xl bg-white rounded-[2rem] border-2 border-slate-200 shadow-[0_8px_30px_rgb(0,0,0,0.04)] transition-all duration-300 z-10 overflow-hidden min-h-[500px] flex flex-col">
-        <AnimatePresence mode="wait">
-          
-          {/* WELCOME SCREEN */}
-          {screen === 'welcome' && (
-            <motion.div
-              key="welcome"
-              initial={{ opacity: 0, y: 15 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -15 }}
-              transition={{ duration: 0.3 }}
-              className="flex-1 flex flex-col justify-between p-6 sm:p-8 text-center"
-              id="screen-welcome"
-            >
-              <div className="pt-4 flex-1 flex flex-col justify-center items-center">
-                {/* Playful & Soft Premium App Icon Container */}
-                <div className="relative mb-8">
-                  <div className="absolute -inset-2 bg-gradient-to-tr from-pink-300 to-rose-300 rounded-[3rem] blur-md opacity-40 animate-pulse" />
-                  <div className="relative w-32 h-32 sm:w-36 sm:h-36 mx-auto bg-white rounded-[2.8rem] flex items-center justify-center overflow-hidden border-2 border-pink-200/60 shadow-md z-1">
-                    <motion.img
-                      animate={{ y: [0, -3, 0], scale: [1, 1.02, 1] }}
-                      transition={{ repeat: Infinity, duration: 6, ease: 'easeInOut' }}
-                      src={menuClothesLogo}
-                      alt="Logo ClimaBaby"
-                      className="w-full h-full object-cover"
-                      referrerPolicy="no-referrer"
-                    />
-                  </div>
-                </div>
+      {/* BELL NOTIFICATION POPUP PANEL */}
+      <AnimatePresence>
+        {bellNotification && (
+          <motion.div
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -10 }}
+            className="w-full max-w-xl mx-auto mb-4 bg-emerald-50 border border-emerald-150 rounded-2xl p-4 shadow-sm z-30 relative text-left"
+          >
+            <div className="flex items-start gap-2.5">
+              <span className="text-base mt-0.5">🙌</span>
+              <p className="text-xs text-emerald-800 font-semibold leading-relaxed flex-1">
+                {bellNotification}
+              </p>
+              <button 
+                onClick={() => setBellNotification(null)}
+                className="p-1 hover:bg-emerald-100 text-emerald-600 rounded-full cursor-pointer shrink-0"
+              >
+                <X className="w-3.5 h-3.5" />
+              </button>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
-                <h1 className="font-display text-3xl sm:text-4xl font-semibold text-slate-850 tracking-tight leading-tight mb-1">
-                  ClimaBaby
-                </h1>
-                <h2 className="font-display text-lg sm:text-xl font-medium text-slate-600 tracking-tight leading-snug mb-3">
-                  Vamos vestir seu bebê com carinho ♥
-                </h2>
-
-                <p className="text-slate-600 font-medium text-xs sm:text-sm max-w-sm leading-relaxed mb-6">
-                  Esqueça a insegurança de vestir a mais ou a menos. Responda a algumas perguntas simples e receba recomendações seguras baseadas no método de camadas.
-                </p>
-
-                {/* Elegant, clean baby badge categories with unified 4-color style */}
-                <div className="flex flex-wrap justify-center gap-2 mb-6 pointer-events-none">
-                  <span className="text-xs font-semibold px-3 py-1.5 bg-slate-50 text-slate-750 rounded-full border border-slate-200/80 flex items-center gap-1 shadow-2xs">👶 Sem excesso</span>
-                  <span className="text-xs font-semibold px-3 py-1.5 bg-slate-50 text-slate-750 rounded-full border border-slate-200/80 flex items-center gap-1 shadow-2xs">🌙 Sono seguro</span>
-                  <span className="text-xs font-semibold px-3 py-1.5 bg-slate-50 text-slate-750 rounded-full border border-slate-200/80 flex items-center gap-1 shadow-2xs">🌡️ Apoio térmico</span>
-                </div>
-              </div>
-
-              <div className="w-full mt-4 space-y-6">
+      {/* MAIN VIEW SYSTEM MAP SWITCH (INICIO / HISTORICO / FAVORITOS / MAIS) */}
+      <div className="w-full max-w-xl z-10">
+        
+        {activeTab === 'inicio' && (
+          <AnimatePresence mode="wait">
+            
+            {/* WELCOME DASHBOARD INI SCREEN */}
+            {screen === 'welcome' && (
+              <motion.div
+                key="welcome-dashboard"
+                initial={{ opacity: 0, y: 15 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -15 }}
+                transition={{ duration: 0.25 }}
+                className="space-y-6"
+                id="screen-welcome"
+              >
                 
-                {/* Playful & Solid Primary Button in brand Pink */}
-                <motion.button
-                  id="btn-start"
-                  onClick={startWizard}
-                  whileHover={{ scale: 1.01, y: -0.5 }}
-                  whileTap={{ scale: 0.99 }}
-                  className="w-full py-4.5 bg-pink-500 hover:bg-pink-600 text-white font-display font-semibold rounded-2xl shadow-sm transition-all outline-none cursor-pointer flex items-center justify-center gap-2 text-md active:translate-y-[1px]"
-                >
-                  <span>Começar calculadora de roupas</span>
-                  <ChevronRight className="w-5 h-5 stroke-[2.5]" />
-                </motion.button>
-
-                {/* QUICK CHECK COMPONENT: ULTRA CLEAN SYSTEM */}
-                <div className="pt-6 border-t border-slate-200 text-left">
-                  <div className="flex items-center gap-2 mb-1.5">
-                    <h3 className="font-display font-semibold text-sm text-pink-600 tracking-wide uppercase flex items-center gap-1">
-                      🩺 Consulta Rápida Express! ⏱️
-                    </h3>
-                  </div>
-                  <p className="text-xs text-slate-500 font-medium mb-4 leading-relaxed">
-                    Com pressa? Informe apenas a temperatura da sala e o período do dia para ver a sugestão de roupa.
-                  </p>
-
-                  <div className="bg-slate-50 rounded-2xl p-5 border border-slate-150 grid grid-cols-1 sm:grid-cols-2 gap-4 shadow-3xs">
-                    
-                    {/* Temperature Controls */}
-                    <div className="space-y-1.5">
-                      <label className="text-xs font-bold text-slate-750 flex items-center gap-1.5">
-                        <Thermometer className="w-4 h-4 text-pink-500 shrink-0" /> Qual a temperatura?
-                      </label>
-                      <div className="flex items-center justify-between bg-white border border-slate-200 rounded-2xl p-1.5 max-w-[170px] shadow-xs">
-                        <motion.button
-                          type="button"
-                          id="btn-quick-dec"
-                          onClick={() => setQuickTemp(prev => Math.max(5, prev - 1))}
-                          whileHover={{ scale: 1.05 }}
-                          whileTap={{ scale: 0.9 }}
-                          className="w-8 h-8 rounded-xl bg-slate-50 hover:bg-pink-50 hover:text-pink-600 border border-slate-200 flex items-center justify-center text-slate-700 font-bold transition-all cursor-pointer"
-                        >
-                          <Minus className="w-3.5 h-3.5 stroke-[3]" />
-                        </motion.button>
-                        <span className="font-sans font-bold text-md text-slate-850 min-w-[32px] text-center font-mono">
-                          {quickTemp}°C
-                        </span>
-                        <motion.button
-                          type="button"
-                          id="btn-quick-inc"
-                          onClick={() => setQuickTemp(prev => Math.min(41, prev + 1))}
-                          whileHover={{ scale: 1.05 }}
-                          whileTap={{ scale: 0.9 }}
-                          className="w-8 h-8 rounded-xl bg-slate-50 hover:bg-pink-50 hover:text-pink-600 border border-slate-200 flex items-center justify-center text-slate-700 font-bold transition-all cursor-pointer"
-                        >
-                          <Plus className="w-3.5 h-3.5 stroke-[3]" />
-                        </motion.button>
-                      </div>
-                    </div>
-
-                    {/* Period Controls */}
-                    <div className="space-y-1.5">
-                      <label className="text-xs font-bold text-slate-750 flex items-center gap-1.5">
-                        <Clock className="w-4 h-4 text-pink-500 shrink-0" /> Período do Dia:
-                      </label>
-                      <div className="grid grid-cols-2 gap-1 bg-white border border-slate-200 rounded-2xl p-1 shadow-xs">
-                        <button
-                          type="button"
-                          id="btn-quick-day"
-                          onClick={() => setQuickPeriod('dia')}
-                          className={`py-2 rounded-xl text-xs font-bold transition-all cursor-pointer flex items-center justify-center gap-1 ${
-                            quickPeriod === 'dia'
-                              ? 'bg-pink-500 border border-pink-500 text-white shadow-xs'
-                              : 'text-slate-600 hover:text-slate-850 hover:bg-slate-50'
-                          }`}
-                        >
-                          Dia ☀️
-                        </button>
-                        <button
-                          type="button"
-                          id="btn-quick-night"
-                          onClick={() => setQuickPeriod('noite')}
-                          className={`py-2 rounded-xl text-xs font-bold transition-all cursor-pointer flex items-center justify-center gap-1 ${
-                            quickPeriod === 'noite'
-                              ? 'bg-pink-500 border border-pink-500 text-white shadow-xs'
-                              : 'text-slate-600 hover:text-slate-850 hover:bg-slate-50'
-                          }`}
-                        >
-                          Noite 🌙
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-
-                  <motion.button
-                    id="btn-quick-submit"
-                    onClick={() => handleQuickCheck(quickTemp, quickPeriod)}
-                    whileHover={{ scale: 1.01 }}
-                    whileTap={{ scale: 0.99 }}
-                    className="w-full mt-3.5 py-4 bg-pink-500 hover:bg-pink-600 text-white font-display font-semibold text-sm rounded-2xl transition-all cursor-pointer flex items-center justify-center gap-2 shadow-sm"
-                  >
-                    Ver recomendação direta <ChevronRight className="w-5 h-5 stroke-[2]" />
-                  </motion.button>
-                </div>
-              </div>
-            </motion.div>
-          )}
-
-          {/* WIZARD CONTAINER */}
-          {screen === 'wizard' && (
-            <motion.div
-              key="wizard"
-              initial={{ opacity: 0, x: 15 }}
-              animate={{ opacity: 1, x: 0 }}
-              exit={{ opacity: 0, x: -15 }}
-              className="flex-1 flex flex-col justify-between p-6 sm:p-8"
-              id="screen-wizard"
-            >
-              {/* Playful & Soft Steppers Header */}
-              <div className="mb-6">
-                <div className="flex justify-between items-center text-xs text-pink-600 font-bold mb-2">
-                  <span className="font-display font-bold">Passo {step} de 3 🌸</span>
-                  <span className="font-display font-semibold text-slate-700 bg-slate-50 px-2.5 py-0.5 rounded-full border border-slate-200">
-                    {step === 1 && 'Sobre o bebê 🍼'}
-                    {step === 2 && 'Momento & Lugar 🏡'}
-                    {step === 3 && 'O Clima atual 🌡️'}
-                  </span>
-                </div>
-                {/* Playful and colorful animated progress bar */}
-                <div className="w-full h-2 bg-slate-100 rounded-full overflow-hidden border border-slate-205/50 shadow-xxs">
-                  <motion.div 
-                    className="h-full bg-pink-500 rounded-full" 
-                    initial={{ width: '33.3%' }}
-                    animate={{ width: `${step * 33.3}%` }}
-                    transition={{ duration: 0.3 }}
-                  ></motion.div>
-                </div>
-              </div>
-
-              {/* Dynamic Steps Render with child themes */}
-              <div className="flex-1 flex flex-col justify-center my-2">
-                <AnimatePresence mode="wait">
+                {/* HERO BLOCK WITH GEOMETRIC BEAUTY AND GENERATED PHOTO */}
+                <div className="flex flex-row items-center justify-between gap-2.5 py-4 relative overflow-visible bg-transparent rounded-3xl">
                   
-                  {/* STEP 1: ABOUT THE BABY */}
-                  {step === 1 && (
-                    <motion.div
-                      key="step1"
-                      initial={{ opacity: 0, y: 10 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      exit={{ opacity: 0, y: -10 }}
-                      className="space-y-5"
-                    >
-                      <div>
-                        <label className="font-display text-base sm:text-lg font-semibold text-slate-850 block mb-1">
-                          Qual a idade do bebê? 🍼
-                        </label>
-                        <p className="text-xs text-gray-500 font-medium mb-3 leading-relaxed">
-                          Bebês muito novos regulam menos a temperatura corporal e requerem mais aconchego.
-                        </p>
-                        <div className="space-y-2">
-                          {[
-                            { key: 'recem-nascido', label: 'Recém-nascido', desc: 'Até os primeiros 28 dias' },
-                            { key: '0-3-meses', label: '0 a 3 meses', desc: 'Fase de acomodação' },
-                            { key: '3-6-meses', label: '3 a 6 meses', desc: 'Já ganha ritmo térmico' },
-                            { key: '6-12-meses', label: '6 a 12 meses', desc: 'Fisicamente mais ativo' },
-                            { key: 'mais-de-1-ano', label: 'Mais de 1 ano', desc: 'Regula bem e engatinha/anda' }
-                          ].map((item) => (
-                            <button
-                              key={item.key}
-                              id={`age-opt-${item.key}`}
-                              onClick={() => setAnswers(prev => ({ ...prev, age: item.key as BabyAge }))}
-                              className={`w-full p-3 rounded-2xl text-left border-2 transition-all duration-200 cursor-pointer flex items-center justify-between shadow-sm ${
-                                answers.age === item.key
-                                  ? 'bg-white border-pink-500 text-pink-600 scale-[1.01]'
-                                  : 'bg-white hover:bg-slate-50 border-slate-200 text-slate-850'
-                              }`}
-                            >
-                              <div>
-                                <span className={`font-display font-bold text-sm sm:text-base block ${answers.age === item.key ? 'text-pink-600' : 'text-slate-850'}`}>{item.label}</span>
-                                <span className={`text-[11px] font-medium mt-0.5 block ${answers.age === item.key ? 'text-pink-550' : 'text-gray-500'}`}>{item.desc}</span>
-                              </div>
-                              <div className={`w-6 h-6 rounded-full border-2 flex items-center justify-center transition-all ${
-                                answers.age === item.key 
-                                  ? 'bg-pink-500 border-transparent text-white' 
-                                  : 'border-slate-200 bg-slate-50'
-                              }`}>
-                                {answers.age === item.key && <Check className="w-4 h-4 stroke-[4] text-white" />}
-                              </div>
-                            </button>
-                          ))}
-                        </div>
-                      </div>
-
-                      <div className="pt-2">
-                        <label className="font-display text-base sm:text-lg font-semibold text-slate-850 block mb-1">
-                          O bebê costuma sentir: 🌡️
-                        </label>
-                        <p className="text-xs text-gray-500 font-medium mb-3 leading-relaxed">
-                          Cada criança possui seu próprio biotipo natural de metabolizar calor.
-                        </p>
-                        <div className="grid grid-cols-3 gap-2">
-                          {[
-                            { key: 'calor', label: 'Mais calor', emoji: '🥵' },
-                            { key: 'normal', label: 'Normal / Neutro', emoji: '😊' },
-                            { key: 'frio', label: 'Mais frio', emoji: '🥶' }
-                          ].map((item) => (
-                            <button
-                              key={item.key}
-                              id={`sens-opt-${item.key}`}
-                              onClick={() => setAnswers(prev => ({ ...prev, sensitivity: item.key as ThermalSensitivity }))}
-                              className={`p-3 rounded-2xl border-2 text-center transition-all duration-200 cursor-pointer flex flex-col items-center gap-1.5 shadow-sm hover:scale-102 ${
-                                answers.sensitivity === item.key
-                                  ? 'bg-white border-pink-500 text-pink-600 scale-102'
-                                  : 'bg-white hover:bg-slate-50 border-slate-201 text-slate-700'
-                              }`}
-                            >
-                              <span className="text-2xl">{item.emoji}</span>
-                              <span className="text-xs leading-none font-semibold">{item.label}</span>
-                            </button>
-                          ))}
-                        </div>
-                      </div>
-                    </motion.div>
-                  )}
-
-                  {/* STEP 2: CONTEXT & PLACE */}
-                  {step === 2 && (
-                    <motion.div
-                      key="step2"
-                      initial={{ opacity: 0, y: 10 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      exit={{ opacity: 0, y: -10 }}
-                      className="space-y-5"
-                    >
-                      <div>
-                        <label className="font-display text-base sm:text-lg font-semibold text-slate-850 block mb-1">
-                          Vamos vestir o bebê para: 🛌
-                        </label>
-                        <p className="text-xs text-gray-500 font-medium mb-3">
-                          Selecione o momento ou atividade atual do bebê.
-                        </p>
-                        <div className="grid grid-cols-1 gap-2">
-                          {[
-                            { key: 'dormindo', label: 'Dormir', desc: 'Confortável e seguro 💤' },
-                            { key: 'acordado', label: 'Acordado em casa', desc: 'Tempo livre para brincar e se movimentar 🧸' },
-                            { key: 'passeando', label: 'Passear ao ar livre', desc: 'Caminhando ou passeando na rua 🌳' },
-                            { key: 'colo-sling', label: 'No colo / Sling', desc: 'Colinho aconchegante de mãe ou pai 🤗' },
-                            { key: 'carrinho', label: 'Dentro do carrinho', desc: 'Protegido da brisa direta 🛒' }
-                          ].map((item) => (
-                            <button
-                              key={item.key}
-                              type="button"
-                              id={`state-opt-${item.key}`}
-                              onClick={() => setAnswers(prev => ({ ...prev, state: item.key as BabyState }))}
-                              className={`w-full p-3 rounded-2xl text-left border-2 transition-all duration-200 cursor-pointer flex items-center justify-between shadow-sm ${
-                                answers.state === item.key
-                                  ? 'bg-white border-pink-500 text-pink-650 scale-[1.01]'
-                                  : 'bg-white hover:bg-slate-50 border-slate-200 text-slate-800'
-                              }`}
-                            >
-                              <div>
-                                <span className={`font-display font-bold text-xs sm:text-sm block ${answers.state === item.key ? 'text-pink-650' : 'text-slate-800'}`}>{item.label}</span>
-                                <span className={`text-[11px] font-semibold mt-0.5 block ${answers.state === item.key ? 'text-pink-500' : 'text-gray-500'}`}>{item.desc}</span>
-                              </div>
-                              <div className={`w-6 h-6 rounded-full border-2 flex items-center justify-center transition-all ${
-                                answers.state === item.key 
-                                  ? 'bg-pink-500 border-transparent text-white' 
-                                  : 'border-slate-200 bg-slate-50'
-                              }`}>
-                                {answers.state === item.key && <Check className="w-4 h-4 stroke-[4] text-white" />}
-                              </div>
-                            </button>
-                          ))}
-                        </div>
-                      </div>
-
-                      <div>
-                        <label className="font-display text-base sm:text-lg font-semibold text-slate-850 block mb-1">
-                          O ambiente está: 🏡
-                        </label>
-                        <p className="text-xs text-gray-500 font-medium mb-2.5">
-                          A sensação real do lugar onde o bebê passará esse momento.
-                        </p>
-                        <div className="grid grid-cols-2 gap-2">
-                          {[
-                            { key: 'fechado', label: 'Fechado', desc: 'Aconchegante e quente' },
-                            { key: 'ventilado', label: 'Ventilado', desc: 'Ar correndo levemente' },
-                            { key: 'ventilador', label: 'Com ventilador', desc: 'Fluxo contínuo ativo' },
-                            { key: 'ar-condicionado', label: 'Ar Condicionado', desc: 'Climatizado mais frio' },
-                            { key: 'externo', label: 'Área externa', desc: 'Ao ar livre' },
-                            { key: 'vento-frio', label: 'Vento frio', desc: 'Brisas e correntes frias' }
-                          ].map((item) => (
-                            <button
-                              key={item.key}
-                              type="button"
-                              id={`cond-opt-${item.key}`}
-                              onClick={() => setAnswers(prev => ({ ...prev, condition: item.key as EnvironmentCondition }))}
-                              className={`p-2.5 rounded-2xl border-2 text-left transition-all duration-200 cursor-pointer shadow-sm hover:scale-102 ${
-                                answers.condition === item.key
-                                  ? 'bg-white border-pink-500 text-pink-650 scale-[1.01]'
-                                  : 'bg-white hover:bg-slate-50 border-slate-200 text-slate-850'
-                              }`}
-                            >
-                              <span className={`font-display font-semibold text-xs block ${answers.condition === item.key ? 'text-pink-600' : 'text-slate-800'}`}>{item.label}</span>
-                              <span className={`text-[10px] font-medium mt-0.5 block ${answers.condition === item.key ? 'text-pink-500' : 'text-gray-500'}`}>{item.desc}</span>
-                            </button>
-                          ))}
-                        </div>
-                      </div>
-
-                      <div className="pt-1">
-                        <label className="font-display text-sm font-semibold text-slate-850 block mb-2">
-                          Período do Dia: ☀️🌙
-                        </label>
-                        <div className="grid grid-cols-2 gap-2">
-                          {[
-                            { key: 'dia', label: 'Dia ☀️' },
-                            { key: 'noite', label: 'Noite 🌙' }
-                          ].map((item) => (
-                            <button
-                              key={item.key}
-                              type="button"
-                              id={`period-opt-${item.key}`}
-                              onClick={() => setAnswers(prev => ({ ...prev, period: item.key as PeriodOfDay }))}
-                              className={`p-3 rounded-2xl border-2 text-center transition-all duration-200 cursor-pointer text-xs font-semibold shadow-sm ${
-                                answers.period === item.key
-                                  ? 'bg-pink-500 border-pink-500 text-white'
-                                  : 'bg-white border-slate-205 text-slate-700 hover:bg-slate-50'
-                              }`}
-                            >
-                              {item.label}
-                            </button>
-                          ))}
-                        </div>
-                      </div>
-                    </motion.div>
-                  )}
-
-                  {step === 3 && (
-                    <motion.div
-                      key="step3"
-                      initial={{ opacity: 0, y: 10 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      exit={{ opacity: 0, y: -10 }}
-                      className="space-y-5"
-                    >
-                      <div className="text-center">
-                        <label className="font-display text-base sm:text-lg font-semibold text-slate-850 block mb-1">
-                          Como o ambiente está agora? 🌡️
-                        </label>
-                        <p className="text-xs text-slate-500 font-medium mb-4 leading-relaxed">
-                          Substitua a lida puramente numérica pela percepção do clima atual.
-                        </p>
-
-                        {/* Feeling options list/grid with beautiful responsive climatic coloring */}
-                        <div className="grid grid-cols-2 gap-2.5 max-w-md mx-auto">
-                          {[
-                            { 
-                              key: 'muito-quente', 
-                              label: 'Muito quente', 
-                              emoji: '🥵', 
-                              desc: 'Acima de 30°C',
-                              activeBg: 'bg-white border-pink-500 text-pink-650 shadow-xs scale-102',
-                              normalBg: 'bg-white border-slate-200 text-slate-800 hover:border-slate-300 hover:bg-slate-50'
-                            },
-                            { 
-                              key: 'quente', 
-                              label: 'Quente', 
-                              emoji: '☀️', 
-                              desc: '27°C a 30°C',
-                              activeBg: 'bg-white border-pink-500 text-pink-650 shadow-xs scale-102',
-                              normalBg: 'bg-white border-slate-200 text-slate-800 hover:border-slate-300 hover:bg-slate-50'
-                            },
-                            { 
-                              key: 'agradavel', 
-                              label: 'Agradável', 
-                              emoji: '😊', 
-                              desc: '22°C a 26°C',
-                              activeBg: 'bg-white border-pink-500 text-pink-650 shadow-xs scale-102',
-                              normalBg: 'bg-white border-slate-200 text-slate-800 hover:border-slate-300 hover:bg-slate-50'
-                            },
-                            { 
-                              key: 'fresquinho', 
-                              label: 'Fresquinho', 
-                              emoji: '🌥️', 
-                              desc: '18°C a 21°C',
-                              activeBg: 'bg-white border-pink-500 text-pink-650 shadow-xs scale-102',
-                              normalBg: 'bg-white border-slate-200 text-slate-800 hover:border-slate-300 hover:bg-slate-50'
-                            },
-                            { 
-                              key: 'frio', 
-                              label: 'Frio', 
-                              emoji: '🥶', 
-                              desc: '12°C a 17°C',
-                              activeBg: 'bg-white border-pink-500 text-pink-650 shadow-xs scale-102',
-                              normalBg: 'bg-white border-slate-200 text-slate-800 hover:border-slate-300 hover:bg-slate-50'
-                            },
-                            { 
-                              key: 'muito-frio', 
-                              label: 'Muito frio', 
-                              emoji: '❄️', 
-                              desc: 'Abaixo de 12°C',
-                              activeBg: 'bg-white border-pink-500 text-pink-650 shadow-xs scale-102',
-                              normalBg: 'bg-white border-slate-200 text-slate-800 hover:border-slate-300 hover:bg-slate-50'
-                            }
-                          ].map((item) => {
-                            const isSelected = answers.feeling === item.key;
-                            return (
-                              <button
-                                key={item.key}
-                                type="button"
-                                id={`feel-opt-${item.key}`}
-                                onClick={() => setAnswers(prev => {
-                                  const updated = { ...prev, feeling: item.key as AmbientFeeling };
-                                  if (prev.temperature !== null) {
-                                    let defaultT = 23;
-                                    if (item.key === 'muito-quente') defaultT = 33;
-                                    else if (item.key === 'quente') defaultT = 28;
-                                    else if (item.key === 'agradavel') defaultT = 23;
-                                    else if (item.key === 'fresquinho') defaultT = 19;
-                                    else if (item.key === 'frio') defaultT = 14;
-                                    else defaultT = 9;
-                                    updated.temperature = defaultT;
-                                  }
-                                  return updated;
-                                })}
-                                className={`p-3 rounded-2xl border-2 text-left transition-all duration-200 cursor-pointer shadow-sm flex flex-col justify-between h-[80px] hover:scale-102 ${
-                                  isSelected ? item.activeBg : item.normalBg
-                                }`}
-                              >
-                                <div className="flex items-center justify-between w-full h-full">
-                                  <div>
-                                    <span className={`font-display font-semibold text-xs sm:text-sm block leading-tight ${isSelected ? 'text-pink-600' : 'text-slate-800'}`}>{item.label}</span>
-                                    <span className={`text-[10px] font-medium block mt-1 leading-snug ${isSelected ? 'text-pink-500' : 'text-slate-500'}`}>{item.desc}</span>
-                                  </div>
-                                  <span className="text-3xl ml-1 leading-none">{item.emoji}</span>
-                                </div>
-                              </button>
-                            );
-                          })}
-                        </div>
-                      </div>
+                  {/* Left Headings Column */}
+                  <div className="space-y-4 flex-1 max-w-[56%] z-10 text-left">
+                    <h2 className="text-[34px] sm:text-[38px] font-bold text-[#4B4642] tracking-normal leading-[1.12] font-display">
+                      Seu bebê <br />
+                      <span className="text-[#8EB79F] font-semibold text-[32px] sm:text-[36px] tracking-normal inline-block">merece o</span> <br />
+                      <span className="text-[#E49F8C] font-semibold text-[32px] sm:text-[36px] tracking-normal inline-flex items-center gap-1">
+                        conforto ideal.
+                        {/* Custom floating heart sticker precisely like the peach heart in model image */}
+                        <svg className="w-5 h-5 text-[#E49F8C] fill-current transform rotate-[15deg] shrink-0 inline-block ml-0.5" viewBox="0 0 24 24">
+                          <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
+                        </svg>
+                      </span>
+                    </h2>
+                    
+                    <p className="text-[13px] sm:text-[14px] text-[#6E6760] font-normal leading-relaxed">
+                      Responda em poucos segundos e descubra a roupa <span className="font-bold text-[#4B4642]">ideal</span> para cada momento do dia.
+                    </p>
  
-                      {/* Optional: Input de temperatura aproximada em graus com design lúdico e amigável */}
-                      <div className="pt-4 border-t border-pink-100">
+                    <div className="pt-1">
+                      <span className="inline-flex items-center gap-2 px-3.5 py-2.5 bg-[#FAF4ED] text-[#716962] text-[11px] font-semibold rounded-2xl border border-[#EDE5DB]/50 shadow-[0_1px_4px_rgba(75,70,66,0.02)]">
+                        {/* Elegant Green Shield Check precisely matching the mockup */}
+                        <svg className="w-4.5 h-4.5 text-[#8EB79F] shrink-0 stroke-[2.2]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                        </svg>
+                        <span>Recomendações seguras baseadas em especialistas</span>
+                      </span>
+                    </div>
+                  </div>
+ 
+                  {/* Right circular baby portrait with exact mockup doodles */}
+                  <div className="relative shrink-0 w-[148px] h-[148px] sm:w-[175px] sm:h-[175px] mr-1.5 z-10">
+                    {/* Decorative Background Doodles exactly from the reference picture */}
+                    
+                    {/* 1. Custom Sun Doodle in top-left */}
+                    <div className="absolute -top-4 -left-3 select-none flex items-center justify-center pointer-events-none z-20">
+                      <div className="relative w-10 h-10">
+                        {/* Sun core */}
+                        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-4.5 h-4.5 rounded-full bg-[#FFD1A9]/90 border border-[#FCD2B3]" />
+                        {/* Ray dashes */}
+                        <span className="absolute top-1 left-1.5 w-1 h-2 bg-[#FFD1A9] rounded-full rotate-[-45deg]" />
+                        <span className="absolute top-0.5 left-1/2 -translate-x-1/2 w-1 h-2 bg-[#FFD1A9] rounded-full" />
+                        <span className="absolute top-1 right-1.5 w-1 h-2 bg-[#FFD1A9] rounded-full rotate-[45deg]" />
+                        <span className="absolute top-1/2 -translate-y-1/2 right-0.5 w-2 h-1 bg-[#FFD1A9] rounded-full" />
+                        <span className="absolute bottom-1 right-1.5 w-1 h-2 bg-[#FFD1A9] rounded-full rotate-[135deg]" />
+                        <span className="absolute bottom-0.5 left-1/2 -translate-x-1/2 w-1 h-2 bg-[#FFD1A9] rounded-full" />
+                        <span className="absolute bottom-1 left-2 w-1 h-2 bg-[#FFD1A9] rounded-full rotate-[225deg]" />
+                        <span className="absolute top-1/2 -translate-y-1/2 left-0.5 w-2 h-1 bg-[#FFD1A9] rounded-full" />
+                      </div>
+                    </div>
+ 
+                    {/* 2. Soft lavender heart */}
+                    <div className="absolute -top-3.5 left-[42%] select-none pointer-events-none z-20">
+                      <svg className="w-4 h-4 text-[#C9BFD6] fill-current opacity-85 transform rotate-[-10deg]" viewBox="0 0 24 24">
+                        <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
+                      </svg>
+                    </div>
+ 
+                    {/* 3. Soft Green Cloud doodle exactly on top right */}
+                    <div className="absolute -top-5 -right-1.5 select-none pointer-events-none z-20">
+                      <div className="relative w-11 h-7 bg-[#8EB79F]/35 border border-[#8EB79F]/15 rounded-full blur-[0.4px]">
+                        <div className="absolute -top-1.5 left-2 w-5 h-5 bg-[#8EB79F]/35 rounded-full" />
+                        <div className="absolute -top-1 left-5.5 w-4.5 h-4.5 bg-[#8EB79F]/35 rounded-full" />
+                      </div>
+                    </div>
+ 
+                    {/* Soft background peach-pink framing halo circle */}
+                    <div className="absolute inset-1.5 bg-[#FAE7DF]/75 rounded-full pointer-events-none border border-[#FBE3D9]" />
+                    
+                    {/* Main Organic Soft Portrait Mask precisamente como na imagem */}
+                    <div className="w-[92%] h-[92%] absolute top-[4%] left-[4%] rounded-full overflow-hidden border-[3px] border-white shadow-[0_4px_16px_rgba(75,70,66,0.06)] bg-white">
+                      <img 
+                        src={babyHeroImg} 
+                        alt="Bebê dormindo confortavelmente" 
+                        className="w-full h-full object-cover scale-[1.05]" 
+                        referrerPolicy="no-referrer"
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                {/* FORM CONTAINER - PREMIUM ROUNDED WHITE BENTO-CARD LAYOUT */}
+                <div className="bg-white rounded-[2rem] border border-[#EDE5DB] shadow-[0_8px_30px_rgba(75,70,66,0.03)] p-5 sm:p-7 space-y-6">
+                  
+                  {/* SEÇÃO 1: COMO ESTÁ O AMBIENTE */}
+                  <div className="space-y-3">
+                    <div className="flex items-center gap-2">
+                      <div className="w-8 h-8 rounded-full bg-[#FAF2EC] flex items-center justify-center text-[#E29A88] border border-[#F5E1D5]">
+                        <Thermometer className="w-4.5 h-4.5 stroke-[2.5]" />
+                      </div>
+                      <h4 className="text-sm font-bold text-slate-800">
+                        Como está o ambiente agora?
+                      </h4>
+                    </div>
+
+                    {/* Horizontal feeling buttons row exactly like layout reference */}
+                    <div className="grid grid-cols-3 sm:grid-cols-6 gap-2">
+                      {(['muito-quente', 'quente', 'agradavel', 'fresquinho', 'frio', 'muito-frio'] as AmbientFeeling[]).map((feel) => {
+                        const isSelected = answers.feeling === feel;
+                        const dataEmoji: Record<AmbientFeeling, { emoji: string; text: string; bg: string; textCol: string; borderCol: string }> = {
+                          'muito-quente': { emoji: '🥵', text: 'Muito quente', bg: 'bg-amber-50', textCol: 'text-amber-800', borderCol: 'border-amber-400' },
+                          'quente': { emoji: '☀️', text: 'Quente', bg: 'bg-[#FFF9E6]', textCol: 'text-amber-800', borderCol: 'border-amber-300' },
+                          'agradavel': { emoji: '😊', text: 'Agradável', bg: 'bg-[#EEFAF2]', textCol: 'text-emerald-800', borderCol: 'border-[#A3E2B8]' },
+                          'fresquinho': { emoji: '☁️', text: 'Fresquinho', bg: 'bg-[#F1F8FA]', textCol: 'text-blue-800', borderCol: 'border-blue-300' },
+                          'frio': { emoji: '❄️', text: 'Frio', bg: 'bg-[#EDF4F9]', textCol: 'text-blue-900', borderCol: 'border-blue-400' },
+                          'muito-frio': { emoji: '🥶', text: 'Muito frio', bg: 'bg-[#F2EEFA]', textCol: 'text-purple-900', borderCol: 'border-purple-300' }
+                        };
+                        const setup = dataEmoji[feel];
+
+                        return (
+                          <button
+                            key={feel}
+                            type="button"
+                            id={`feel-btn-${feel}`}
+                            onClick={() => setAnswers(prev => ({ ...prev, feeling: feel }))}
+                            className={`py-3 px-1 rounded-2xl border-2 text-center transition-all cursor-pointer flex flex-col items-center justify-center gap-1.5 relative ${
+                              isSelected
+                                ? `${setup.bg} ${setup.borderCol} ${setup.textCol} shadow-sm font-bold scale-102`
+                                : 'bg-white border-[#EDE5DB] text-[#5F5A55] hover:bg-[#F8F4EE] hover:border-slate-300'
+                            }`}
+                          >
+                            <span className="text-2xl select-none leading-none">{setup.emoji}</span>
+                            <span className="text-[10px] leading-tight select-none font-bold font-sans">{setup.text}</span>
+                            
+                            {/* Checkmark indicator badge at top-right exactly like mockup */}
+                            {isSelected && (
+                              <div className="absolute -top-1.5 -right-1.5 w-4.5 h-4.5 rounded-full bg-emerald-500 border-2 border-white flex items-center justify-center shadow-3xs">
+                                <Check className="w-2.5 h-2.5 text-white stroke-[3.5]" />
+                              </div>
+                            )}
+                          </button>
+                        );
+                      })}
+                    </div>
+                  </div>
+
+                  {/* SEÇÃO 2: QUAL O MOMENTO (Horizontal Row layout like picture) */}
+                  <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between py-3 border-b border-[#FAF2EC] gap-3">
+                    <div className="flex items-center gap-2">
+                      <div className="w-7 h-7 rounded-full bg-[#FAF2EC] flex items-center justify-center text-[#E29A88]">
+                        <Sun className="w-4 h-4" />
+                      </div>
+                      <span className="text-xs font-bold text-[#4B4642]">Qual o momento?</span>
+                    </div>
+
+                    <div className="flex items-center gap-2">
+                      {(['dia', 'noite'] as PeriodOfDay[]).map((p) => {
+                        const isSelected = answers.period === p;
+                        const labelsEmoji: Record<PeriodOfDay, { text: string; icon: React.ReactNode }> = {
+                          'dia': { text: 'Dia', icon: <Sun className="w-3.5 h-3.5 mr-1" /> },
+                          'noite': { text: 'Noite', icon: <Moon className="w-3.5 h-3.5 mr-1" /> }
+                        };
+                        return (
+                          <button
+                            key={p}
+                            type="button"
+                            id={`period-btn-${p}`}
+                            onClick={() => setAnswers(prev => ({ ...prev, period: p }))}
+                            className={`py-2 px-4 rounded-xl border-2 text-[11px] font-bold transition-all cursor-pointer flex items-center justify-center ${
+                              isSelected
+                                ? 'bg-[#FAF2EC] border-[#E29A88] text-[#B96552] font-semibold'
+                                : 'bg-white border-[#EDE5DB] text-slate-700 hover:bg-[#F8F4EE]'
+                            }`}
+                          >
+                            {labelsEmoji[p].icon}
+                            <span>{labelsEmoji[p].text}</span>
+                          </button>
+                        );
+                      })}
+                    </div>
+                  </div>
+
+                  {/* SEÇÃO 3: O BEBÊ ESTARÁ */}
+                  <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between py-3 border-b border-[#FAF2EC] gap-3">
+                    <div className="flex items-center gap-2">
+                      <div className="w-7 h-7 rounded-full bg-[#FAF2EC] flex items-center justify-center text-[#E29A88]">
+                        <Baby className="w-4 h-4" />
+                      </div>
+                      <span className="text-xs font-bold text-[#4B4642] whitespace-nowrap">O bebê estará...</span>
+                    </div>
+
+                    <div className="grid grid-cols-2 md:flex md:items-center md:flex-wrap gap-1.5 justify-end">
+                      {(['acordado', 'dormindo', 'colo-sling', 'passeando'] as BabyState[]).map((st) => {
+                        const isSelected = answers.state === st;
+                        const stateLayout: Record<BabyState, { name: string; icon: string }> = {
+                          'acordado': { name: 'Acordado', icon: '😊' },
+                          'dormindo': { name: 'Dormindo', icon: '😴' },
+                          'colo-sling': { name: 'No colo/sling', icon: '🤱' },
+                          'passeando': { name: 'Passeando', icon: '🛒' }
+                        };
+                        return (
+                          <button
+                            key={st}
+                            type="button"
+                            id={`state-btn-${st}`}
+                            onClick={() => setAnswers(prev => ({ ...prev, state: st }))}
+                            className={`py-2 px-2 rounded-xl border-2 text-[10px] font-bold transition-all cursor-pointer text-center flex flex-col items-center justify-center gap-0.5 min-w-[76px] ${
+                              isSelected
+                                ? 'bg-[#FAF2EC] border-[#E29A88] text-[#B96552]'
+                                : 'bg-white border-[#EDE5DB] text-slate-700 hover:bg-[#F8F4EE]'
+                            }`}
+                          >
+                            <span className="text-md leading-none select-none">{stateLayout[st].icon}</span>
+                            <span className="leading-tight select-none font-sans font-semibold">{stateLayout[st].name}</span>
+                          </button>
+                        );
+                      })}
+                    </div>
+                  </div>
+
+                  {/* SEÇÃO 4: IDADE DO BEBÊ */}
+                  <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between py-3 border-b border-[#FAF2EC] gap-3">
+                    <div className="flex items-center gap-2">
+                      <div className="w-7 h-7 rounded-full bg-[#FAF2EC] flex items-center justify-center text-[#E29A88]">
+                        <Sliders className="w-4 h-4" />
+                      </div>
+                      <span className="text-xs font-bold text-[#4B4642] whitespace-nowrap font-sans">Idade do bebê</span>
+                    </div>
+
+                    <div className="grid grid-cols-2 md:flex md:items-center md:flex-wrap gap-1.5 justify-end">
+                      {(['recem-nascido', '1-6-meses', '6-12-meses', 'mais-de-1-ano'] as BabyAge[]).map((ag) => {
+                        const isSelected = answers.age === ag;
+                        const labelText: Record<BabyAge, { text: string; sub: string; icon: string }> = {
+                          'recem-nascido': { text: 'Recém-nas.', sub: '0 a 28 dias', icon: '👶' },
+                          '1-6-meses': { text: '1 a 6 meses', sub: 'Bebezinho', icon: '🍼' },
+                          '6-12-meses': { text: '6 a 12 m', sub: 'Engatinhando', icon: '👧' },
+                          'mais-de-1-ano': { text: 'Acima 1 ano', sub: 'Andando', icon: '🌟' }
+                        };
+                        return (
+                          <button
+                            key={ag}
+                            type="button"
+                            id={`age-btn-${ag}`}
+                            onClick={() => setAnswers(prev => ({ ...prev, age: ag }))}
+                            className={`py-2 px-1 md:px-2.5 rounded-xl border-2 text-[10px] text-center leading-snug transition-all cursor-pointer flex flex-col items-center justify-center gap-0.5 min-w-[76px] ${
+                              isSelected
+                                ? 'bg-[#FAF2EC] border-[#E29A88] text-[#B96552] font-bold'
+                                : 'bg-white border-[#EDE5DB] text-slate-705 hover:bg-[#F8F4EE]'
+                            }`}
+                          >
+                            <span className="text-md leading-none select-none">{labelText[ag].icon}</span>
+                            <span className="font-sans font-bold leading-none">{labelText[ag].text}</span>
+                            <span className="text-[7.5px] opacity-75 font-sans leading-none">{labelText[ag].sub}</span>
+                          </button>
+                        );
+                      })}
+                    </div>
+                  </div>
+
+                  {/* SEÇÃO 5: AMBIENTE (Condition) */}
+                  <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between py-3 border-b border-[#FAF2EC] gap-3">
+                    <div className="flex items-center gap-2">
+                      <div className="w-7 h-7 rounded-full bg-[#FAF2EC] flex items-center justify-center text-[#E29A88]">
+                        <Home className="w-4 h-4" />
+                      </div>
+                      <span className="text-xs font-bold text-[#4B4642] whitespace-nowrap">Ambiente</span>
+                    </div>
+
+                    <div className="grid grid-cols-2 md:flex md:items-center md:flex-wrap gap-1.5 justify-end">
+                      {(['fechado', 'ventilador', 'ar-condicionado', 'vento-frio', 'externo'] as EnvironmentCondition[]).map((cond) => {
+                        const isSelected = answers.condition === cond;
+                        const labelEmoji: Record<EnvironmentCondition, { text: string; icon: string }> = {
+                          'fechado': { text: 'Fechado', icon: '🏠' },
+                          'ventilador': { text: 'Ventilador', icon: '🌀' },
+                          'ar-condicionado': { text: 'Ar-cond.', icon: '❄️' },
+                          'vento-frio': { text: 'Vento frio', icon: '💨' },
+                          'externo': { text: 'Área ext.', icon: '🌳' }
+                        };
+                        return (
+                          <button
+                            key={cond}
+                            type="button"
+                            id={`cond-btn-${cond}`}
+                            onClick={() => setAnswers(prev => ({ ...prev, condition: cond }))}
+                            className={`py-2 px-1 rounded-xl border-2 text-[10px] text-center transition-all cursor-pointer flex flex-col items-center justify-center gap-0.5 min-w-[72px] ${
+                              isSelected
+                                ? 'bg-[#FAF2EC] border-[#E29A88] text-[#B96552] font-bold'
+                                : 'bg-white border-[#EDE5DB] text-[#5F5A55] hover:bg-[#F8F4EE]'
+                            }`}
+                          >
+                            <span className="text-md leading-none select-none">{labelEmoji[cond].icon}</span>
+                            <span className="font-sans font-semibold leading-tight">{labelEmoji[cond].text}</span>
+                          </button>
+                        );
+                      })}
+                    </div>
+                  </div>
+
+                  {/* SEÇÃO OPCIONAL: TEMPERATURA APROXIMADA */}
+                  <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between py-3 border-b border-[#FAF2EC] gap-3">
+                    <div className="flex items-center gap-2">
+                      <div className="w-7 h-7 rounded-full bg-[#FAF2EC] flex items-center justify-center text-[#E29A88]">
+                        <Thermometer className="w-4 h-4" />
+                      </div>
+                      <div>
+                        <span className="text-xs font-bold text-[#4B4642] block leading-none">Temperatura aproximada</span>
+                        <span className="text-[8.5px] text-slate-400 font-semibold">(opcional)</span>
+                      </div>
+                    </div>
+
+                    <div className="flex items-center gap-2 max-w-[170px] w-full">
+                      <div className="relative flex-1">
+                        <input
+                          type="text"
+                          pattern="[0-9]*"
+                          placeholder="Ex: 20°C"
+                          value={tempInputValue}
+                          onChange={(e) => setTempInputValue(e.target.value.replace(/[^0-9.-]/g, ''))}
+                          className="w-full bg-[#FAFBF9] border border-[#EDE5DB] rounded-xl py-2 pl-3.5 pr-8 text-xs font-semibold text-slate-800 font-mono focus:outline-none focus:ring-2 focus:ring-[#FAF2EC]/50 focus:border-[#E29A88]"
+                        />
+                        <span className="absolute right-3 top-1/2 -translate-y-1/2 text-[10px] text-slate-400 font-bold">°C</span>
+                      </div>
+                      {tempInputValue && (
                         <button
                           type="button"
-                          id="btn-toggle-temp"
-                          onClick={() => {
-                            if (answers.temperature === null) {
-                              let defaultT = 23;
-                              if (answers.feeling === 'muito-quente') defaultT = 33;
-                              else if (answers.feeling === 'quente') defaultT = 28;
-                              else if (answers.feeling === 'agradavel') defaultT = 23;
-                              else if (answers.feeling === 'fresquinho') defaultT = 19;
-                              else if (answers.feeling === 'frio') defaultT = 14;
-                              else defaultT = 9;
-                              setAnswers(prev => ({ ...prev, temperature: defaultT }));
-                            } else {
-                              setAnswers(prev => ({ ...prev, temperature: null }));
-                            }
-                          }}
-                          className={`flex items-center gap-2.5 text-xs font-semibold p-3.5 rounded-2xl transition-all shadow-xs cursor-pointer w-full justify-center border-2 ${
-                            answers.temperature !== null 
-                              ? 'bg-pink-50 text-pink-700 border-pink-200' 
-                              : 'bg-slate-50 text-slate-700 border-slate-200 hover:bg-slate-100/50'
-                          }`}
+                          onClick={() => setTempInputValue('')}
+                          className="text-[9px] font-bold px-2.5 py-1.5 bg-slate-100 text-slate-600 rounded-lg hover:bg-slate-200/80 cursor-pointer"
                         >
-                          <Thermometer className={`w-4 h-4 ${answers.temperature !== null ? 'text-pink-650' : 'text-slate-500'}`} />
-                          {answers.temperature !== null 
-                            ? 'Omitir temperatura exata em graus (°C)' 
-                            : 'Opcional: Informar temperatura exata em graus (°C)'}
+                          X
                         </button>
- 
-                        {answers.temperature !== null && (
+                      )}
+                    </div>
+                  </div>
+
+                  {/* BIG SUBMIT ACTION BUTTON AT THE BOTTOM OF THE CARD */}
+                  <div className="pt-2">
+                    <motion.button
+                      id="btn-get-recommendation"
+                      onClick={handleGetRecommendation}
+                      whileHover={{ scale: 1.01 }}
+                      whileTap={{ scale: 0.99 }}
+                      className="w-full py-4.5 bg-gradient-to-r from-[#F4BFA8] to-[#E29A88] text-white font-semibold rounded-2xl shadow-sm cursor-pointer flex items-center justify-center gap-2 text-sm transition-all uppercase tracking-wider text-center"
+                    >
+                      <Sparkles className="w-4.5 h-4.5 text-white animate-pulse" />
+                      <span className="font-display font-medium text-white tracking-widest text-xs">Ver Recomendação Ideal</span>
+                      <ChevronRight className="w-4 h-4 stroke-[2.5]" />
+                    </motion.button>
+                  </div>
+
+                </div>
+
+                {/* TRUST BADGES ROW EXACTLY MATCHING VISUAL PICTURE FOOTER DETAILS */}
+                <div className="grid grid-cols-3 gap-2 py-4 bg-[#FFF9E6]/20 border border-[#EDE5DB]/50 rounded-[1.5rem] px-3 sm:px-4 text-center select-none">
+                  <div className="flex flex-col items-center justify-center p-2.5 space-y-1 border-r border-[#EDE5DB]/60">
+                    <CheckCircle className="w-5 h-5 text-emerald-500 shrink-0" />
+                    <span className="text-[10px] font-bold text-slate-800 block font-display leading-none">Seguro e confiável</span>
+                    <span className="text-[8px] text-slate-400 block font-sans leading-relaxed">Baseado em especialistas</span>
+                  </div>
+
+                  <div className="flex flex-col items-center justify-center p-2.5 space-y-1 border-r border-[#EDE5DB]/60">
+                    <Heart className="w-5 h-5 text-[#E29A88] fill-current shrink-0" />
+                    <span className="text-[10px] font-bold text-slate-800 block font-display leading-none">Feito para mães</span>
+                    <span className="text-[8px] text-slate-400 block font-sans leading-relaxed">Prático e acolhedor</span>
+                  </div>
+
+                  <div className="flex flex-col items-center justify-center p-2.5 space-y-1">
+                    <Award className="w-5 h-5 text-[#8CB69F] shrink-0" />
+                    <span className="text-[10px] font-bold text-slate-800 block font-display leading-none">Sempre Atualizado</span>
+                    <span className="text-[8px] text-slate-400 block font-sans leading-relaxed">Ideal para cada estação</span>
+                  </div>
+                </div>
+
+              </motion.div>
+            )}
+
+            {/* LOADING PULSING TRANSITION SCREEN */}
+            {screen === 'loading' && (
+              <motion.div
+                key="loading"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                className="flex flex-col justify-center items-center py-24 px-8 text-center bg-white rounded-[2rem] border border-[#EDE5DB] shadow-sm"
+                id="screen-loading"
+              >
+                <div className="relative mb-6">
+                  <div className="absolute -inset-3 bg-gradient-to-r from-pink-300 via-emerald-200 to-amber-200 rounded-full blur-md opacity-40 animate-pulse" />
+                  <div className="relative w-20 h-20 bg-white border border-pink-100 rounded-full flex items-center justify-center shadow-sm">
+                    <motion.div
+                      animate={{ rotate: 360, scale: [1, 1.15, 1] }}
+                      transition={{ repeat: Infinity, duration: 2.2, ease: 'linear' }}
+                      className="text-3xl select-none"
+                    >
+                      👶
+                    </motion.div>
+                    <div className="absolute -top-1 -right-1 text-xl select-none animate-bounce">✨</div>
+                  </div>
+                </div>
+
+                <AnimatePresence mode="wait">
+                  <motion.h3
+                    key={loadingText}
+                    initial={{ opacity: 0, y: 5 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -5 }}
+                    transition={{ duration: 0.2 }}
+                    className="text-sm font-bold text-[#6F2718] max-w-xs mt-2"
+                  >
+                    {loadingText}
+                  </motion.h3>
+                </AnimatePresence>
+
+                <p className="text-[11px] text-slate-400 font-medium mt-3 max-w-xs leading-relaxed">
+                  Calculando as camadas para {getAgeFriendlyName(answers.age)} no clima de {getFeelingFriendlyDescription(answers.feeling)}...
+                </p>
+              </motion.div>
+            )}
+
+            {/* COZY RECOMMENDATION REPORT SCREEN */}
+            {screen === 'result' && result && (
+              <motion.div
+                key="result"
+                initial={{ opacity: 0, scale: 0.98 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.25 }}
+                className="space-y-6"
+                id="screen-result"
+              >
+                {/* Result header card */}
+                <div className="bg-white border border-[#EDE5DB] rounded-[2rem] shadow-sm p-5 space-y-5">
+                  <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between pb-4 border-b border-[#FAF2EC] gap-3">
+                    <div className="flex items-center gap-3">
+                      <div className="p-3 rounded-full bg-[#FAF2EC] text-[#E29A88] border border-[#F5E1D5]">
+                        <Baby className="w-6 h-6 stroke-[2]" />
+                      </div>
+                      <div>
+                        <span className="text-[9px] bg-[#E29A88]/10 text-[#B96552] font-extrabold uppercase px-2.5 py-0.5 rounded-full block w-max mb-1 select-none font-sans">
+                          Look Recomendado
+                        </span>
+                        <h3 className="text-lg font-bold text-slate-800 leading-tight">
+                          {result.temperatureCategory}
+                        </h3>
+                      </div>
+                    </div>
+
+                    <div className="flex items-center gap-2">
+                      {/* Active Favorite Toggle */}
+                      <button
+                        onClick={() => toggleFavorite(answers, result)}
+                        className={`p-2 rounded-xl border transition-all cursor-pointer flex items-center justify-center ${
+                          isCurrentFavorite()
+                            ? 'bg-rose-50 border-rose-200 text-rose-500'
+                            : 'bg-white border-slate-200 text-slate-400 hover:text-slate-600'
+                        }`}
+                        title="Salvar nos Favoritos"
+                      >
+                        <Heart className={`w-4 h-4 ${isCurrentFavorite() ? 'fill-current' : ''}`} />
+                      </button>
+
+                      {/* Instant Interactive adjustments right on the results screen */}
+                      <div className="flex items-center gap-1.5 p-1 bg-slate-50 border border-slate-200 rounded-xl">
+                        <button
+                          onClick={() => handleImmediateAdjustment('period', answers.period === 'dia' ? 'noite' : 'dia')}
+                          className="px-2 py-1 bg-white border border-slate-200 rounded-lg text-[9px] font-bold cursor-pointer text-[#5F5A55]"
+                        >
+                          {answers.period === 'dia' ? '☀️ Dia' : '🌙 Noite'}
+                        </button>
+                        <button
+                          onClick={() => {
+                            const states: BabyState[] = ['acordado', 'dormindo', 'colo-sling', 'passeando'];
+                            const nextIdx = (states.indexOf(answers.state) + 1) % states.length;
+                            handleImmediateAdjustment('state', states[nextIdx]);
+                          }}
+                          className="px-2 py-1 bg-white border border-slate-200 rounded-lg text-[9px] font-bold cursor-pointer text-[#5F5A55]"
+                        >
+                          🔄 {answers.state === 'colo-sling' ? 'Colo' : answers.state === 'acordado' ? 'Acordado' : answers.state === 'dormindo' ? 'Dormindo' : 'Passeando'}
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Context interpretation caption */}
+                  <div className="bg-[#FFF9E6]/30 border border-amber-100 rounded-2xl p-4 text-xs text-slate-705 flex items-start gap-2.5">
+                    <Sparkles className="w-4 h-4 text-[#E29A88] shrink-0 mt-0.5 animate-pulse" />
+                    <p className="leading-relaxed font-sans">{result.temperatureDescription}</p>
+                  </div>
+
+                  {/* RECOMMENDED LAYERS STACK COZY BADGE */}
+                  <div className="bg-gradient-to-tr from-[#FAF2EC] via-white to-[#FDFBF7] border border-[#F2ECE5] rounded-2xl p-4.5 shadow-3xs relative overflow-hidden">
+                    <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                      <div className="space-y-1 flex-1">
+                        <span className="text-[9px] font-extrabold text-[#B96552] block uppercase tracking-wider font-sans leading-none">
+                          Método de Camadas ClimaBaby
+                        </span>
+                        <h4 className="text-md font-bold text-slate-800 font-display">
+                          {result.layerCount} {result.layerCount === 1 ? 'Camada Essencial' : 'Camadas de Roupas'}
+                        </h4>
+                        <p className="text-[11px] text-slate-600 font-medium leading-relaxed font-sans">
+                          {result.layersDescription}
+                        </p>
+                      </div>
+
+                      {/* Vertical stacked visual lines of safety layers */}
+                      <div className="flex flex-col gap-1 w-full md:w-44 shrink-0 font-sans">
+                        {Array.from({ length: result.layerCount }).map((_, idx) => {
+                          let layerColor = 'bg-slate-50 text-slate-600 border-slate-200';
+                          let layerTag = '';
+                          if (idx === 0) {
+                            layerColor = 'bg-[#EDF4F9] text-blue-700 border-blue-105';
+                            layerTag = '1ª Camada: Pele (Body)';
+                          } else if (idx === 1) {
+                            layerColor = 'bg-[#FAF2EC] text-[#B96552] border-[#F2DCD0]';
+                            layerTag = '2ª Camada: Meio (Culote)';
+                          } else {
+                            layerColor = 'bg-[#EEFAF2] text-emerald-800 border-emerald-150';
+                            layerTag = '3ª Camada: Calor (Macacão)';
+                          }
+                          return (
+                            <div key={idx} className={`text-[9px] font-bold py-1 px-2.5 rounded-lg border border-dashed flex justify-between items-center ${layerColor}`}>
+                              <span>{layerTag}</span>
+                              <span className="text-[7px] bg-white px-1 py-0.2 rounded border border-current font-extrabold">OK</span>
+                            </div>
+                          );
+                        })}
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* CLOTHING OUTFIT ITEMS PHOTO VISUAL SHOWCASE */}
+                  <div className="space-y-3">
+                    <span className="text-xs font-bold text-slate-800 block font-display">
+                      👕 Peças Escolhidas para o Look
+                    </span>
+
+                    <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+                      {result.visualItems.map((itemId) => {
+                        const cloth = CLOTHING_DATABASE[itemId];
+                        if (!cloth) return null;
+
+                        let levelColor = 'bg-emerald-50 text-emerald-700 border-emerald-100';
+                        if (cloth.heatingLevel === 'Médio') {
+                          levelColor = 'bg-amber-50 text-amber-700 border-amber-100';
+                        } else if (cloth.heatingLevel === 'Alto' || cloth.heatingLevel === 'Muito Alto') {
+                          levelColor = 'bg-rose-50 text-rose-700 border-rose-100';
+                        }
+
+                        return (
                           <motion.div
-                            initial={{ opacity: 0, height: 0 }}
-                            animate={{ opacity: 1, height: 'auto' }}
-                            exit={{ opacity: 0, height: 0 }}
-                            className="space-y-4 pt-4 text-center overflow-hidden"
+                            key={itemId}
+                            whileHover={{ y: -1.5 }}
+                            className="bg-[#FFFDF9] border border-slate-100 hover:border-[#E29A88] rounded-2xl overflow-hidden flex flex-col justify-between shadow-3xs transition-all p-1"
                           >
-                            <p className="text-[11px] text-slate-500 font-medium mb-1">
-                              Ajuste os graus de forma fina utilizando os botões de - e + ou arraste o controle deslizante abaixo:
-                            </p>
- 
-                            {/* Interactive Thermometer Status Widget but extremely clean rounded layout */}
-                            <div className="mx-auto rounded-[1.75rem] p-4 border-2 border-slate-200 text-center transition-all max-w-sm bg-white shadow-xs text-slate-950">
-                              <span className="text-3xl font-display font-bold tracking-tight text-pink-600">
-                                {answers.temperature}<span className="text-xl font-bold">°C</span>
-                              </span>
-                              
-                              <div className="flex items-center justify-center gap-3 mt-3">
-                                <motion.button
-                                  id="btn-temp-dec-wiz"
-                                  type="button"
-                                  onClick={() => setAnswers(prev => ({ ...prev, temperature: Math.max(5, (prev.temperature || 22) - 1) }))}
-                                  whileHover={{ scale: 1.05 }}
-                                  whileTap={{ scale: 0.9 }}
-                                  className="w-10 h-10 rounded-xl bg-slate-50 border-2 border-slate-200 flex items-center justify-center text-slate-700 shadow-xs cursor-pointer"
-                                  title="Diminuir 1 grau"
-                                >
-                                  <Minus className="w-4 h-4 stroke-[3]" />
-                                </motion.button>
- 
-                                <div className="flex-1 max-w-[150px]">
-                                  <input
-                                    id="input-temp-slider-wiz"
-                                    type="range"
-                                    min="5"
-                                    max="40"
-                                    value={answers.temperature}
-                                    onChange={(e) => setAnswers(prev => ({ ...prev, temperature: parseInt(e.target.value) }))}
-                                    className="w-full h-2 bg-slate-100 rounded-lg appearance-none cursor-pointer accent-pink-500 focus:outline-none"
-                                  />
-                                </div>
- 
-                                <motion.button
-                                  id="btn-temp-inc-wiz"
-                                  type="button"
-                                  onClick={() => setAnswers(prev => ({ ...prev, temperature: Math.min(40, (prev.temperature || 22) + 1) }))}
-                                  whileHover={{ scale: 1.05 }}
-                                  whileTap={{ scale: 0.9 }}
-                                  className="w-10 h-10 rounded-xl bg-pink-100 border-2 border-pink-200 flex items-center justify-center text-pink-700 shadow-xs cursor-pointer"
-                                  title="Aumentar 1 grau"
-                                >
-                                  <Plus className="w-4 h-4 stroke-[3]" />
-                                </motion.button>
+                            <div className="aspect-square bg-white rounded-xl p-2.5 flex items-center justify-center relative border border-slate-50">
+                              <img
+                                src={cloth.url}
+                                alt={cloth.name}
+                                referrerPolicy="no-referrer"
+                                className="w-full h-full object-contain mix-blend-multiply"
+                                onError={(e) => {
+                                  e.currentTarget.style.display = 'none';
+                                  try {
+                                    const fb = e.currentTarget.nextElementSibling as HTMLDivElement;
+                                    if (fb) fb.style.display = 'flex';
+                                  } catch {}
+                                }}
+                              />
+                              <div style={{ display: 'none' }} className="absolute inset-0 bg-slate-50 flex-col items-center justify-center text-center p-2 rounded-xl">
+                                <Shirt className="w-5 h-5 text-slate-300 mb-1" />
+                                <span className="text-[8px] text-slate-400 font-bold uppercase font-sans">Visual</span>
+                              </div>
+                            </div>
+
+                            <div className="p-2 space-y-1 flex-1 flex flex-col justify-between">
+                              <div>
+                                <span className="text-[10px] font-bold text-slate-800 block truncate leading-none font-sans">{cloth.name}</span>
+                                <span className="text-[8.5px] text-slate-400 leading-tight block line-clamp-2 mt-0.5 font-sans">{cloth.desc}</span>
+                              </div>
+
+                              <div className="pt-1.5 mt-1 border-t border-slate-50 flex items-center justify-between text-[7.5px] font-bold uppercase text-slate-400 font-sans">
+                                <span>Aquece</span>
+                                <span className={`px-1 py-0.2 rounded text-[7px] border font-bold ${levelColor}`}>{cloth.heatingLevel}</span>
                               </div>
                             </div>
                           </motion.div>
-                        )}
-                      </div>
-                    </motion.div>
-                  )}
- 
-                </AnimatePresence>
-              </div>
- 
-              {/* Step Navigation Button Row with bouncy elements */}
-              <div className="flex gap-3 pt-6 border-t border-slate-200 mt-4">
-                <button
-                  type="button"
-                  id="btn-back"
-                  onClick={handlePrevStep}
-                  className="px-5 py-4 bg-white hover:bg-slate-50 text-slate-700 border-2 border-slate-200 text-sm font-display font-semibold rounded-2xl cursor-pointer flex items-center gap-1.5 transition-all shadow-xs"
-                >
-                  <ChevronLeft className="w-4 h-4 stroke-[2]" /> Voltar
-                </button>
- 
-                <button
-                  type="button"
-                  id="btn-next"
-                  onClick={handleNextStep}
-                  className="flex-1 py-4.5 bg-pink-500 hover:bg-pink-600 text-white text-sm font-display font-semibold rounded-2xl cursor-pointer flex items-center justify-center gap-1.5 transition-all shadow-md active:translate-y-[1px]"
-                >
-                  {step === 3 ? 'Calcular recomendação ⚡' : 'Continuar'} <ChevronRight className="w-4 h-4 stroke-[2]" />
-                </button>
-              </div>
-            </motion.div>
-          )}
-
-          {/* LOADING SCREEN WITH DELIGHTFUL PULSING ANIMATIONS */}
-          {screen === 'loading' && (
-            <motion.div
-              key="loading"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              className="flex-1 flex flex-col justify-center items-center p-8 text-center bg-gradient-to-br from-pink-50/50 to-pink-100/50"
-              id="screen-loading"
-            >
-              <div className="relative mb-6">
-                <div className="absolute -inset-2 bg-gradient-to-r from-pink-300 via-rose-300 to-slate-200 rounded-full blur opacity-80 animate-pulse" />
-                <div className="relative w-20 h-20 bg-white border-2 border-pink-100 rounded-full flex items-center justify-center shadow-lg">
-                  <motion.div
-                    animate={{ rotate: 360, scale: [1, 1.15, 1] }}
-                    transition={{ repeat: Infinity, duration: 2.5, ease: 'linear' }}
-                    className="text-3xl select-none"
-                  >
-                    👶
-                  </motion.div>
-                  <div className="absolute -top-1 -right-1 text-xl select-none">✨</div>
-                </div>
-              </div>
- 
-              <AnimatePresence mode="wait">
-                <motion.h3
-                  key={loadingText}
-                  initial={{ opacity: 0, y: 7 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -7 }}
-                  transition={{ duration: 0.25 }}
-                  className="font-display text-md font-bold text-pink-700 max-w-xs mt-2"
-                >
-                  {loadingText}
-                </motion.h3>
-              </AnimatePresence>
-
-              <p className="text-xs text-slate-500 font-semibold mt-3.5 max-w-xs leading-relaxed">
-                Analisando as camadas térmicas e o conforto seguro para o maior bem-estar do seu bebê! 🌸🧸
-              </p>
-            </motion.div>
-          )}
-
-          {/* FINAL RESULTS VIEW */}
-          {screen === 'result' && result && (
-            <motion.div
-              key="result"
-              initial={{ opacity: 0, scale: 0.98 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 0.3 }}
-              className="flex-1 flex flex-col justify-between p-5 sm:p-7 space-y-5"
-              id="screen-result"
-            >
-              {/* Header result badge info */}
-              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between pb-3.5 border-b-2 border-slate-100 gap-3">
-                <div className="flex items-center gap-3">
-                  <div className={`p-2.5 rounded-full ${getTempColorStyle(answers.temperature, answers.feeling).pill} border-2 border-white shadow-xs`}>
-                    <Thermometer className="w-5 h-5 text-slate-800" />
-                  </div>
-                  <div>
-                    <h3 className="font-display font-semibold text-lg sm:text-xl text-pink-600 leading-tight border-none outline-none">
-                      {result.temperatureCategory}
-                    </h3>
-                    <p className="text-xs text-slate-500 font-semibold mt-0.5">
-                      Sensibilidade: {getAgeFriendlyName(answers.age)}
-                    </p>
-                  </div>
-                </div>
- 
-                {/* Instant thermal adjuster panel (extremely practical for parents on the fly) with clean design */}
-                <div className="flex items-center gap-1.5 self-start bg-slate-50 border-2 border-slate-200 rounded-2xl p-1 shadow-xs">
-                  <button
-                    id="btn-res-dec"
-                    type="button"
-                    onClick={() => adjustResultTemperature(-1)}
-                    className="p-2 hover:bg-slate-100/80 text-slate-700 hover:text-slate-900 rounded-xl transition-all cursor-pointer bg-white/60 border border-slate-200/50 shadow-xxs"
-                    title="Testar com 1°C a menos"
-                  >
-                    <Minus className="w-3.5 h-3.5 stroke-[3]" />
-                  </button>
-                  <span className="text-xs font-display font-semibold text-slate-800 px-2.5 bg-white border border-slate-200 rounded-xl shadow-xs py-1.5 min-w-[55px] text-center">
-                    {answers.temperature !== null ? `${answers.temperature}°C` : getFeelingFriendlyName(answers.feeling)}
-                  </span>
-                  <button
-                    id="btn-res-inc"
-                    type="button"
-                    onClick={() => adjustResultTemperature(1)}
-                    className="p-2 hover:bg-slate-100/80 text-slate-700 hover:text-slate-900 rounded-xl transition-all cursor-pointer bg-white/60 border border-slate-200/50 shadow-xxs"
-                    title="Testar com 1°C a mais"
-                  >
-                    <Plus className="w-3.5 h-3.5 stroke-[3]" />
-                  </button>
-                  
-                  {/* Wind toggle button right inside results */}
-                  <button
-                    id="btn-res-wind"
-                    type="button"
-                    onClick={toggleResultWind}
-                    className={`p-2 rounded-xl transition-all cursor-pointer border ${answers.condition === 'vento-frio' ? 'bg-pink-500 text-white border-transparent shadow-xs' : 'text-slate-400 bg-white/60 border-slate-200/50 hover:text-slate-600'}`}
-                    title={answers.condition === 'vento-frio' ? "Remover efeito de vento" : "Simular vento/sensação fria"}
-                  >
-                    <Wind className="w-3.5 h-3.5 stroke-[2.5]" />
-                  </button>
-                </div>
-              </div>
- 
-              {/* COGNITIVE VISUAL THERMOMETER */}
-              <div className="bg-white rounded-3xl p-4.5 border-2 border-slate-200 flex flex-col items-center shadow-xs">
-                <span className="text-[10px] font-display font-semibold text-pink-600 uppercase tracking-wider mb-3 flex items-center gap-1.5 leading-none">
-                  <Thermometer className="w-3.5 h-3.5 text-pink-500" /> Termômetro de Conforto Térmico
-                </span>
-                {(() => {
-                  const effectiveTemp = answers.temperature !== null ? answers.temperature : (() => {
-                    if (answers.feeling === 'muito-quente') return 33;
-                    if (answers.feeling === 'quente') return 28;
-                    if (answers.feeling === 'agradavel') return 23;
-                    if (answers.feeling === 'fresquinho') return 19;
-                    if (answers.feeling === 'frio') return 14;
-                    return 9;
-                  })();
-                  return (
-                    <div className="grid grid-cols-3 gap-2.5 w-full max-w-sm">
-                       <div className={`py-2.5 px-3 rounded-2xl text-center flex flex-col items-center justify-center transition-all duration-300 w-full border-2 ${
-                        effectiveTemp < 19 
-                          ? 'bg-slate-100 border-slate-300 text-slate-800 shadow-xs font-semibold' 
-                          : 'bg-white border-slate-100 text-slate-300 font-medium opacity-50'
-                      }`}>
-                         <span className="text-xl">🥶</span>
-                        <span className="text-[11px] mt-1 font-display font-medium">Frio</span>
-                      </div>
-                      <div className={`py-2.5 px-3 rounded-2xl text-center flex flex-col items-center justify-center transition-all duration-300 w-full border-2 ${
-                        effectiveTemp >= 19 && effectiveTemp < 27
-                          ? 'bg-pink-500 border-transparent text-white shadow-xs font-semibold' 
-                          : 'bg-white border-slate-100 text-slate-300 font-medium opacity-50'
-                      }`}>
-                        <span className="text-xl">😊</span>
-                        <span className="text-[11px] mt-1 font-display font-medium">Adequado</span>
-                      </div>
-                      <div className={`py-2.5 px-3 rounded-2xl text-center flex flex-col items-center justify-center transition-all duration-300 w-full border-2 ${
-                        effectiveTemp >= 27
-                          ? 'bg-slate-900 border-transparent text-white shadow-xs font-semibold' 
-                          : 'bg-white border-slate-100 text-slate-300 font-medium opacity-50'
-                      }`}>
-                        <span className="text-xl">🥵</span>
-                        <span className="text-[11px] mt-1 font-display font-medium">Calor</span>
-                      </div>
+                        );
+                      })}
                     </div>
-                  );
-                })()}
-              </div>
- 
-              {/* CORE METRIC CARD: LAYER COUNT */}
-              <div className="bg-gradient-to-br from-pink-100/55 via-white to-rose-100/35 border-2 border-pink-300 rounded-3xl p-6 flex flex-col md:flex-row items-center gap-5 shadow-sm relative overflow-hidden ring-4 ring-pink-500/10">
-                <div className="absolute -top-6 -right-6 w-16 h-16 bg-pink-100/30 rounded-full blur-xl pointer-events-none" />
-                <div className="absolute -bottom-8 -left-8 w-20 h-20 bg-rose-100/35 rounded-full blur-xl pointer-events-none" />
-                
-                <div className="flex-1 relative z-10">
-                  <div className="inline-flex items-center gap-1.5 px-3 py-1 mb-3 rounded-full bg-pink-500 text-pink-850 text-[10.5px] font-display font-bold uppercase tracking-wider shadow-xxs border border-pink-600/10">
-                    <Layers className="w-3.5 h-3.5 stroke-[2.5]" /> RECOMENDAÇÃO DE CAMADAS
                   </div>
-                  <h4 className="font-display font-extrabold text-2xl text-slate-800 mb-2 tracking-tight">
-                    {result.layerCount} {result.layerCount === 1 ? 'Camada única' : result.layerCount === 2 ? 'Camadas leves' : 'Camadas aconchegantes'}
-                  </h4>
-                  <p className="text-sm text-slate-705 font-medium leading-relaxed font-sans">
-                    {result.layersDescription}
-                  </p>
-                  <p className="text-[11px] text-slate-500 font-medium mt-3 italic flex items-center gap-1">
-                    ✨ Combine as peças abaixo de acordo com as instruções.
-                  </p>
-                </div>
- 
-                {/* Layer visual stack pills */}
-                <div className="flex flex-col gap-2 w-full md:w-48 shrink-0 relative z-10">
-                  <span className="text-[10px] font-display font-bold text-slate-500 uppercase tracking-widest text-center md:text-left mb-1 block">Estrutura de Roupas</span>
-                  {Array.from({ length: result.layerCount }).map((_, i) => {
-                    let layerBg = 'bg-pink-100 border-pink-250 text-pink-700';
-                    let layerName = 'Base (Corpo)';
-                    let layerIcon = '👶';
-                    if (i === 0) {
-                      layerBg = 'bg-blue-100 border-blue-200 text-blue-700';
-                      layerName = '1ª Camada: Bodysuit';
-                      layerIcon = '👕';
-                    } else if (i === 1) {
-                      layerBg = 'bg-purple-100 border-purple-205 text-purple-705';
-                      layerName = '2ª Camada: Macacão';
-                      layerIcon = '👖';
-                    } else if (i === 2) {
-                      layerBg = 'bg-rose-100 border-rose-250 text-rose-700';
-                      layerName = '3ª Camada: Manta/Casaco';
-                      layerIcon = '🧥';
-                    }
-                    return (
-                      <motion.div
-                        key={i}
-                        initial={{ scaleX: 0, opacity: 0 }}
-                        animate={{ scaleX: 1, opacity: 1 }}
-                        transition={{ delay: i * 0.15, type: 'spring', stiffness: 100 }}
-                        className={`h-9.5 rounded-2xl flex items-center justify-between px-3 text-xs font-display font-semibold shadow-xxs border ${layerBg} transition-all duration-300 hover:scale-[1.02]`}
-                      >
-                        <span className="flex items-center gap-1.5">
-                          <span className="text-sm">{layerIcon}</span>
-                          <span>{layerName}</span>
-                        </span>
-                        <span className="text-[8.5px] bg-white/60 px-1.5 py-0.5 rounded-md border border-white/80 font-bold uppercase tracking-wide">
-                          {i === 0 && 'Base'}
-                          {i === 1 && 'Aquecer'}
-                          {i === 2 && 'Manter'}
-                        </span>
-                      </motion.div>
-                    );
-                  })}
-                </div>
-              </div>
-              <div className="bg-white rounded-3xl p-5 border-2 border-pink-100 shadow-xs space-y-4">
-                <div className="flex items-center gap-2 pb-2.5 border-b border-pink-150">
-                  <div className="p-1.5 bg-pink-50 text-pink-700 border border-pink-100 rounded-xl shadow-xs">
-                    <Shirt className="w-4.5 h-4.5 stroke-[2]" />
-                  </div>
-                  <div>
-                    <h4 className="font-display font-semibold text-sm sm:text-base text-pink-750">
-                      Look Recomendado para esta Temperatura
-                    </h4>
-                    <p className="text-[11px] text-amber-900 font-medium opacity-85">
-                      O conjunto perfeito combinado para vestir seu bebê com facilidade.
-                    </p>
-                  </div>
-                </div>
- 
-                <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-                  {result.visualItems.map((itemId) => {
-                    const itemInfo = CLOTHING_DATABASE[itemId];
-                    if (!itemInfo) return null;
-                    
-                    let badgeStyles = 'bg-[#F0FDF4] text-emerald-700 border-emerald-200';
-                    if (itemInfo.heatingLevel === 'Médio') {
-                      badgeStyles = 'bg-[#FEF3C7] text-amber-800 border-amber-250';
-                    } else if (itemInfo.heatingLevel === 'Alto') {
-                      badgeStyles = 'bg-[#FFF1F2] text-rose-700 border-rose-250';
-                    } else if (itemInfo.heatingLevel === 'Muito Alto') {
-                      badgeStyles = 'bg-[#F5F3FF] text-indigo-700 border-indigo-250';
-                    }
- 
-                    return (
-                      <motion.div
-                        key={itemId}
-                        initial={{ opacity: 0, y: 12 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        whileHover={{ y: -2, scale: 1.02 }}
-                        transition={{ duration: 0.2 }}
-                        className="bg-gradient-to-b from-white to-pink-50/10 border-2 border-pink-150 rounded-2xl overflow-hidden flex flex-col group shadow-xs hover:border-pink-300 transition-all duration-300"
-                      >
-                        {/* Cloth picture wrapper */}
-                        <div className="relative aspect-square w-full bg-[#FCFDFE] overflow-hidden flex items-center justify-center border-b-2 border-pink-100/50">
-                          <img
-                            src={itemInfo.url}
-                            alt={itemInfo.name}
-                            referrerPolicy="no-referrer"
-                            className="w-full h-full object-contain p-2 transition-transform duration-300 group-hover:scale-104 select-none"
-                            onError={(e) => {
-                              e.currentTarget.style.display = 'none';
-                              const fallback = e.currentTarget.parentElement?.querySelector('.fallback-icon') as HTMLDivElement;
-                              if (fallback) fallback.style.display = 'flex';
-                            }}
-                          />
-                          <div className="fallback-icon absolute inset-0 bg-pink-50/20 flex flex-col items-center justify-center p-3 text-center pointer-events-none" style={{ display: 'none' }}>
-                            <Shirt className="w-8 h-8 text-pink-350 mb-1.5" />
-                            <span className="text-[9px] text-pink-500 font-semibold uppercase">Sem foto</span>
-                          </div>
-                          
-                          <div className="absolute top-2 right-2 bg-pink-500 text-[8px] font-display font-semibold text-white px-2 py-0.5 rounded-full select-none shadow-xs">
-                            Look ✓
-                          </div>
-                        </div>
- 
-                        <div className="p-3 flex-1 flex flex-col justify-between space-y-2">
-                          <div>
-                            <h5 className="font-display text-[11px] sm:text-xs md:text-sm font-semibold text-rose-700 leading-snug break-words group-hover:text-pink-650 transition-colors">
-                              {itemInfo.name}
-                            </h5>
-                            <p className="text-[10px] sm:text-[10.5px] text-slate-500 font-medium leading-snug sm:leading-relaxed mt-1 break-words line-clamp-3 sm:line-clamp-none">
-                              {itemInfo.desc}
-                            </p>
-                          </div>
-                          
-                          <div className="pt-2 border-t border-slate-100 flex flex-row items-center justify-between gap-1">
-                            <span className="text-[8.5px] sm:text-[9px] text-slate-400 font-semibold uppercase tracking-wide">Aquecer</span>
-                            <span className={`text-[9px] sm:text-[9.5px] font-display font-semibold px-1.5 sm:px-2 py-0.5 rounded-lg border-2 text-center whitespace-nowrap ${badgeStyles}`}>
-                              {itemInfo.heatingLevel}
-                            </span>
-                          </div>
-                        </div>
-                      </motion.div>
-                    );
-                  })}
-                </div>
-              </div>
 
-              {/* THREE COLUMNS GRID: OUTFITS, FABRICS, ACCESSORIES */}
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4.5">
-                
-                {/* OUTFIT RECOMMENDATION */}
-                <div className="bg-white rounded-2xl p-4.5 border-2 border-slate-200 shadow-xs hover:border-pink-200 transition-all duration-300">
-                  <span className="text-xs font-display font-bold text-pink-600 flex items-center gap-1.5 mb-2.5">
-                    <Shirt className="w-4 h-4 text-pink-500 shrink-0" /> Peças Sugeridas:
-                  </span>
-                  <ul className="space-y-2">
-                    {result.outfitSuggestions.map((item, idx) => (
-                      <li key={idx} className="text-xs text-slate-700 flex items-start gap-1.5 leading-relaxed font-bold">
-                        <span className="text-pink-400 shrink-0 select-none">🌸</span>
-                        <span>{item}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
- 
-                {/* RECOMMENDED FABRICS */}
-                <div className="bg-white rounded-2xl p-4.5 border-2 border-slate-200 shadow-xs hover:border-pink-200 transition-all duration-300">
-                  <span className="text-xs font-display font-bold text-pink-600 flex items-center gap-1.5 mb-2.5">
-                    <Sparkles className="w-4 h-4 text-pink-500 shrink-0" /> Tecidos Recomendados:
-                  </span>
-                  <ul className="space-y-2">
-                    {result.recommendedFabrics.map((item, idx) => (
-                      <li key={idx} className="text-xs text-slate-700 flex items-start gap-1.5 leading-relaxed font-medium">
-                        <span className="text-pink-500 shrink-0 select-none">✓</span>
-                        <span className="text-slate-800">{item}</span>
-                      </li>
-                    ))}
-                  </ul>
-                  <p className="text-[10px] text-pink-600 font-semibold mt-2.5 leading-tight">
-                    *Prefira fibras naturais como o algodão para deixar a pele respirar livremente.
-                  </p>
-                </div>
- 
-                {/* ACCESSORIES */}
-                <div className="bg-white rounded-2xl p-4.5 border-2 border-slate-200 shadow-xs hover:border-pink-200 transition-all duration-300">
-                  <span className="text-xs font-display font-semibold text-slate-800 flex items-center gap-1.5 mb-2.5">
-                    <Footprints className="w-4 h-4 text-pink-550 shrink-0" /> Acessórios Indicados:
-                  </span>
-                  {result.accessories.length > 0 ? (
-                    <ul className="space-y-2">
-                       {result.accessories.map((item, idx) => (
-                        <li key={idx} className="text-xs text-slate-700 flex items-start gap-1.5 leading-relaxed font-medium">
-                          <span className="text-pink-400 shrink-0 select-none">✦</span>
-                          <span>{item}</span>
-                        </li>
-                      ))}
-                    </ul>
-                  ) : (
-                    <div className="text-xs text-slate-400 italic font-semibold">
-                      Nenhum acessório extravagante indicado. Pés livres! 👣
+                  {/* COLO AND SLING NOTE CARDS */}
+                  {answers.state === 'colo-sling' && (
+                    <div className="bg-[#FAF2EC] border border-[#F2DCD0] rounded-xl p-3 text-xs text-[#B96552] leading-relaxed font-sans font-medium">
+                      💡 <strong>Aconchego do Colo ou Sling:</strong> Como o contato corpo a corpo transmite muito calor natural dos pais, removemos automaticamente uma camada de roupinha para evitar desconforto. Aproveite esse chamego quentinho!
                     </div>
                   )}
-                </div>
- 
-              </div>
- 
-              {/* COZY VOICE COUNSEL BUBBLE + EXTRA TIPS */}
-              <div className="space-y-4">
-                {/* COZY VOICE COUNSEL BUBBLE */}
-                <div className="bg-pink-50/40 rounded-3xl p-5 border-2 border-pink-100 relative shadow-xs">
-                  <div className="absolute -top-3 left-5 px-3 py-1 bg-pink-500 text-white text-[10px] font-display font-semibold uppercase tracking-wider rounded-full flex items-center gap-1 shadow-sm border border-pink-200">
-                    <Heart className="w-2.5 h-2.5 fill-white" /> Conselho do Coração
-                  </div>
-                  <div className="space-y-2 mt-1.5">
-                    {result.cozyParagraphs.map((para, i) => (
-                      <p key={i} className="text-slate-750 font-sans text-xs md:text-sm font-medium leading-relaxed opacity-95">
-                        {para}
-                      </p>
-                    ))}
-                  </div>
-                </div>
- 
-                {/* EXTRA ADVICES */}
-                {result.extraTips && (
-                  <div className="bg-white rounded-3xl p-5 border-2 border-slate-200 shadow-xs">
-                    <span className="text-xs font-display font-semibold text-slate-800 flex items-center gap-1.5 mb-3">
-                      <Heart className="w-4 h-4 text-pink-500" /> Dicas Extras e Cuidados:
+
+                  {/* ESSENTIAL SUMMARY FROM MOM CONSULTANT */}
+                  <div className="bg-[#FAF2EC]/50 rounded-2xl p-4.5 border border-[#F2DCD0] relative">
+                    <span className="absolute -top-2.5 left-4 px-3 py-0.5 bg-[#E29A88] text-white text-[8px] font-bold uppercase tracking-widest rounded-lg shadow-3xs font-sans">
+                      Orientação da Consultora 💛
                     </span>
-                    <ul className="space-y-2">
-                      {result.extraTips.map((tip, idx) => (
-                        <li key={idx} className="text-xs text-slate-600 leading-relaxed flex items-start gap-2.5 font-medium">
-                          <span className="text-pink-400 shrink-0 mt-0.5">🧸</span>
-                          <span>{tip}</span>
+                    <div className="space-y-2 mt-1">
+                      {result.cozyParagraphs.map((para, i) => (
+                        <p key={i} className="text-[#5F5A55] text-xs font-semibold leading-relaxed font-sans">
+                          {para}
+                        </p>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* IMPORTANT STACK ACCENT DETAIL CARDS */}
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-1">
+                    <div className="bg-[#FFFDF9] border border-slate-150 rounded-xl p-4 space-y-2">
+                      <span className="text-[9px] font-extrabold text-[#B96552] uppercase tracking-wider block font-sans">
+                        ✓ Peças Recomendadas
+                      </span>
+                      <ul className="space-y-1.5">
+                        {result.outfitSuggestions.map((item, idx) => (
+                          <li key={idx} className="text-[11px] text-[#4B4642] flex items-start gap-1.5 leading-relaxed font-bold font-sans">
+                            <span className="text-[#E29A88] shrink-0">🌸</span>
+                            <span>{item}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+
+                    <div className="bg-[#FFFDF9] border border-slate-150 rounded-xl p-4 space-y-2">
+                      <span className="text-[9px] font-extrabold text-[#B96552] uppercase tracking-wider block font-sans">
+                        🧵 Tecidos Ideais
+                      </span>
+                      <ul className="space-y-1.5">
+                        {result.recommendedFabrics.map((item, idx) => (
+                          <li key={idx} className="text-[11px] text-[#4B4642] flex items-start gap-1.5 leading-relaxed font-medium font-sans">
+                            <span className="text-emerald-500 font-bold shrink-0">✓</span>
+                            <span>{item}</span>
+                          </li>
+                        ))}
+                      </ul>
+                      <p className="text-[8px] text-slate-400 font-bold font-sans leading-none block">
+                        *Dê preferência a fibras naturais suaves.
+                      </p>
+                    </div>
+                  </div>
+
+                  {/* SAFE SLEEP CRITICAL BOX */}
+                  <div className="bg-gradient-to-br from-purple-50 via-white to-[#FDFBF7] border border-purple-150 rounded-2xl p-4">
+                    <div className="flex items-start gap-3">
+                      <div className="w-8 h-8 rounded-xl bg-[#F3EEF9] flex items-center justify-center text-[#967CBA] shrink-0 mt-0.5">
+                        <Moon className="w-4.5 h-4.5" />
+                      </div>
+                      <div className="space-y-1 flex-1">
+                        <span className="text-[8px] font-extrabold bg-[#E6DCF1] text-purple-800 px-2.5 py-0.5 rounded-full uppercase tracking-wider font-sans inline-block leading-none">
+                          Alerta Crítico de Sono Seguro
+                        </span>
+                        <h5 className="text-[11px] font-bold text-slate-800 font-sans leading-snug">
+                          Evite cobertores soltos e toucas durante o sono
+                        </h5>
+                        <p className="text-[10px] text-slate-600 leading-relaxed font-sans">
+                          Para evitar riscos de asfixia e superaquecimento acidental, nunca use cobertores soltos ou toucas enquanto o bebê dorme no berço sem supervisão. Prefira sempre um saco de dormir macio de tamanho apropriado!
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* CRITICAL IMPORTANT VITAL WARNING NEWS */}
+                  <div className="bg-slate-50 border border-slate-150 rounded-xl p-4 space-y-2 text-left">
+                    <span className="text-[10px] font-bold text-slate-800 flex items-center gap-1.5 uppercase font-sans">
+                      <AlertTriangle className="w-3.5 h-3.5 text-[#E29A88]" /> Notas importantes de proteção
+                    </span>
+                    <ul className="space-y-1.5">
+                      {result.importantAlerts.map((alert, idx) => (
+                        <li key={idx} className="text-[10.5px] text-slate-600 leading-relaxed flex items-start gap-1 pb-1 border-b border-dashed border-slate-100 last:border-none font-sans">
+                          <span className="text-[#E29A88] shrink-0 mt-0.5">⚠️</span>
+                          <span>{alert}</span>
                         </li>
                       ))}
                     </ul>
                   </div>
-                )}
-              </div>
- 
-              {/* SAFE SLEEP PERMANENT ADVISORY (CRITICAL USER REQUEST) */}
-              <div className="bg-gradient-to-br from-purple-100 via-white to-purple-50/50 border-2 border-purple-300 rounded-3xl p-5 sm:p-5.5 shadow-sm relative overflow-hidden">
-                <div className="absolute -top-12 -right-12 w-24 h-24 bg-purple-300/20 rounded-full blur-xl pointer-events-none" />
-                <div className="relative z-10 flex flex-col sm:flex-row items-start gap-3.5">
-                  <div className="w-10 h-10 rounded-2xl bg-purple-100 border border-purple-200 flex items-center justify-center text-purple-700 shadow-xxs shrink-0 mt-0.5 animate-pulse">
-                    <Moon className="w-5 h-5 text-purple-600" />
-                  </div>
-                  <div className="space-y-2 flex-1">
-                    <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-purple-300 text-purple-900 text-[9.5px] font-display font-extrabold uppercase tracking-wide border border-purple-300/20 shadow-xxs">
-                      🚨 Alerta de Sono Seguro
-                    </div>
-                    <h5 className="font-display font-bold text-sm text-slate-800 tracking-tight leading-snug">
-                      Lembrete de Proteção: Nunca deixe o bebê dormir de touca nem cobertor sem supervisão
-                    </h5>
-                    <p className="text-xs text-slate-705 leading-relaxed font-sans font-medium">
-                      Colocar toucas, gorros ou cobertores soltos enquanto o bebê dorme sem vigilância direta aumenta expressivamente os riscos de superaquecimento e asfixia mecânica acidental.
-                    </p>
-                    <div className="mt-2 text-[11px] leading-relaxed p-3 rounded-2xl bg-[#FFFDF9] border border-purple-200/60 shadow-xxs font-sans text-slate-700">
-                      <span className="font-semibold text-purple-800 block mb-1">💡 Dica de Conforto & Segurança:</span>
-                      Uma excelente opção é usar um <strong className="text-purple-950 font-bold">saco de dormir quentinho com mangas</strong> ao invés de cobertores. Ele mantém seu bebê totalmente protegido, livre de perigo e super aconchegante a noite toda!
-                    </div>
+
+                  {/* Bottom Recalculation Buttons */}
+                  <div className="pt-2 flex flex-col sm:flex-row gap-3">
+                    <button
+                      type="button"
+                      id="btn-recalculate"
+                      onClick={() => {
+                        setScreen('welcome');
+                      }}
+                      className="flex-1 py-4 bg-[#E29A88] hover:bg-[#D48977] text-white text-xs font-bold uppercase tracking-widest rounded-xl cursor-pointer flex items-center justify-center gap-2 shadow-sm font-sans"
+                    >
+                      <RefreshCw className="w-4 h-4" /> Recalcular Outro Período
+                    </button>
+                    
+                    <button
+                      type="button"
+                      id="btn-reset"
+                      onClick={() => {
+                        setAnswers({
+                          feeling: 'agradavel',
+                          period: 'dia',
+                          state: 'acordado',
+                          age: '1-6-meses',
+                          condition: 'fechado',
+                          temperature: null
+                        });
+                        setTempInputValue('');
+                        setScreen('welcome');
+                      }}
+                      className="px-5 py-4 bg-white hover:bg-slate-50 text-slate-605 border border-slate-200 text-xs font-bold rounded-xl cursor-pointer shadow-3xs font-sans"
+                    >
+                      Limpar Tudo
+                    </button>
                   </div>
                 </div>
+
+              </motion.div>
+            )}
+
+          </AnimatePresence>
+        )}
+
+        {/* HISTÓRICO TAB VIEW */}
+        {activeTab === 'historico' && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            className="space-y-6"
+          >
+            <div className="bg-white border border-[#EDE5DB] rounded-[2rem] p-5 sm:p-7 shadow-sm space-y-4">
+              <div className="flex items-center justify-between pb-3 border-b border-[#FAF2EC]">
+                <div className="flex items-center gap-2">
+                  <Clock className="w-5 h-5 text-[#E29A88]" />
+                  <h3 className="text-md font-bold text-slate-800">Histórico de Consultas</h3>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => saveHistory([])}
+                  className="text-[10px] text-slate-400 font-bold hover:text-[#B96552] uppercase cursor-pointer"
+                >
+                  Limpar histórico
+                </button>
               </div>
- 
-              {/* SECURITY ALERTS BLOCK */}
-              <div className="bg-pink-50/25 rounded-3xl p-5 border-2 border-pink-200">
-                <span className="text-xs font-display font-semibold text-pink-850 flex items-center gap-1.5 mb-2.5 uppercase tracking-wide">
-                  <AlertTriangle className="w-4 h-4 text-pink-650" /> Alertas de Segurança:
-                </span>
-                <ul className="space-y-2">
-                  {result.importantAlerts.map((alert, idx) => (
-                    <li key={idx} className="text-xs text-slate-700 leading-relaxed flex items-start gap-2 font-medium">
-                      <span className="text-pink-550 font-semibold shrink-0 mt-0.5">⚠️</span>
-                      <span>{alert}</span>
-                    </li>
+
+              {historyList.length === 0 ? (
+                <div className="text-center py-10 space-y-3 font-sans">
+                  <span className="text-3xl block">🧺</span>
+                  <p className="text-xs text-slate-400 font-medium">Nenhuma consulta realizada recentemente.</p>
+                  <p className="text-[10px] text-slate-400">As consultas que você fizer serão salvas localmente aqui para rápido acesso.</p>
+                </div>
+              ) : (
+                <div className="space-y-3">
+                  {historyList.map((item) => (
+                    <div 
+                      key={item.id}
+                      onClick={() => handleLoadFromHistoryOrFavorites(item.answers, item.result)}
+                      className="p-3 bg-[#FCFBF8] border border-slate-100 hover:border-[#E29A88] hover:bg-[#FAF2EC]/50 rounded-xl cursor-pointer transition-all flex items-center justify-between gap-2"
+                    >
+                      <div className="space-y-1 font-sans flex-1">
+                        <div className="flex items-center gap-1.5 flex-wrap">
+                          <span className="text-[10px] font-bold text-slate-800 bg-[#FAF2EC] px-2 py-0.5 rounded-md text-[#B96552]">
+                            {getAgeFriendlyName(item.answers.age)}
+                          </span>
+                          <span className="text-[10px] font-semibold text-slate-400">{item.timestamp}</span>
+                        </div>
+                        <h4 className="text-xs font-bold text-slate-700 block truncate">
+                          {getFeelingFriendlyDescription(item.answers.feeling)} • {item.result.layerCount} {item.result.layerCount === 1 ? 'Camada' : 'Camadas'}
+                        </h4>
+                      </div>
+                      <ChevronRight className="w-4 h-4 text-slate-400" />
+                    </div>
                   ))}
-                </ul>
+                </div>
+              )}
+            </div>
+          </motion.div>
+        )}
+
+        {/* FAVORITOS TAB VIEW */}
+        {activeTab === 'favoritos' && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            className="space-y-6"
+          >
+            <div className="bg-white border border-[#EDE5DB] rounded-[2rem] p-5 sm:p-7 shadow-sm space-y-4">
+              <div className="flex items-center gap-2 pb-3 border-b border-[#FAF2EC]">
+                <Heart className="w-5 h-5 text-rose-500 fill-current" />
+                <h3 className="text-md font-bold text-slate-800">Meus Looks Favoritos</h3>
               </div>
- 
-              {/* VERIFIED COMFORT CHECKBOX BOX */}
-              <div className="text-center text-xs text-slate-700 font-semibold bg-white border-2 border-slate-200 py-3 px-5 rounded-2xl flex items-center justify-center gap-2 leading-relaxed shadow-xs font-sans">
-                <CheckCircle className="w-5 h-5 text-pink-500 shrink-0" />
-                <span>Sempre observe a nuca e o peito para avaliar de fato o conforto térmico de seu bebê.</span>
+
+              {favoritesList.length === 0 ? (
+                <div className="text-center py-10 space-y-3 font-sans">
+                  <span className="text-3xl block">💖</span>
+                  <p className="text-xs text-slate-400 font-medium">Você ainda não favoritou nenhuma recomendação.</p>
+                  <p className="text-[10px] text-slate-450 max-w-xs mx-auto leading-relaxed">
+                    Clique no botão de coração ao realizar uma recomendação inteligente para salvá-la aqui como look de acesso imediato.
+                  </p>
+                </div>
+              ) : (
+                <div className="space-y-3">
+                  {favoritesList.map((item) => (
+                    <div 
+                      key={item.id}
+                      className="p-3.5 bg-[#FFFDF9] border border-slate-100 hover:border-[#E29A88] rounded-2xl transition-all flex items-center justify-between gap-4"
+                    >
+                      <div 
+                        onClick={() => handleLoadFromHistoryOrFavorites(item.answers, item.result)}
+                        className="space-y-1 font-sans flex-1 cursor-pointer"
+                      >
+                        <div className="flex items-center gap-1.5 flex-wrap">
+                          <span className="text-[9px] font-bold text-white bg-[#E29A88] px-2 py-0.5 rounded-full leading-none">
+                            {getAgeFriendlyName(item.answers.age)}
+                          </span>
+                          <span className="text-[9px] font-bold text-emerald-800 bg-[#EEFAF2] px-2 py-0.5 rounded-full leading-none">
+                            {getConditionFriendlyName(item.answers.condition)}
+                          </span>
+                        </div>
+                        <h4 className="text-xs font-bold text-slate-800 block truncate mt-1">
+                          {item.result.temperatureCategory}
+                        </h4>
+                        <p className="text-[11px] text-slate-500 line-clamp-1">{item.result.layersDescription}</p>
+                      </div>
+
+                      <button
+                        onClick={() => toggleFavorite(item.answers, item.result)}
+                        className="p-2 hover:bg-rose-50 text-rose-500 rounded-full cursor-pointer shrink-0"
+                        title="Remover dos favoritos"
+                      >
+                        <X className="w-4 h-4" />
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          </motion.div>
+        )}
+
+        {/* MAIS OPTION TAB VIEW */}
+        {activeTab === 'mais' && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            className="space-y-6"
+          >
+            <div className="bg-white border border-[#EDE5DB] rounded-[2rem] p-5 sm:p-7 shadow-sm space-y-4">
+              <div className="flex items-center gap-2 pb-3 border-b border-[#FAF2EC]">
+                <Info className="w-5 h-5 text-[#E29A88]" />
+                <h3 className="text-md font-bold text-slate-800">Mais Opções</h3>
               </div>
- 
-              {/* BOTTOM CONTROL ACTIONS WITH PLAYFUL BABY LOOK */}
-              <div className="pt-2 flex flex-col sm:flex-row gap-3">
+
+              <div className="space-y-2.5 font-sans">
+                {/* About ClimaBaby Panel */}
                 <button
-                  type="button"
-                  id="btn-recalculate"
-                  onClick={() => {
-                    setStep(1);
-                    setScreen('wizard');
-                  }}
-                  className="flex-1 py-4 bg-pink-500 hover:bg-pink-600 text-white text-sm font-display font-semibold rounded-3xl cursor-pointer flex items-center justify-center gap-2 shadow-md active:translate-y-[1px]"
+                  onClick={() => setIsAboutOpen(true)}
+                  className="w-full flex items-center justify-between p-3.5 bg-slate-50 hover:bg-[#FAF2EC]/40 rounded-xl text-left font-bold text-xs text-slate-700 transition-all cursor-pointer border border-slate-100"
                 >
-                  <RefreshCw className="w-4 h-4 shrink-0 animate-spin-reverse" /> Alterar Dados
+                  <div className="flex items-center gap-3">
+                    <Info className="w-4.5 h-4.5 text-[#E29A88]" />
+                    <div>
+                      <span className="block">Sobre o ClimaBaby</span>
+                      <span className="text-[9.5px] font-normal text-slate-400 block mt-0.5">Conheça o segredo das camadas seguras</span>
+                    </div>
+                  </div>
+                  <ChevronRight className="w-4 h-4 text-slate-400" />
                 </button>
-                
+
+                {/* Installation tutorial panel */}
                 <button
-                  type="button"
-                  id="btn-reset"
-                  onClick={() => {
-                    setAnswers({
-                      age: '0-3-meses',
-                      state: 'acordado',
-                      period: 'dia',
-                      temperature: 22,
-                      hasWind: false,
-                      sensitivity: 'normal',
-                      location: 'fechado',
-                      condition: 'fechado',
-                      wantsExtras: true,
-                    });
-                    setStep(1);
-                    setScreen('welcome');
-                  }}
-                  className="px-6 py-4 bg-white hover:bg-pink-50/25 text-pink-650 border-2 border-pink-200 hover:border-pink-350 text-xs sm:text-sm font-display font-semibold rounded-3xl cursor-pointer flex items-center justify-center gap-1.5 shadow-xs transition-all active:scale-[0.98]"
+                  onClick={() => setIsPwaInstructionOpen(true)}
+                  className="w-full flex items-center justify-between p-3.5 bg-slate-50 hover:bg-[#FAF2EC]/40 rounded-xl text-left font-bold text-xs text-slate-705 transition-all cursor-pointer border border-slate-100"
                 >
-                  Reiniciar Tudo
+                  <div className="flex items-center gap-3">
+                    <Smartphone className="w-4.5 h-4.5 text-[#E29A88]" />
+                    <div>
+                      <span className="block font-bold">Como baixar no celular</span>
+                      <span className="text-[9.5px] font-normal text-slate-400 block mt-0.5">Transforme o ClimaBaby em App</span>
+                    </div>
+                  </div>
+                  <ChevronRight className="w-4 h-4 text-slate-400" />
                 </button>
+
+                {/* Support Link */}
+                <a
+                  href="https://wa.me/message/R2T4NMNY46OEL1"
+                  target="_blank"
+                  rel="noreferrer"
+                  className="w-full flex items-center justify-between p-3.5 bg-slate-50 hover:bg-[#FAF2EC]/40 rounded-xl text-left font-bold text-xs text-slate-700 transition-all cursor-pointer border border-slate-100"
+                >
+                  <div className="flex items-center gap-3">
+                    <HelpCircle className="w-4.5 h-4.5 text-[#E29A88]" />
+                    <div>
+                      <span className="block">Suporte no WhatsApp</span>
+                      <span className="text-[9.5px] font-normal text-slate-400 block mt-0.5">Fale diretamente conosco</span>
+                    </div>
+                  </div>
+                  <ChevronRight className="w-4 h-4 text-slate-400" />
+                </a>
+
+                {/* Secret Coupon Group WhatsApp Link */}
+                <a
+                  href="https://chat.whatsapp.com/IvwQos4ntsGEfgLZzZdayx?mode=gi_t"
+                  target="_blank"
+                  rel="noreferrer"
+                  className="w-full flex items-center justify-between p-3.5 bg-slate-50 hover:bg-[#FAF2EC]/40 rounded-xl text-left font-bold text-xs text-slate-750 transition-all cursor-pointer border border-slate-100"
+                >
+                  <div className="flex items-center gap-3">
+                    <Gift className="w-4.5 h-4.5 text-[#E29A88]" />
+                    <div>
+                      <span className="block">Grupo de Ofertas Especial</span>
+                      <span className="text-[9.5px] font-normal text-slate-400 block mt-0.5">Fique por dentro das promoções</span>
+                    </div>
+                  </div>
+                  <ChevronRight className="w-4 h-4 text-slate-400" />
+                </a>
               </div>
+            </div>
+          </motion.div>
+        )}
 
-            </motion.div>
-          )}
+      </div>
 
-        </AnimatePresence>
-      </main>
-
-      {/* Footer Details */}
-      <footer className="w-full max-w-xl text-center mt-5 text-[11px] text-[#A69799] font-light space-y-1 select-none z-10 pb-6">
-        <p>Criado com amor para simplificar o cuidado com seu bebê. 🧸</p>
+      {/* Footer copyright block */}
+      <footer className="w-full max-w-xl text-center mt-5 text-[10px] text-slate-400 font-medium select-none z-10 font-sans">
+        <p>Desenvolvido com carinho para proteger o seu pequeno. 🧸</p>
         <p>© 2026 ClimaBaby</p>
       </footer>
 
-      {/* OVERLAY SYSTEM (DRAWER, ABOUT, INSTALL MODALS) */}
+      {/* PERSISTENT FLOATING NAVIGATION TAB BAR AT AT THE BOTTOM (Exactly matching reference picture) */}
+      <nav className="fixed bottom-0 inset-x-0 bg-white/95 backdrop-blur-md border-t border-slate-150 py-2.5 px-6 flex justify-around items-center z-40 shadow-[0_-5px_22px_rgba(75,70,66,0.06)] rounded-t-3xl max-w-xl mx-auto">
+        <button
+          onClick={() => { setActiveTab('inicio'); }}
+          className={`flex flex-col items-center gap-0.5 transition-all w-16 cursor-pointer ${
+            activeTab === 'inicio' ? 'text-[#E29A88] font-bold font-display scale-105' : 'text-slate-405 hover:text-slate-600 font-sans'
+          }`}
+        >
+          <Home className="w-5 h-5 stroke-[2]" />
+          <span className="text-[10px]">Início</span>
+        </button>
+
+        <button
+          onClick={() => { setActiveTab('historico'); }}
+          className={`flex flex-col items-center gap-0.5 transition-all w-16 cursor-pointer ${
+            activeTab === 'historico' ? 'text-[#E29A88] font-bold font-display scale-105' : 'text-slate-405 hover:text-slate-600 font-sans'
+          }`}
+        >
+          <Clock className="w-5 h-5 stroke-[2]" />
+          <span className="text-[10px]">Histórico</span>
+        </button>
+
+        <button
+          onClick={() => { setActiveTab('favoritos'); }}
+          className={`flex flex-col items-center gap-0.5 transition-all w-16 cursor-pointer ${
+            activeTab === 'favoritos' ? 'text-[#E29A88] font-bold font-display scale-105' : 'text-slate-405 hover:text-slate-600 font-sans'
+          }`}
+        >
+          <Heart className="w-5 h-5 stroke-[2]" />
+          <span className="text-[10px]">Favoritos</span>
+        </button>
+
+        <button
+          onClick={() => { setActiveTab('mais'); }}
+          className={`flex flex-col items-center gap-0.5 transition-all w-16 cursor-pointer ${
+            activeTab === 'mais' ? 'text-[#E29A88] font-bold font-display scale-105' : 'text-slate-450 hover:text-slate-600 font-sans'
+          }`}
+        >
+          <div className="flex gap-1 items-center justify-center pt-1 pb-1 w-5">
+            <span className="w-1 h-1 bg-current rounded-full" />
+            <span className="w-1 h-1 bg-current rounded-full" />
+            <span className="w-1 h-1 bg-current rounded-full" />
+          </div>
+          <span className="text-[10px]">Mais</span>
+        </button>
+      </nav>
+
+      {/* SIDEBAR DRAWER AND INFORMATION OVERLAYS */}
       <AnimatePresence>
+        
+        {/* Navigation/utility Menu Drawer overlay */}
         {isMenuOpen && (
-          <React.Fragment key="drawer-holder">
-            {/* Backdrop */}
+          <React.Fragment key="drawer-overlay-holder">
             <motion.div
               initial={{ opacity: 0 }}
-              animate={{ opacity: 0.4 }}
+              animate={{ opacity: 0.3 }}
               exit={{ opacity: 0 }}
               onClick={() => setIsMenuOpen(false)}
-              className="fixed inset-0 bg-gray-955 z-40 cursor-pointer"
+              className="fixed inset-0 bg-[#3D3936] z-45 cursor-pointer"
             />
 
-            {/* Pastel Drawer Panel Custom Slide */}
             <motion.div
               initial={{ x: '-100%' }}
               animate={{ x: 0 }}
               exit={{ x: '-100%' }}
-              transition={{ type: 'spring', damping: 25, stiffness: 180 }}
-              className="fixed top-0 left-0 bottom-0 w-[85%] max-w-[340px] bg-white z-50 shadow-2xl flex flex-col justify-between rounded-r-2xl border-r border-gray-255"
+              transition={{ type: 'spring', damping: 26, stiffness: 210 }}
+              className="fixed top-0 left-0 bottom-0 w-[84%] max-w-[310px] bg-white z-50 shadow-2xl flex flex-col justify-between rounded-r-3xl border-r border-[#EDE5DB] font-sans"
             >
-              {/* Drawer Content */}
-              <div className="p-6 flex-1 flex flex-col overflow-y-auto">
-                {/* Header of Drawer */}
-                <div className="flex justify-between items-center pb-5 border-b border-gray-100 mb-6">
+              <div className="p-5 flex-1 flex flex-col overflow-y-auto">
+                <div className="flex justify-between items-center pb-4 border-b border-slate-100 mb-5">
                   <div className="flex items-center gap-2">
-                    <div className="w-8 h-8 rounded-full overflow-hidden flex items-center justify-center border border-gray-200 shrink-0">
+                    <div className="w-7 h-7 rounded-full overflow-hidden shrink-0">
                       <img 
-                        src={menuClothesLogo} 
+                        src={menuClothesLogoImg} 
                         alt="Logo ClimaBaby" 
                         className="w-full h-full object-cover"
                         referrerPolicy="no-referrer"
                       />
                     </div>
                     <div>
-                      <h4 className="font-sans font-semibold text-sm text-gray-900">ClimaBaby</h4>
-                      <span className="text-[10px] text-gray-405 font-normal block leading-tight">ClimaBaby PWA</span>
+                      <h4 className="font-bold text-xs text-slate-900 leading-none">ClimaBaby</h4>
+                      <span className="text-[8px] text-slate-400 font-extrabold block uppercase tracking-wider mt-0.5">Consultoria Especializada</span>
                     </div>
                   </div>
-                  <motion.button
-                    whileTap={{ scale: 0.9 }}
+                  <button
                     onClick={() => setIsMenuOpen(false)}
-                    className="p-1.5 hover:bg-gray-100 text-gray-850 rounded-full transition-all cursor-pointer"
+                    className="p-1.5 hover:bg-slate-50 text-slate-500 rounded-xl cursor-pointer"
                   >
-                    <X className="w-5 h-5" />
-                  </motion.button>
+                    <X className="w-4 h-4" />
+                  </button>
                 </div>
 
-                {/* Sidebar Navigation Items */}
-                <div className="space-y-2 flex-1">
-                  {/* Item Home */}
+                <div className="space-y-1.5 flex-1">
                   <button
                     onClick={() => {
                       setIsMenuOpen(false);
+                      setActiveTab('inicio');
                       setScreen('welcome');
-                      setStep(1);
                     }}
-                    className="w-full flex items-center gap-3.5 p-2 rounded-xl text-left font-sans font-medium text-sm text-gray-700 hover:bg-gray-50 hover:text-black transition-all group cursor-pointer"
+                    className="w-full flex items-center gap-3 p-3 rounded-xl text-left font-bold text-xs text-slate-700 hover:bg-[#FAF2EC]/50 cursor-pointer transition-all"
                   >
-                    <div className="p-1.5 bg-gray-50 border border-gray-200 rounded-xl group-hover:bg-gray-950 group-hover:text-white transition-all text-gray-600">
-                      <Home className="w-4 h-4" />
-                    </div>
+                    <Home className="w-4 h-4 text-[#E29A88]" />
                     <span>Início</span>
                   </button>
 
-                  {/* Install PWA Option */}
-                  {isInstallable && (
-                    <button
-                      onClick={() => {
-                        setIsMenuOpen(false);
-                        handleInstallApp();
-                      }}
-                      className="w-full flex items-center gap-3.5 p-2 rounded-xl text-left font-sans font-medium text-sm text-gray-705 hover:bg-gray-50 hover:text-black transition-all group cursor-pointer"
-                    >
-                      <div className="p-1.5 bg-gray-50 border border-gray-200 rounded-xl group-hover:bg-gray-950 group-hover:text-white transition-all text-gray-600">
-                        <Download className="w-4 h-4" />
-                      </div>
-                      <div className="flex-1">
-                        <span className="block font-bold">Adicionar à Tela Inicial</span>
-                        <span className="text-[10px] font-normal text-gray-500 block leading-tight">Instalação aplicativo rápida</span>
-                      </div>
-                    </button>
-                  )}
-
-                  {/* WhatsApp Support */}
-                  <a
-                    href="https://wa.me/message/R2T4NMNY46OEL1"
-                    target="_blank"
-                    rel="noreferrer"
-                    onClick={() => setIsMenuOpen(false)}
-                    className="w-full flex items-center gap-3.5 p-2 rounded-xl text-left font-sans font-medium text-sm text-gray-700 hover:bg-gray-50 hover:text-black transition-all group cursor-pointer"
+                  <button
+                    onClick={() => {
+                      setIsMenuOpen(false);
+                      setActiveTab('historico');
+                    }}
+                    className="w-full flex items-center gap-3 p-3 rounded-xl text-left font-bold text-xs text-slate-700 hover:bg-[#FAF2EC]/50 cursor-pointer transition-all"
                   >
-                    <div className="p-1.5 bg-gray-50 border border-gray-200 rounded-xl group-hover:bg-gray-950 group-hover:text-white transition-all text-gray-600">
-                      <HelpCircle className="w-4 h-4" />
-                    </div>
-                    <div>
-                      <span className="block text-gray-900 font-medium">Suporte ou sugestões</span>
-                      <span className="text-[10px] font-normal text-gray-500 block leading-tight">Fale conosco pelo WhatsApp</span>
-                    </div>
-                  </a>
+                    <Clock className="w-4 h-4 text-[#E29A88]" />
+                    <span>Histórico de consultas</span>
+                  </button>
 
-                  {/* WhatsApp Offers Channel */}
-                  <a
-                    href="https://chat.whatsapp.com/IvwQos4ntsGEfgLZzZdayx?mode=gi_t"
-                    target="_blank"
-                    rel="noreferrer"
-                    onClick={() => setIsMenuOpen(false)}
-                    className="w-full flex items-center gap-3.5 p-2 rounded-xl text-left font-sans font-medium text-sm text-gray-700 hover:bg-gray-50 hover:text-black transition-all group cursor-pointer"
+                  <button
+                    onClick={() => {
+                      setIsMenuOpen(false);
+                      setActiveTab('favoritos');
+                    }}
+                    className="w-full flex items-center gap-3 p-3 rounded-xl text-left font-bold text-xs text-slate-700 hover:bg-[#FAF2EC]/50 cursor-pointer transition-all"
                   >
-                    <div className="p-1.5 bg-gray-50 border border-gray-200 rounded-xl group-hover:bg-gray-950 group-hover:text-white transition-all text-gray-600">
-                      <Gift className="w-4 h-4" />
-                    </div>
-                    <div>
-                      <span className="block text-gray-900 font-medium">Grupo de Ofertas</span>
-                      <span className="text-[10px] font-normal text-gray-500 block leading-tight">Dicas e promoções especiais</span>
-                    </div>
-                  </a>
+                    <Heart className="w-4 h-4 text-[#E29A88]" />
+                    <span>Looks Favoritos</span>
+                  </button>
 
-                  {/* About the Application Item */}
                   <button
                     onClick={() => {
                       setIsMenuOpen(false);
                       setIsAboutOpen(true);
                     }}
-                    className="w-full flex items-center gap-3.5 p-2 rounded-xl text-left font-sans font-medium text-sm text-gray-700 hover:bg-gray-50 hover:text-black transition-all group cursor-pointer"
+                    className="w-full flex items-center gap-3 p-3 rounded-xl text-left font-bold text-xs text-slate-700 hover:bg-[#FAF2EC]/50 cursor-pointer transition-all"
                   >
-                    <div className="p-1.5 bg-gray-50 border border-gray-200 rounded-xl group-hover:bg-gray-950 group-hover:text-white transition-all text-gray-600">
-                      <Info className="w-4 h-4" />
-                    </div>
-                    <span>Sobre o App</span>
+                    <Info className="w-4 h-4 text-[#E29A88]" />
+                    <span>Sobre o ClimaBaby</span>
                   </button>
+
+                  <button
+                    onClick={() => {
+                      setIsMenuOpen(false);
+                      setIsPwaInstructionOpen(true);
+                    }}
+                    className="w-full flex items-center gap-3 p-3 rounded-xl text-left font-bold text-xs text-slate-705 hover:bg-[#FAF2EC]/50 cursor-pointer transition-all"
+                  >
+                    <Smartphone className="w-4 h-4 text-[#E29A88]" />
+                    <div>
+                      <span className="block font-bold">Instalar Aplicativo</span>
+                      <span className="text-[8.5px] font-normal text-slate-400 block">Facilite seu acesso diário</span>
+                    </div>
+                  </button>
+
+                  <a
+                    href="https://wa.me/message/R2T4NMNY46OEL1"
+                    target="_blank"
+                    rel="noreferrer"
+                    onClick={() => setIsMenuOpen(false)}
+                    className="w-full flex items-center gap-3 p-3 rounded-xl text-left font-bold text-xs text-slate-705 hover:bg-[#FAF2EC]/50 cursor-pointer transition-all block"
+                  >
+                    <HelpCircle className="w-4 h-4 text-[#E29A88]" />
+                    <div>
+                      <span className="block">Dúvidas ou Sugestões</span>
+                      <span className="text-[8.5px] font-normal text-slate-400 block">Fale conosco por WhatsApp</span>
+                    </div>
+                  </a>
                 </div>
 
-                {/* Lovely Pastel App Installer Mini Banner inside Drawer */}
-                {isInstallable && (
-                  <div className="mt-auto bg-gray-50 p-4 rounded-xl border border-gray-200 text-center shadow-xs">
-                    <p className="text-[11.5px] text-gray-600 font-normal leading-relaxed mb-3">
-                      Instale o app na sua tela inicial para acessar mais rápido no dia a dia.
-                    </p>
-                    <button
-                      onClick={() => {
-                        setIsMenuOpen(false);
-                        handleInstallApp();
-                      }}
-                      className="w-full py-2 bg-gray-950 text-white text-xs font-semibold rounded-xl hover:bg-black transition-colors cursor-pointer"
-                    >
-                      Instalar Agora
-                    </button>
-                  </div>
-                )}
+                <div className="mt-4 bg-[#FAF2EC]/30 p-4 rounded-2xl border border-[#EDE5DB]/50 text-center">
+                  <p className="text-[10px] text-slate-500 leading-normal mb-3 font-semibold">
+                    Tenha o ClimaBaby direto na sua tela inicial para usar a qualquer momento!
+                  </p>
+                  <button
+                    onClick={() => {
+                      setIsMenuOpen(false);
+                      setIsPwaInstructionOpen(true);
+                    }}
+                    className="w-full py-2 bg-[#E29A88] hover:bg-[#D48977] text-white text-[10px] font-bold rounded-lg cursor-pointer font-sans"
+                  >
+                    Instalar Aplicativo
+                  </button>
+                </div>
               </div>
 
-              {/* Drawer Footer Details */}
-              <div className="p-5 border-t border-gray-100 bg-gray-50 text-center rounded-br-2xl">
-                <span className="text-[10px] text-gray-400 block uppercase tracking-wide font-mono">ClimaBaby v3.2</span>
-                <span className="text-[9.5px] text-gray-400 font-normal block leading-relaxed mt-1">Carrega atualizações em tempo real</span>
+              <div className="p-4 border-t border-slate-100 bg-[#FDFBF7] text-center">
+                <span className="text-[9px] text-slate-400 block font-mono">ClimaBaby v4.2 PRO</span>
               </div>
             </motion.div>
           </React.Fragment>
         )}
 
+        {/* Modal: About ClimaBaby */}
         {isAboutOpen && (
-          <React.Fragment key="about-modal">
+          <React.Fragment key="about-modal-holder">
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 0.4 }}
               exit={{ opacity: 0 }}
               onClick={() => setIsAboutOpen(false)}
-              className="fixed inset-0 bg-gray-955 z-50 cursor-pointer"
+              className="fixed inset-0 bg-[#3D3936] z-50 cursor-pointer"
             />
             <motion.div
-              initial={{ opacity: 0, scale: 0.95, y: 20 }}
+              initial={{ opacity: 0, scale: 0.95, y: 15 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
-              exit={{ opacity: 0, scale: 0.95, y: 20 }}
-              transition={{ type: 'spring', damping: 25, stiffness: 200 }}
-              className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[90%] max-w-sm bg-white rounded-2xl p-6 shadow-2xl z-55 border border-gray-150 flex flex-col gap-4 text-center"
+              exit={{ opacity: 0, scale: 0.95, y: 15 }}
+              className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[90%] max-w-sm bg-white rounded-[2rem] p-5 shadow-2xl z-55 border border-[#EDE5DB] text-center font-sans"
             >
-              <div className="w-12 h-12 bg-gray-50 text-gray-800 rounded-full flex items-center justify-center mx-auto border border-gray-150">
-                <Info className="w-6 h-6" />
+              <div className="w-11 h-11 bg-[#FAF2EC] text-[#E29A88] rounded-full flex items-center justify-center mx-auto border border-[#F5E1D5] mb-3">
+                <Info className="w-5 h-5" />
               </div>
-              <h3 className="font-sans font-semibold text-lg text-gray-900 border-none outline-none leading-tight">Sobre o ClimaBaby</h3>
-              <p className="text-xs sm:text-sm text-gray-650 font-normal leading-relaxed">
-                O <strong>ClimaBaby</strong> é um aplicativo progressivo (PWA) de utilidade prática criado para de forma descomplicada apoiar cuidadores a escolherem as camadas perfeitas de vestimenta para os pequenos.
+              <h3 className="font-bold text-md text-slate-800 leading-tight mb-2">Sobre o ClimaBaby</h3>
+              <p className="text-xs text-slate-600 leading-relaxed mb-3 font-semibold text-left">
+                O <strong>ClimaBaby</strong> é uma consultoria inteligente de camadas desenvolvida para simplificar a vida de mães e pais, sugerindo looks plenamente ajustados ao clima e à rotina do bebê.
               </p>
-              <p className="text-[11.5px] text-gray-600 font-normal leading-relaxed bg-gray-50 p-3 rounded-xl border border-gray-150">
-                Utilizamos algoritmos térmicos baseados em consensos de pediatria e neonatologia para guiar o sono seguro, a transpiração livre e minimizar riscos de superaquecimento.
+              <p className="text-[10px] text-slate-450 leading-relaxed bg-slate-50 p-3 rounded-xl border border-slate-150 mb-4 font-semibold text-left">
+                Consideramos a ventilação, o uso de ar condicionado, vento e o sono seguro. O método evita colocar toucas ou cobertores soltos durante o sono noturno sem supervisão, eliminando riscos de asfixia e oferecendo o Saco de Dormir como alternativa primária.
               </p>
-              <div className="flex flex-col gap-2 pt-2 border-none">
-                <button
-                  onClick={() => setIsAboutOpen(false)}
-                  className="w-full py-2.5 bg-gray-955 hover:bg-black text-white text-sm font-semibold rounded-xl cursor-pointer transition-colors"
-                >
-                  Entendi, obrigado!
-                </button>
-              </div>
+              <button
+                onClick={() => setIsAboutOpen(false)}
+                className="w-full py-2.5 bg-[#E29A88] hover:bg-[#D48977] text-white text-xs font-bold rounded-xl cursor-pointer transition-colors"
+              >
+                Concluir
+              </button>
             </motion.div>
           </React.Fragment>
         )}
 
+        {/* Modal: PWA Installation instructions */}
         {isPwaInstructionOpen && (
-          <React.Fragment key="install-modal">
+          <React.Fragment key="install-modal-holder">
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 0.4 }}
               exit={{ opacity: 0 }}
               onClick={() => setIsPwaInstructionOpen(false)}
-              className="fixed inset-0 bg-gray-955 z-50 cursor-pointer"
+              className="fixed inset-0 bg-[#3D3936] z-50 cursor-pointer"
             />
             <motion.div
-              initial={{ opacity: 0, scale: 0.95, y: 20 }}
+              initial={{ opacity: 0, scale: 0.95, y: 15 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
-              exit={{ opacity: 0, scale: 0.95, y: 20 }}
-              transition={{ type: 'spring', damping: 25, stiffness: 200 }}
-              className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[90%] max-w-sm bg-white rounded-2xl p-6 shadow-2xl z-55 border border-gray-150 flex flex-col gap-4 focus:outline-none"
+              exit={{ opacity: 0, scale: 0.95, y: 15 }}
+              className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[90%] max-w-sm bg-white rounded-[2rem] p-5 shadow-2xl z-55 border border-[#EDE5DB] font-sans"
             >
-              <div className="w-12 h-12 bg-gray-50 text-gray-850 rounded-full flex items-center justify-center mx-auto border border-gray-200">
-                <Smartphone className="w-6 h-6" />
+              <div className="w-11 h-11 bg-slate-50 text-slate-600 rounded-full flex items-center justify-center mx-auto border border-slate-200 mb-3">
+                <Smartphone className="w-5 h-5" />
               </div>
-              <h3 className="font-sans font-bold text-center text-lg text-gray-900 leading-tight">Instalar na Tela Inicial</h3>
+              <h3 className="font-bold text-center text-md text-slate-800 leading-tight mb-1">Passo a Passo de Instalação</h3>
               
-              <div className="space-y-4 py-1 text-xs text-gray-600 font-normal">
-                <p className="text-center text-xs text-gray-500 leading-relaxed">
-                  Acesse com apenas um toque no seu celular! Funciona de modo prático inclusive offline.
+              <div className="space-y-3 py-2 text-xs text-slate-600 font-medium leading-relaxed">
+                <p className="text-center text-[10.5px] text-slate-450">
+                  Tenha acesso imediato ao ClimaBaby adicionando o ícone à tela inicial!
                 </p>
 
-                {/* iPhone / Safari specific manual */}
-                <div className="bg-gray-50 p-4 rounded-xl border border-gray-150 space-y-2">
-                  <span className="font-sans font-bold text-gray-900 text-xs block uppercase tracking-wide">No iPhone (iOS - Safari)</span>
-                  <ol className="list-decimal list-inside space-y-2 text-xs leading-relaxed text-gray-700">
-                    <li>Toque no botão de <strong>Compartilhar</strong> <Share2 className="w-3.5 h-3.5 inline inline-block text-gray-850" /> no Safari (setinha no rodapé).</li>
-                    <li>Role o menu de opções para baixo.</li>
-                    <li>Clique em <strong>Adicionar à Tela de Início</strong>.</li>
+                <div className="bg-slate-50 p-3 rounded-xl border border-slate-150 space-y-1">
+                  <span className="font-bold text-slate-800 text-[9.5px] block uppercase tracking-wider">No iPhone (iOS - Safari)</span>
+                  <ol className="list-decimal list-inside text-slate-600 text-[9px] space-y-1">
+                    <li>Toque no botão de <strong>Compartilhar</strong> <Share2 className="w-3.5 h-3.5 inline text-slate-800" />.</li>
+                    <li>Role as opções e clique em <strong>Adicionar à Tela de Início</strong>.</li>
                   </ol>
                 </div>
 
-                {/* Android / Chrome specific manual */}
-                <div className="bg-gray-50 p-4 rounded-xl border border-gray-155 space-y-2">
-                  <span className="font-sans font-bold text-gray-900 text-xs block uppercase tracking-wide">No Android (Chrome)</span>
-                  <ol className="list-decimal list-inside space-y-2 text-xs text-gray-700 leading-relaxed">
-                    <li>Toque no botão de <strong>3 pontinhos</strong> do navegador.</li>
-                    <li>Selecione <strong>Adicionar à Tela Inicial</strong> ou <strong>Instalar Aplicativo</strong>.</li>
+                <div className="bg-slate-50 p-3 rounded-xl border border-slate-150 space-y-1">
+                  <span className="font-bold text-slate-800 text-[9.5px] block uppercase tracking-wider">No Android (Chrome)</span>
+                  <ol className="list-decimal list-inside text-slate-600 text-[9px] space-y-1">
+                    <li>Toque nas <strong>configurações (três pontinhos)</strong> no canto superior.</li>
+                    <li>Clique na opção <strong>Instalar Aplicativo</strong> ou <strong>Adicionar à tela inicial</strong>.</li>
                   </ol>
                 </div>
               </div>
 
-              <div className="flex flex-col gap-2 pt-2 border-none">
-                <button
-                  onClick={() => setIsPwaInstructionOpen(false)}
-                  className="w-full py-2.5 bg-gray-955 hover:bg-black text-white text-sm font-semibold rounded-xl cursor-pointer transition-colors text-center"
-                >
-                  Entendi, vou instalar!
-                </button>
-              </div>
+              <button
+                onClick={() => setIsPwaInstructionOpen(false)}
+                className="w-full py-2.5 bg-[#E29A88] hover:bg-[#D48977] text-white text-xs font-bold rounded-xl cursor-pointer text-center mt-3"
+              >
+                Entendido!
+              </button>
             </motion.div>
           </React.Fragment>
         )}

@@ -1,134 +1,106 @@
 /**
- * @license
  * SPDX-License-Identifier: Apache-2.0
  */
 
 import { QuestionnaireAnswers, RecommendationResult } from './types.ts';
 
 /**
- * Interprets the questionnaire input and generates a cozy, highly personalized
- * recommendation based on the Intelligent Layers System and perceived ambient feeling.
+ * Intelligent Consultancy Engine for ClimaBaby.
+ * Avoids raw mathematical temperature additions/subtractions.
+ * Reasons based on smart context conditional rules.
  */
 export function calculateClothing(answers: QuestionnaireAnswers): RecommendationResult {
   const {
     age,
     state,
     period,
-    sensitivity,
     condition,
     feeling,
-    temperature,
-    wantsExtras
+    temperature
   } = answers;
 
-  // 1. Establish Base Temperature from Ambient Feeling
-  let baseTemp = 23; // default 'agradavel'
+  // Context-Based Perceived Feeling
+  // We align with the specified order of decision hierarchy:
+  // 1. Is the baby sleeping?
+  // 2. How is the environment feeling?
+  // 3. What is the age?
+  // 4. Is there air-conditioning or cold wind?
+  // 5. Is it day or night?
+  // 6. Optional temperature.
+
+  const isSleeping = state === 'dormindo';
+  const isColoSling = state === 'colo-sling';
+  const isPasseando = state === 'passeando';
   
-  if (feeling === 'muito-quente') {
-    baseTemp = 33;
-  } else if (feeling === 'quente') {
-    baseTemp = 28;
-  } else if (feeling === 'agradavel') {
-    baseTemp = 23;
-  } else if (feeling === 'fresquinho') {
-    baseTemp = 19;
-  } else if (feeling === 'frio') {
-    baseTemp = 14;
-  } else if (feeling === 'muito-frio') {
-    baseTemp = 9;
-  }
+  const isNewborn = age === 'recem-nascido';
+  const isAC = condition === 'ar-condicionado';
+  const isWind = condition === 'vento-frio';
+  const isNight = period === 'noite';
 
-  // If a temperature in Celsius is explicitly complementarily provided,
-  // we can anchor slightly to it or merge to create a highly realistic perception.
-  if (temperature !== null && !isNaN(temperature)) {
-    // If the difference is big, respect the numerical value but lean towards feeling
-    baseTemp = (baseTemp * 0.6) + (temperature * 0.4);
-  }
-
-  // 2. Apply Logical Context Modifiers to get "Perceived Temperature"
-  let perceivedTemp = baseTemp;
-
-  // Modifiers based on: "O ambiente está" (condition)
-  // fechar can warm up. draft can cool down.
-  if (condition === 'fechado') {
-    perceivedTemp += 1.5; // closed rooms feel warmer
-  } else if (condition === 'ventilador') {
-    perceivedTemp -= 1.5; // fan cools down
-  } else if (condition === 'ar-condicionado') {
-    perceivedTemp -= 3.0; // air-conditioned is significantly cooler
-  } else if (condition === 'externo') {
-    perceivedTemp -= 1.0; // outdoors generally feels a bit more drafty
-  } else if (condition === 'vento-frio') {
-    perceivedTemp -= 4.0; // cold wind has a strong cooling effect!
-  } else if (condition === 'ventilado') {
-    perceivedTemp -= 0.5; // lightly ventilated
-  }
-
-  // Modifiers based on: "O bebê estará" (state)
-  if (state === 'dormindo') {
-    perceivedTemp -= 1.0; // body slows down and feels cooler, or needs sleep protection
-  } else if (state === 'acordado') {
-    perceivedTemp += 0.5; // active play heats up slightly
-  } else if (state === 'colo-sling') {
-    perceivedTemp += 4.0; // body heat from parent warm up immensely! Reduces layers.
-  } else if (state === 'passeando') {
-    perceivedTemp -= 1.0; // strolling outside exposure
-  } else if (state === 'carrinho') {
-    perceivedTemp += 1.0; // canopy/blankets barrier inside stroller creates micro-climate
-  }
-
-  // Modifiers based on: "Bebê costuma sentir" (sensitivity)
-  if (sensitivity === 'frio') {
-    perceivedTemp -= 1.5;
-  } else if (sensitivity === 'calor') {
-    perceivedTemp += 1.5;
-  }
-
-  // Modifiers based on: "Qual a idade do bebê" (age)
-  if (age === 'recem-nascido') {
-    perceivedTemp -= 1.5; // newborns regulate thermal poorly, require extra cozy layer
-  }
-
-  // 3. Determine Severity, Category labels based on Perceived Temperature
-  let tempCategory = '';
-  let tempDescription = '';
+  // Translate Feeling to Category and Tone
+  let categoryLabel = '';
+  let interpretationText = '';
   let severity: RecommendationResult['severity'] = 'mild';
 
-  if (perceivedTemp < 12) {
-    tempCategory = '❄️ Frio Intenso';
-    tempDescription = 'Sensação térmica muito fria! Proteja o bebê com camadas de aconchego e isole extremidades.';
-    severity = 'extreme-cold';
-  } else if (perceivedTemp >= 12 && perceivedTemp < 16) {
-    tempCategory = '🥶 Clima Frio';
-    tempDescription = 'O ambiente está gelado! Tecidos protetores nas camadas intermediária e externa farão toda a diferença.';
-    severity = 'cold';
-  } else if (perceivedTemp >= 16 && perceivedTemp < 19) {
-    tempCategory = '🍃 Frio Moderado';
-    tempDescription = 'A brisa está mais fresca, pedindo camadas suaves e confortáveis.';
-    severity = 'cold';
-  } else if (perceivedTemp >= 19 && perceivedTemp < 22) {
-    tempCategory = '🌤️ Clima Fresco';
-    tempDescription = 'Temperatura gostosa mas que pede casaco protetor para passeios.';
-    severity = 'mild';
-  } else if (perceivedTemp >= 22 && perceivedTemp < 25) {
-    tempCategory = '😊 Levemente Fresco';
-    tempDescription = 'Clima ideal, muito confortável. Opte por peças macias de algodão duplo.';
-    severity = 'mild';
-  } else if (perceivedTemp >= 25 && perceivedTemp < 28) {
-    tempCategory = '☀️ Clima Agradável';
-    tempDescription = 'Dia delicioso e ameno. Vista com peças finas e respiráveis de uma a duas camadas.';
-    severity = 'mild';
-  } else if (perceivedTemp >= 28 && perceivedTemp < 31) {
-    tempCategory = '🔥 Clima Quente';
-    tempDescription = 'Calor no ambiente! Use pouquíssimas peças e foque em tecidos de toque refrescante.';
-    severity = 'warm';
-  } else {
-    tempCategory = '🌡️ Clima Muito Quente';
-    tempDescription = 'Calor forte. Priorize apenas um body leve de algodão bem vazado.';
-    severity = 'hot';
+  // Base environmental feeling
+  switch (feeling) {
+    case 'muito-quente':
+      categoryLabel = '🥵 Ambiente Muito Quente';
+      interpretationText = 'O calor está bem forte hoje por aí!';
+      severity = 'hot';
+      break;
+    case 'quente':
+      categoryLabel = '☀️ Ambiente Quente';
+      interpretationText = 'Está um dia quente e ensolarado.';
+      severity = 'warm';
+      break;
+    case 'agradavel':
+      categoryLabel = '😊 Clima Agradável';
+      interpretationText = 'O clima está ótimo, muito gostoso e equilibrado.';
+      severity = 'mild';
+      break;
+    case 'fresquinho':
+      categoryLabel = '🌥️ Ambiente Fresquinho';
+      interpretationText = 'Está fresquinho, com aquele ventinho gostoso.';
+      severity = 'cold';
+      break;
+    case 'frio':
+      categoryLabel = '🥶 Ambiente Frio';
+      interpretationText = 'A temperatura caiu e o ambiente está bem gelado.';
+      severity = 'cold';
+      break;
+    case 'muito-frio':
+      categoryLabel = '❄️ Clima Bem Frio';
+      interpretationText = 'Dia ou noite de inverno com frio rigoroso!';
+      severity = 'extreme-cold';
+      break;
   }
 
-  // Outfit formulation variables
+  // Adjust if there is AC or Wind (they make the environment feel cooler)
+  let adjustedFeeling = feeling;
+  if (isAC) {
+    if (feeling === 'muito-quente' || feeling === 'quente') {
+      adjustedFeeling = 'agradavel';
+    } else if (feeling === 'agradavel') {
+      adjustedFeeling = 'fresquinho';
+    } else {
+      adjustedFeeling = 'frio';
+    }
+  } else if (isWind) {
+    if (feeling === 'muito-quente') {
+      adjustedFeeling = 'quente';
+    } else if (feeling === 'quente') {
+      adjustedFeeling = 'agradavel';
+    } else if (feeling === 'agradavel') {
+      adjustedFeeling = 'fresquinho';
+    } else if (feeling === 'fresquinho') {
+      adjustedFeeling = 'frio';
+    } else {
+      adjustedFeeling = 'muito-frio';
+    }
+  }
+
+  // Let's model outfits cleanly
   const outfitSuggestions: string[] = [];
   const recommendedFabrics: string[] = [];
   const accessories: string[] = [];
@@ -136,241 +108,178 @@ export function calculateClothing(answers: QuestionnaireAnswers): Recommendation
   let layerCount = 2;
   let layersDescription = '';
 
-  const isNight = period === 'noite';
-  const isSleeping = state === 'dormindo';
-
-  // ==========================================
-  // CLOTHING COMPOSITION BASED ON PERCEIVED ZONE
-  // ==========================================
-  
-  if (perceivedTemp >= 31) {
-    // 🌡️ MUCH WARM / HOT
+  // CORE CONSULTANCY GRID OF LAYERS & COMPOSITION
+  if (adjustedFeeling === 'muito-quente') {
     layerCount = 1;
-    layersDescription = 'Camada única respirável e leve de algodão fino.';
+    layersDescription = 'Apenas uma única camada extremamente leve e fresca para evitar brotoejas e superaquecimento.';
     
     if (isSleeping) {
-      outfitSuggestions.push('Look ideal: apenas body de manga curta leve.');
-      outfitSuggestions.push('Dica: em sonecas muito abafadas, o bebê pode dormir com segurança apenas de fralda.');
+      outfitSuggestions.push('Apenas Body de Manga Curta leve');
+      visualItems.push('body-manga-curta');
     } else {
-      outfitSuggestions.push('Body de manga curta fino e respirável');
+      outfitSuggestions.push('Body de Manga Curta bem fininho');
+      visualItems.push('body-manga-curta');
     }
-    
-    recommendedFabrics.push('Algodão leve', 'Malha de algodão respirável');
-    accessories.push('Pezinhos descalços para regulação térmica natural');
-    visualItems.push('body-manga-curta');
+    recommendedFabrics.push('Algodão 100% leve, gaze ou cambraia');
+    accessories.push('Nenhum acessório hoje. Deixe os pezinhos descalços!');
 
-  } else if (perceivedTemp >= 28 && perceivedTemp < 31) {
-    // ☀️ WARMY / SUNNY
+  } else if (adjustedFeeling === 'quente') {
     layerCount = 1;
-    layersDescription = 'Camada única de algodão super leve e respirável.';
-    
-    outfitSuggestions.push('Body de manga curta leve e confortável');
-    if (condition === 'ar-condicionado' || condition === 'vento-frio') {
-      outfitSuggestions.push('Adicione uma calça leve de algodão para proteger de brisas diretas');
-      visualItems.push('calca');
-    }
-    if (age === 'recem-nascido') {
-      outfitSuggestions.push('Para recém-nascidos, prefira body de manga longa para proteger os bracinhos.');
-    }
+    layersDescription = 'Uma camada simples, focando na transpiração natural e conforto.';
 
-    recommendedFabrics.push('Algodão 100% puro', 'Fibra de bambu fresca');
-    accessories.push('Pezinhos livres ou apenas fralda nas sonecas mais quentes do dia');
-    visualItems.push('body-manga-curta');
+    if (isNewborn) {
+      outfitSuggestions.push('Body de Manga Longa fininho (por ser recém-nascido)');
+      visualItems.push('body-manga-longa');
+    } else {
+      outfitSuggestions.push('Body de Manga Curta confortável');
+      visualItems.push('body-manga-curta');
+    }
+    recommendedFabrics.push('Algodão Suedine bem macio');
+    accessories.push('Pezinhos livres de meias para regular o calor naturalmente.');
 
-  } else if (perceivedTemp >= 25 && perceivedTemp < 28) {
-    // 😊 AGREEABLE / NICE
+  } else if (adjustedFeeling === 'agradavel') {
     layerCount = 2;
-    layersDescription = 'Camadas básicas: body e calça leve para mantê-lo confortável.';
-    
-    if (isSleeping) {
-      outfitSuggestions.push('Opção principal: body de manga curta + calça de algodão macio');
-      outfitSuggestions.push('Dica de sono seguro: saco de dormir leve para substituir cobertores soltos');
-      visualItems.push('body-manga-curta', 'saco-dormir-leve');
+    layersDescription = 'Duas camadas básicas e leves para manter o corpinho seguro e em temperatura ideal.';
+
+    if (isNewborn) {
+      outfitSuggestions.push('Body de Manga Longa + Calça confortável');
+      visualItems.push('body-manga-longa', 'calca');
     } else {
-      outfitSuggestions.push('Body de manga curta ou body de manga longa bem fino');
-      outfitSuggestions.push('Calça leve (mijão) para liberdade de movimento');
+      outfitSuggestions.push('Body de Manga Curta + Calça (culote/mijão)');
       visualItems.push('body-manga-curta', 'calca');
     }
 
-    recommendedFabrics.push('Algodão suedine leve', 'Malha canelada de toque macio');
-    accessories.push('Meias leves opcionais caso sinta os pezinhos gelados');
+    if (isSleeping) {
+      outfitSuggestions.push('Saco de dormir leve opcional substituindo cobertores');
+      visualItems.push('saco-dormir-leve');
+    }
 
-  } else if (perceivedTemp >= 22 && perceivedTemp < 25) {
-    // 🌤️ LIGHTLY FRESH
+    recommendedFabrics.push('Algodão Suedine tradicional ou Malha canelada');
+    accessories.push('Meias leves se sentir as extremidades geladinhas.');
+
+  } else if (adjustedFeeling === 'fresquinho') {
     layerCount = 2;
-    layersDescription = 'Duas camadas leves de algodão para manter o corpinho e os membros protegidos.';
-    
+    layersDescription = 'Duas camadas aconchegantes com proteção integral para braços e pernas.';
+
+    outfitSuggestions.push('Body de Manga Longa de base');
+    outfitSuggestions.push('Calça confortável de algodão');
+    visualItems.push('body-manga-longa', 'calca');
+
     if (isSleeping) {
-      outfitSuggestions.push('Look principal: body de manga longa + calça de algodão respirável');
-      outfitSuggestions.push('Opção para a noite: saco de dormir leve por cima do body de manga longa');
-      visualItems.push('body-manga-longa', 'saco-dormir-soft');
+      outfitSuggestions.push('Saco de dormir soft quentinho');
+      visualItems.push('saco-dormir-soft');
     } else {
-      outfitSuggestions.push('Body de manga longa bem macio');
-      outfitSuggestions.push('Calça (mijão) de algodão bem flexível');
-      outfitSuggestions.push('Macacão de algodão leve por cima se a temperatura começar a cair');
-      visualItems.push('body-manga-longa', 'calca', 'meias');
+      outfitSuggestions.push('Macacão de algodão leve por cima');
+      visualItems.push('macacao-algodao');
     }
 
-    recommendedFabrics.push('Algodão suedine clássico', 'Soft de espessura bem fina');
-    accessories.push('Meias de algodão macias');
+    recommendedFabrics.push('Algodão Interlock ou suedine encorpado');
+    accessories.push('Meias confortáveis de algodão');
 
-  } else if (perceivedTemp >= 19 && perceivedTemp < 22) {
-    // 🌥️ FRESH
-    layerCount = 2;
-    layersDescription = 'Proteção leve e aconchegante com body sob macacão de algodão mais encorpado.';
-    
-    if (isSleeping) {
-      outfitSuggestions.push('Look à noite: body de manga longa + calça + saco de dormir soft');
-      visualItems.push('body-manga-longa', 'calca', 'saco-dormir-soft');
-    } else {
-      outfitSuggestions.push('Body de manga longa + calça de algodão de base');
-      outfitSuggestions.push('Macacão de algodão mais encorpado por cima');
-      visualItems.push('body-manga-longa', 'calca', 'macacao-algodao', 'meias');
-    }
-
-    recommendedFabrics.push('Algodão interlock macio', 'Fleece leve de toque aveludado');
-    accessories.push('Meias confortáveis');
-
-  } else if (perceivedTemp >= 16 && perceivedTemp < 19) {
-    // 🍃 MODERATE COLD
+  } else if (adjustedFeeling === 'frio') {
     layerCount = 3;
-    layersDescription = 'Camada base protegida sob um macacão de soft ou plush aconchegante.';
-    
+    layersDescription = 'Três camadas protetoras de frio para cobrir o peito e reter o calor de forma segura.';
+
+    outfitSuggestions.push('Body de Manga Longa');
+    outfitSuggestions.push('Calça (mijão) macia por baixo');
+    visualItems.push('body-manga-longa', 'calca');
+
     if (isSleeping) {
-      outfitSuggestions.push('Opção confortável: body de manga longa + calça canelada + saco de dormir de soft por cima');
-      visualItems.push('body-manga-longa', 'calca', 'macacao-soft', 'meias');
+      outfitSuggestions.push('Saco de dormir plush ou soft quentinho');
+      visualItems.push('saco-dormir-soft');
     } else {
-      outfitSuggestions.push('Body de manga longa confortável');
-      outfitSuggestions.push('Calça de algodão (mijão) por baixo');
-      outfitSuggestions.push('Macacão de soft peluciado para reter o calor no corpinho');
-      visualItems.push('body-manga-longa', 'calca', 'macacao-soft', 'meias');
+      outfitSuggestions.push('Macacão de algodão plush ou soft quentinho');
+      visualItems.push('macacao-soft');
     }
 
-    recommendedFabrics.push('Algodão interlock denso', 'Soft escovado térmico');
-    accessories.push('Meias de algodão bem macias');
+    recommendedFabrics.push('Plush de toque sedoso e Soft escovado');
+    accessories.push('Meias quentinhas');
 
-  } else if (perceivedTemp >= 12 && perceivedTemp < 16) {
-    // 🥶 COLD
-    layerCount = 3;
-    layersDescription = 'Camada quentinha com body e calça por baixo de um macacão de plush aconchegante.';
-    
-    if (isSleeping) {
-      outfitSuggestions.push('Visual de sono seguro: body de manga longa + calça + saco de dormir de plush quentinho');
-      visualItems.push('body-manga-longa', 'calca', 'saco-dormir-plush');
-    } else {
-      outfitSuggestions.push('Body de manga longa quentinho e macio');
-      outfitSuggestions.push('Calça confortável de algodão por baixo');
-      outfitSuggestions.push('Macacão de plush ou soft que protege bem o peito e as perninhas');
-      visualItems.push('body-manga-longa', 'calca', 'macacao-plush', 'meias');
-    }
-
-    if (condition === 'externo' || condition === 'vento-frio' || state === 'passeando') {
-      accessories.push('Touca protetora de algodão cobrindo as orelhinhas');
-      accessories.push('Luvas macias para passeios ao ar livre');
+    if (isPasseando || (isNewborn && isWind)) {
+      accessories.push('Touca macia protetora');
       visualItems.push('touca');
-    } else {
-      accessories.push('Meias bem quentinhas');
     }
 
-    recommendedFabrics.push('Plush denso aveludado', 'Algodão escovado espesso');
-
   } else {
-    // ❄️ EXTREME COLD
-    layerCount = 4;
-    layersDescription = 'Proteção completa contra o frio com camadas bem quentinhas e acessórios.';
-    
+    // muito-frio
+    layerCount = 3;
+    layersDescription = 'Três camadas térmicas cheias de aconchego para dias de inverno rigoroso.';
+
+    outfitSuggestions.push('Body de Manga Longa quentinho');
+    outfitSuggestions.push('Calça (mijão) confortável');
+    visualItems.push('body-manga-longa', 'calca');
+
     if (isSleeping) {
-      outfitSuggestions.push('Visual recomendado: body de manga longa + calça + meias e saco de dormir de plush bem quentinho');
-      visualItems.push('body-manga-longa', 'calca', 'saco-dormir-plush', 'meias');
+      outfitSuggestions.push('Saco de dormir plush bem quentinho com mangas');
+      visualItems.push('saco-dormir-plush');
     } else {
-      outfitSuggestions.push('Body de manga longa quentinho e confortável');
-      outfitSuggestions.push('Calça quentinha de algodão por baixo');
-      outfitSuggestions.push('Macacão de plush ou soft bem quentinho por cima');
-      visualItems.push('body-manga-longa', 'calca', 'macacao-plush', 'meias', 'touca');
+      outfitSuggestions.push('Macacão Plush reforçado');
+      visualItems.push('macacao-plush');
     }
 
-    accessories.push('Meias bem grossas de algodão ou sapatilhas de pelúcia');
-    accessories.push('Touca de plush ou soft para proteger as orelhinhas');
-    
-    if (condition === 'externo' || condition === 'vento-frio' || state === 'passeando') {
-      accessories.push('Luvas macias infantis');
-      visualItems.push('luvas');
+    recommendedFabrics.push('Plush denso, soft térmico e algodão escovado');
+    accessories.push('Meias bem quentinhas grossas');
+
+    if (isPasseando || isNewborn || isWind) {
+      accessories.push('Touca de plush cobrindo as orelhinhas');
+      accessories.push('Luvas macias como item de preferência');
+      visualItems.push('touca', 'luvas');
     }
-
-    recommendedFabrics.push('Plush de alta densidade', 'Soft térmico aveludado de isolamento reforçado');
   }
 
-  // Add specific custom suggestions based on items
-  let itemOptionalText = 'Se o seu bebê costuma transpirar ou sentir calor facilmente, você pode retirar as meias ou dispensar acessórios no ambiente interno.';
-  if (sensitivity === 'frio') {
-    itemOptionalText = 'Para bebês mais sensíveis ao frio, vale adicionar uma meia a mais ou escolher macacões com pezinho reversível para proteger mais.';
-  } else if (sensitivity === 'calor') {
-    itemOptionalText = 'Como o seu bebê sente calor fácil, evite o plush ou soft e dê preferência ao algodão tradicional, deixando as meias de lado se estiver em casa.';
+  // SPECIAL COOLO AND SLING RULE: REDUCE LAYER OR ADJUST CAPABILITY
+  if (isColoSling) {
+    if (layerCount > 1) {
+      layerCount = layerCount - 1;
+    }
   }
 
-  // 4. Create human, warm paragraphs (cozyParagraphs) conforming to style examples
-  const cozyParagraphs: string[] = [];
-  const ageLabel = {
-    'recem-nascido': 'seu recém-nascido',
-    '0-3-meses': 'seu bebezinho',
-    '3-6-meses': 'seu bebê',
-    '6-12-meses': 'seu bebê',
-    'mais-de-1-ano': 'seu filho(a)'
-  }[age];
-
-  // A single, beautifully shortened, direct and warm advice from the heart
-  let heartAdvice = '';
-  if (state === 'dormindo') {
-    heartAdvice = `Para a soneca ou noite de ${ageLabel}, use saco de dormir seguro para evitar cobertores soltos e manter uma temperatura agradável sem superaquecer 💛`;
-  } else if (state === 'colo-sling') {
-    heartAdvice = `O colo ou sling já aquece o bebê de forma maravilhosa. Vista ${ageLabel} com uma camada a menos, aproveitando bem o calor do seu corpo.`;
-  } else if (condition === 'fechado') {
-    heartAdvice = `Em ambientes fechados a temperatura é estável. Um body leve com calça de algodão costuma ser perfeito para ${ageLabel}.`;
-  } else if (condition === 'ar-condicionado') {
-    heartAdvice = `No ar-condicionado, proteja o peito de ${ageLabel} do vento direto, priorizando tecidos macios e confortáveis.`;
-  } else if (condition === 'vento-frio') {
-    heartAdvice = `O vento frio exige cuidado rápido: garanta uma barreira cobrindo os bracinhos e orelhas de ${ageLabel}.`;
-  } else {
-    heartAdvice = `Priorize peças práticas e maleáveis para ${ageLabel} se movimentar com total liberdade e conforto térmico.`;
-  }
-
-  // Add a small cozy reminder about checking warmth
-  if (age === 'recem-nascido') {
-    heartAdvice += ' Lembre-se de manter os pezinhos sempre protegidos com meias suaves.';
-  } else {
-    heartAdvice += ' Sinta a nuca ou o peitinho do bebê para conferir se ele está quentinho e confortável!';
-  }
-
-  cozyParagraphs.push(heartAdvice);
-
-  // 5. Build Smart Alerts and Extra Tips
+  // ALERTS & RECOMMENDATIONS WRITTEN IN WARM MOM-TO-MOM TONE
   const importantAlerts = [
-    'Segurança do Sono Crítica: O bebê NUNCA deve dormir de touca ou com cobertores soltos sem supervisão direta para evitar qualquer risco de asfixia e superaquecimento.',
-    'Recomendação Especial: Uma excelente opção é o uso de um saco de dormir quentinho com mangas ao invés de cobertores soltos. Ele mantém o pequeno seguro, aquecido e sem o risco de cobrir o rostinho!',
-    'A nuca do bebê é o melhor indicador de conforto térmico: sinta ali para saber se ele realmente está suando ou com frio.',
-    'Mãos frias nem sempre significam frio! A circulação das extremidades nos pequenos ainda está amadurecendo.',
-    'Evite excesso de camadas! Superaquecimento é desconfortável e aumenta os riscos térmicos associados ao sono.',
-    'Observe sempre sinais importantes como suor excessivo, bochechas avermelhadas, irritabilidade inexplicável ou pele muito quente.'
+    'Segurança Prática do Sono: Nunca coloque toucas ou gorros enquanto seu bebê dorme sem supervisão. A cabeça é o local por onde eles regulam o próprio calor e há risco de asfixia mecânica.',
+    'Nunca utilize cobertores ou lençóis soltos no berço para bebês sem supervisão direta. Há risco de cobrir acidentalmente o rostinho.',
+    'Excelente Alternativa Segura: Para os momentos de soninho, use sempre um saco de dormir quentinho com mangas de acordo com o frio atual, eliminando a necessidade de cobertor.'
   ];
 
-  if (state === 'dormindo') {
-    importantAlerts.push('Segurança do Sono: Nunca coloque toucas ou luvas enquanto o bebê dorme no berço, pois impede a troca de calor natural e pode soltar causando asfixia.');
+  if (isSleeping) {
+    importantAlerts.push('Atenção ao sono: Mantenha o berço livre de protetores de berço fofos, bichos de pelúcia ou travesseiros para garantir ventilação ideal.');
   }
 
-  // Extra tips if checked
-  const extraTips: string[] = [];
-  if (wantsExtras) {
-    extraTips.push('Dobre as mangas do body se o ar aquecer ao longo do dia e escolha golas americanas (as asas nos ombros facilitam puxar a peça para baixo se houver vazamento).');
-    extraTips.push('Use e abuse de sabão de coco ou hipoalergênico neutro livre de corantes fortes na lavagem das fraldas e roupinhas.');
-    extraTips.push('Deixe as pecinhas próximas a você antes de vestir para que não entrem em contato direto estando geladas.');
-    if (perceivedTemp <= 18) {
-      extraTips.push('Evite banhos muito demorados ou correntes de vento no banheiro mantendo as portas totalmente fechadas.');
-    }
+  // Build Personalized, ultra friendly paragraphs for parents
+  const cozyParagraphs: string[] = [];
+  const ageGroupText = {
+    'recem-nascido': 'seu recém-nascido, que ainda está se acostumando com o mundo cá fora',
+    '1-6-meses': 'seu bebezinho de poucos meses',
+    '6-12-meses': 'seu bebê que já está descobrindo novos movimentos',
+    'mais-de-1-ano': 'seu pequeno que está cheio de energia'
+  }[age];
+
+  let consultSummary = '';
+  if (isSleeping) {
+    consultSummary = `Para a hora do soninho seguro de ${ageGroupText}, preparamos um look focado no conforto e na segurança. Como o bebê não deve dormir de touca nem usar cobertor solto sem supervisão, a melhor alternativa é adotar um bom saco de dormir quentinho com mangas! Ele envolve o bebê como um abraço seguro a noite inteira 💛`;
+  } else if (isColoSling) {
+    consultSummary = `Você escolheu colo ou sling para ${ageGroupText}! Como o contato direto com o seu corpo gera muito aconchego natural e aquece bastante o bebê, reduzimos uma camada da recomendação oficial. Fique atenta para aproveitar bem esse chamego aconchegante!`;
+  } else if (isPasseando) {
+    consultSummary = `Para o passeio ao ar livre de ${ageGroupText}, o mais importante é proteger extremidades caso surjam brisas frias indesejadas pelo caminho. Leve sempre uma touca prática na bolsa!`;
+  } else {
+    consultSummary = `Para o dia a dia de ${ageGroupText} em ambiente doméstico, focamos em conforto puro. O segredo é dar liberdade para brincar e se mover livremente com tecidos saudáveis.`;
   }
+
+  if (isAC) {
+    consultSummary += ' Como o ar-condicionado costuma resfriar o ambiente e produzir vento contínuo, a roupinha foi recomendada para proteger o peito e evitar friagens diretas.';
+  } else if (isWind) {
+    consultSummary += ' Com esse vento frio de hoje, manter os membros protegidos com meias e punhos firmes ajudará a reter o quentinho de forma adorável.';
+  }
+
+  if (temperature !== null) {
+    consultSummary += ` A temperatura aproximada de ${temperature}°C foi considerada para refinar a sugestão.`;
+  }
+
+  cozyParagraphs.push(consultSummary);
 
   return {
-    temperatureCategory: tempCategory,
-    temperatureDescription: tempDescription,
+    temperatureCategory: categoryLabel,
+    temperatureDescription: interpretationText,
     layerCount,
     layersDescription,
     outfitSuggestions,
@@ -378,7 +287,6 @@ export function calculateClothing(answers: QuestionnaireAnswers): Recommendation
     accessories: accessories.length > 0 ? accessories : ['Nenhum acessório robusto necessário hoje.'],
     importantAlerts,
     cozyParagraphs,
-    extraTips: extraTips.length > 0 ? extraTips : undefined,
     severity,
     visualItems
   };
