@@ -29,7 +29,16 @@ import {
   Gift,
   Bell,
   Sliders,
-  Award
+  Award,
+  Flame,
+  Snowflake,
+  CloudSun,
+  Cloud,
+  Smile,
+  Compass,
+  Star,
+  Minus,
+  Plus
 } from 'lucide-react';
 import {
   QuestionnaireAnswers,
@@ -136,7 +145,7 @@ export default function App() {
     temperature: null
   });
 
-  const [tempInputValue, setTempInputValue] = useState<string>('');
+  const [tempInputValue, setTempInputValue] = useState<string>('22');
   const [result, setResult] = useState<RecommendationResult | null>(null);
 
   // loading screen text loop
@@ -293,63 +302,48 @@ export default function App() {
   };
 
   return (
-    <div className="min-h-screen bg-[#FAF5EE] text-[#4B4642] flex flex-col items-center justify-start pb-28 pt-4 px-4 sm:px-6 relative overflow-x-hidden antialiased">
+    <div className="min-h-screen bg-[#F8F4EE] text-[#5F5A55] flex flex-col items-center justify-start pb-28 pt-4 px-4 sm:px-6 relative overflow-x-hidden antialiased">
       
-      {/* Absolute Full Screen BG Graphic matching the mockup precisely */}
-      {activeTab === 'inicio' && screen === 'welcome' && (
-        <div className="w-full max-w-xl absolute top-0 left-1/2 -translate-x-1/2 h-[380px] sm:h-[415px] pointer-events-none overflow-hidden z-0 select-none">
-          <img 
-            src={babyHeroImg} 
-            alt="ClimaBaby BG" 
-            className="absolute top-12 right-[-4%] h-[320px] sm:h-[350px] w-[58%] sm:w-[52%] object-contain object-right-top opacity-[1.05]"
-            referrerPolicy="no-referrer"
-          />
-          {/* Bottom fade blending seamlessly into the #FAF5EE content bg */}
-          <div className="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-[#FAF5EE] via-[#FAF5EE]/90 to-transparent pointer-events-none" />
-          {/* Leftside edge fade blending nicely for perfect text contrast on the left column */}
-          <div className="absolute top-0 right-[57%] sm:right-[51%] w-24 h-full bg-gradient-to-l from-[#FAF5EE]/0 via-[#FAF5EE]/95 to-[#FAF5EE] pointer-events-none" />
-        </div>
-      )}
-
-      {/* Playful & Cozy Header with PWA install shortcuts */}
-      <header className="w-full max-w-xl flex items-center justify-between py-1.5 mb-5 z-20 relative px-1">
+      {/* TOPO: Compact Premium App Header Layout */}
+      <header className="w-full max-w-xl flex items-center justify-between py-2 mb-4 z-20 relative px-1">
         <div className="flex items-center">
-          {/* Menu Button precisely like picture (fully round, white/gray, clear lines) */}
+          {/* Menu button inspired by modern iOS apps */}
           <motion.button 
             id="btn-open-menu"
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
             onClick={() => setIsMenuOpen(true)}
-            className="w-12 h-12 bg-white border border-[#EDE5DB]/70 rounded-full shadow-[0_2px_12px_rgba(75,70,66,0.04)] hover:bg-[#FAF9F5] text-slate-700 transition-all cursor-pointer flex items-center justify-center shrink-0"
+            className="flex items-center gap-1.5 px-3 py-1.5 bg-white border border-[#EDE5DB]/70 rounded-full shadow-[0_2px_12px_rgba(75,70,66,0.03)] hover:bg-[#FAF9F5] text-[#5F5A55] transition-all cursor-pointer text-xs font-bold"
           >
-            <div className="flex flex-col gap-1 w-4.5 items-center justify-center">
-              <span className="w-4.5 h-[1.8px] bg-[#8B847C] rounded-full" />
-              <span className="w-4.5 h-[1.8px] bg-[#8B847C] rounded-full" />
-              <span className="w-4.5 h-[1.8px] bg-[#8B847C] rounded-full" />
+            <div className="flex flex-col gap-0.5 items-center justify-center">
+              <span className="w-3.5 h-[1.8px] bg-[#5F5A55] rounded-full" />
+              <span className="w-3.5 h-[1.8px] bg-[#5F5A55] rounded-full" />
+              <span className="w-3.5 h-[1.8px] bg-[#5F5A55] rounded-full" />
             </div>
+            <span>Menu</span>
           </motion.button>
         </div>
 
-        {/* Brand Hanger-Heart Wordmark Logo precisely matches ClimaBaby custom colors & bare image placement */}
+        {/* Small Centralized Brand Logo */}
         <motion.div 
           onClick={() => { setActiveTab('inicio'); setScreen('welcome'); }}
-          className="cursor-pointer flex items-center gap-2"
+          className="cursor-pointer flex items-center gap-1.5 focus:outline-none"
           whileHover={{ scale: 1.02 }}
           whileTap={{ scale: 0.98 }}
         >
           <img 
             src={menuClothesLogoImg} 
             alt="Logo ClimaBaby" 
-            className="h-11 w-auto object-contain shrink-0"
+            className="h-6.5 w-auto object-contain shrink-0"
             referrerPolicy="no-referrer"
           />
-          <div className="flex items-center font-logo tracking-tight text-[32px] leading-none select-none">
-            <span className="font-medium text-[#8EB79F]">Clima</span>
-            <span className="font-medium text-[#E49F8C]">Baby</span>
+          <div className="flex items-center font-logo tracking-tight text-lg leading-none select-none">
+            <span className="font-semibold text-[#8EB79F]">Clima</span>
+            <span className="font-semibold text-[#E49F8C]">Baby</span>
           </div>
         </motion.div>
 
-        {/* Right Active Bell Notification Button (fully round, exact inline position and orange badge) */}
+        {/* Right Active Bell Notification Button */}
         <div className="flex items-center">
           <motion.button 
             id="header-btn-notification"
@@ -358,10 +352,10 @@ export default function App() {
             onClick={() => {
               setBellNotification("🛡️ Tudo perfeito por aqui! Não há alertas climáticos severos para as próximas horas.");
             }}
-            className="w-12 h-12 bg-white border border-[#EDE5DB]/70 rounded-full shadow-[0_2px_12px_rgba(75,70,66,0.04)] hover:bg-[#FAF9F5] text-slate-700 transition-all cursor-pointer flex items-center justify-center relative shrink-0"
-            title="Alertas do Dia"
+            className="w-10 h-10 bg-white border border-[#EDE5DB]/70 rounded-full shadow-[0_2px_12px_rgba(75,70,66,0.03)] hover:bg-[#FAF9F5] text-[#5F5A55] transition-all cursor-pointer flex items-center justify-center relative shrink-0"
+            title="Notificações"
           >
-            <Bell className="w-5 h-5 text-[#8B847C] stroke-[2]" />
+            <Bell className="w-4 h-4 text-[#5F5A55] stroke-[2]" />
             <span className="absolute top-2.5 right-2.5 w-2 h-2 bg-[#E49F8C] rounded-full ring-2 ring-white animate-pulse" />
           </motion.button>
         </div>
@@ -402,315 +396,428 @@ export default function App() {
             {screen === 'welcome' && (
               <motion.div
                 key="welcome-dashboard"
-                initial={{ opacity: 0, y: 15 }}
+                initial={{ opacity: 0, y: 12 }}
                 animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -15 }}
-                transition={{ duration: 0.25 }}
-                className="space-y-6"
+                exit={{ opacity: 0, y: -12 }}
+                transition={{ duration: 0.22, ease: [0.16, 1, 0.3, 1] }}
+                className="space-y-4"
                 id="screen-welcome"
               >
                 
-                {/* HERO BLOCK WITH GEOMETRIC BEAUTY AND GENERATED PHOTO */}
-                <div className="flex flex-row items-center justify-between gap-2.5 pt-4 pb-12 min-h-[230px] sm:min-h-[270px] relative overflow-visible bg-transparent rounded-3xl">
+                {/* NEW INTEGRATED LANDING HERO (NO HEAVY CARDS, BIO-GRADIENT BG, OVERLAPPING ORGANIC FLOAT BABY) */}
+                <div className="w-full relative overflow-hidden rounded-[2.25rem] bg-gradient-to-br from-[#FFFDF9] via-[#F8F4EE] to-[#F4C7B8]/30 border border-[#EDE5DB]/25 p-5 sm:p-6 mb-2 flex flex-col justify-center min-h-[148px] sm:min-h-[160px]">
                   
-                  {/* Left Headings Column */}
-                  <div className="space-y-5 flex-1 max-w-[56%] sm:max-w-[52%] z-10 text-left">
-                    <h2 className="text-[35px] sm:text-[39px] font-extrabold text-[#4B4642] tracking-tight leading-[1.10] font-display">
-                      Seu bebê <br />
-                      <span className="text-[#8EB79F] font-bold text-[31px] sm:text-[35px] tracking-tight inline-block">merece o</span> <br />
-                      <span className="text-[#E29A88] font-bold text-[31px] sm:text-[35px] tracking-tight inline-flex items-center relative">
-                        conforto ideal.
-                        {/* Custom peach heart sticker placed as in reference image */}
-                        <span className="absolute -right-6 top-1/2 -translate-y-1/2 transform scale-110 rotate-[12deg] select-none pointer-events-none opacity-90 pl-1">
-                          <svg className="w-5 h-5 text-[#FCBEB1] fill-current" viewBox="0 0 24 24">
-                            <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
-                          </svg>
-                        </span>
-                      </span>
-                    </h2>
+                  {/* Floating ornaments surrounding the baby on the right side */}
+                  <div className="absolute right-0 top-0 bottom-0 w-[55%] pointer-events-none select-none z-10 overflow-hidden">
                     
-                    <p className="text-[13px] sm:text-[14px] text-[#716C66] font-normal leading-relaxed">
-                      Responda em poucos segundos e descubra a roupa ideal para cada momento do dia.
-                    </p>
- 
-                    <div className="pt-1.5">
-                      <div className="inline-flex items-center gap-3 px-3.5 py-2.5 bg-[#FAF4ED] text-[#716962] rounded-2xl border border-[#EDE5DB]/40 shadow-[0_2px_12px_rgba(75,70,66,0.015)] select-none">
-                        {/* Soft green outlines check shield container */}
-                        <div className="w-10 h-10 rounded-xl bg-white border border-[#EDE5DB]/50 flex items-center justify-center shrink-0 shadow-[0_1px_4px_rgba(75,70,66,0.01)]">
-                          <svg className="w-[22px] h-[22px] text-[#8EB79F] shrink-0 stroke-[2.2]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
-                          </svg>
-                        </div>
-                        <div className="flex flex-col text-left">
-                          <span className="text-[11px] font-bold text-[#5C5650] leading-none">Recomendações seguras</span>
-                          <span className="text-[10px] text-[#8B847C] font-semibold leading-none mt-1">baseadas em especialistas</span>
-                        </div>
-                      </div>
+                    {/* The baby image - aligned right, borderless, organic float transition */}
+                    <div className="absolute -right-5 top-1/2 -translate-y-1/2 w-full h-[125%] max-h-[180px] rounded-l-[3.5rem] overflow-hidden transform rotate-[-2deg]">
+                      <img 
+                        src={babyHeroImg} 
+                        alt="Bebê dormindo" 
+                        className="w-full h-full object-cover object-center transform scale-[1.05]"
+                        referrerPolicy="no-referrer"
+                      />
+                      {/* Left soft wash transparency layer to dissolve the image into the layout gradient seamlessly */}
+                      <div className="absolute inset-y-0 left-0 w-20 bg-gradient-to-r from-[#F8F4EE] via-[#F8F4EE]/90 to-transparent" />
+                      <div className="absolute inset-0 bg-gradient-to-t from-[#F4C7B8]/10 via-transparent to-transparent pointer-events-none" />
                     </div>
+
+                    {/* Highly discreet, premium floating graphic shapes */}
+                    <motion.div 
+                      animate={{ y: [0, -5, 0], rotate: [0, 5, 0] }}
+                      transition={{ repeat: Infinity, duration: 4, ease: "easeInOut" }}
+                      className="absolute left-[8%] top-[15%] text-amber-400 opacity-60 flex items-center justify-center"
+                    >
+                      <Star className="w-3.5 h-3.5 fill-amber-300 text-amber-300" />
+                    </motion.div>
+
+                    <motion.div 
+                      animate={{ y: [0, 4, 0] }}
+                      transition={{ repeat: Infinity, duration: 5, ease: "easeInOut" }}
+                      className="absolute right-[12%] top-[8%] text-[#E29A88] opacity-70"
+                    >
+                      <Heart className="w-3 h-3 fill-[#E29A88] text-[#E29A88]" />
+                    </motion.div>
+
+                    <motion.div 
+                      animate={{ y: [0, -3, 0], scale: [0.95, 1.05, 0.95] }}
+                      transition={{ repeat: Infinity, duration: 4.5, ease: "easeInOut" }}
+                      className="absolute left-[15%] bottom-[15%] text-indigo-300 opacity-55"
+                    >
+                      <Moon className="w-4 h-4 fill-indigo-100/50 text-indigo-300" />
+                    </motion.div>
+
+                    <motion.div 
+                      animate={{ scale: [1, 1.15, 1] }}
+                      transition={{ repeat: Infinity, duration: 3, ease: "easeInOut" }}
+                      className="absolute right-[22%] bottom-[12%] text-amber-400 opacity-70"
+                    >
+                      <Sparkles className="w-3.5 h-3.5" />
+                    </motion.div>
+
+                    <motion.div 
+                      animate={{ x: [0, 3, 0] }}
+                      transition={{ repeat: Infinity, duration: 6, ease: "easeInOut" }}
+                      className="absolute left-[3%] top-[45%] text-[#8CB69F] opacity-50 flex items-center justify-center font-black"
+                    >
+                      <Cloud className="w-3.5 h-3.5 fill-emerald-50/50 text-emerald-300" />
+                    </motion.div>
+                  </div>
+
+                  {/* LEFT TEXT PANEL — occupying ~50% width to prevent overlap */}
+                  <div className="w-[52%] sm:w-[50%] z-20 text-left space-y-1.5 relative select-none pr-1">
+                    <span className="inline-block text-[8.5px] font-black text-[#CB7C69] bg-[#FFF3EE] px-2.5 py-0.5 rounded-full border border-[#F4C7B8]/40 tracking-wider uppercase">
+                      🍼 Guia Inteligente
+                    </span>
+                    <h2 className="text-md sm:text-lg font-black text-[#5F5A55] tracking-tight leading-tight">
+                      Como vestir seu bebê hoje? 💛
+                    </h2>
+                    <p className="text-[10px] sm:text-[11px] text-[#5F5A55]/85 font-medium leading-relaxed">
+                      Descubra a combinação ideal para cada momento em poucos segundos.
+                    </p>
+                  </div>
+
+                </div>
+
+                {/* INDICADOR DE PROGRESSO DISCRETO E PREMIUM */}
+                <div className="flex items-center justify-center gap-2 py-1 bg-white/40 border border-[#EDE5DB]/30 rounded-full max-w-[340px] mx-auto shadow-3xs">
+                  <span className="text-[8.5px] font-extrabold text-[#5F5A55]/50 tracking-wider uppercase">Passos:</span>
+                  <div className="flex items-center gap-2 text-[9px] font-bold text-[#5F5A55]/60">
+                    <span className="flex items-center gap-1 text-[#E29A88] shrink-0">
+                      <span className="w-1.5 h-1.5 rounded-full bg-[#E29A88]" /> Ambiente
+                    </span>
+                    <span className="text-gray-300">|</span>
+                    <span className="flex items-center gap-1 text-[#E29A88] shrink-0">
+                      <span className="w-1.5 h-1.5 rounded-full bg-[#E29A88]" /> Momento
+                    </span>
+                    <span className="text-gray-300">|</span>
+                    <span className="flex items-center gap-1 text-[#E29A88] shrink-0">
+                      <span className="w-1.5 h-1.5 rounded-full bg-[#E29A88]" /> Bebê
+                    </span>
+                    <span className="text-gray-300">|</span>
+                    <span className="flex items-center gap-1 text-[#E29A88] shrink-0">
+                      <span className="w-1.5 h-1.5 rounded-full bg-[#E29A88]" /> Idade
+                    </span>
+                    <span className="text-gray-300">|</span>
+                    <span className="flex items-center gap-1 text-[#5F5A55]/40 shrink-0">
+                      <span className="w-1.5 h-1.5 rounded-full bg-[#EDE5DB]" /> Local
+                    </span>
+                  </div>
+                </div>
+
+                {/* BENEFÍCIOS REALÇADORES DO APP (Ajuste 7) */}
+                <div className="grid grid-cols-2 gap-1.5 max-w-[440px] sm:max-w-md mx-auto px-1 select-none">
+                  <div className="flex items-center gap-1.5 bg-white/50 backdrop-blur-[2px] border border-[#EDE5DB]/40 px-2.5 py-1 rounded-xl shadow-4xs transition-transform duration-300 hover:scale-[1.01]">
+                    <span className="text-[11px]" role="img" aria-label="Ambiente">🌡️</span>
+                    <span className="text-[9.5px] font-bold text-[#5F5A55]/75">Analisa o ambiente real</span>
+                  </div>
+                  <div className="flex items-center gap-1.5 bg-white/50 backdrop-blur-[2px] border border-[#EDE5DB]/40 px-2.5 py-1 rounded-xl shadow-4xs transition-transform duration-300 hover:scale-[1.01]">
+                    <span className="text-[11px]" role="img" aria-label="Sono">😴</span>
+                    <span className="text-[9.5px] font-bold text-[#5F5A55]/75">Considera o sono</span>
+                  </div>
+                  <div className="flex items-center gap-1.5 bg-white/50 backdrop-blur-[2px] border border-[#EDE5DB]/40 px-2.5 py-1 rounded-xl shadow-4xs transition-transform duration-300 hover:scale-[1.01]">
+                    <span className="text-[11px]" role="img" aria-label="Colo">🤱</span>
+                    <span className="text-[9.5px] font-bold text-[#5F5A55]/75">Entende colo e sling</span>
+                  </div>
+                  <div className="flex items-center gap-1.5 bg-white/50 backdrop-blur-[2px] border border-[#EDE5DB]/40 px-2.5 py-1 rounded-xl shadow-4xs transition-transform duration-300 hover:scale-[1.01]">
+                    <span className="text-[11px]" role="img" aria-label="Seguro">💛</span>
+                    <span className="text-[9.5px] font-bold text-[#5F5A55]/75">Recomendações seguras</span>
                   </div>
                 </div>
  
-                {/* FORM CONTAINER - PREMIUM ROUNDED WHITE BENTO-CARD LAYOUT */}
-                <div className="bg-white rounded-[2rem] border border-[#EDE5DB] shadow-[0_8px_30px_rgba(75,70,66,0.03)] p-5 sm:p-7 space-y-6">
+                {/* FORM AREA: INDEPENDENT STYLISH WIDGET CARDS FOR NATIVE APP FEEL */}
+                <div className="space-y-3">
                   
-                  {/* SEÇÃO 1: COMO ESTÁ O AMBIENTE */}
-                  <div className="space-y-3">
-                    <div className="flex items-center gap-2">
-                      <div className="w-8 h-8 rounded-full bg-[#FAF2EC] flex items-center justify-center text-[#E29A88] border border-[#F5E1D5]">
-                        <Thermometer className="w-4.5 h-4.5 stroke-[2.5]" />
-                      </div>
-                      <h4 className="text-sm font-bold text-slate-800">
-                        Como está o ambiente agora?
-                      </h4>
+                  {/* BLOCO 1: Como está o ambiente? */}
+                  <div className="bg-white/70 hover:bg-white/95 backdrop-blur-[6px] rounded-[1.75rem] border border-[#EDE5DB]/30 p-4 shadow-3xs hover:shadow-2xs transition-all duration-300 space-y-3">
+                    <div className="flex items-center justify-between">
+                      <label className="text-[10px] font-black text-[#5F5A55]/70 uppercase tracking-wider block">
+                        Como está o ambiente?
+                      </label>
+                      <span className="text-[9px] text-[#A1BDD1] font-bold bg-[#EDF4F9]/70 px-2.5 py-0.5 rounded-full">Clima ideal</span>
                     </div>
 
-                    {/* Horizontal feeling buttons row exactly like layout reference */}
-                    <div className="grid grid-cols-3 sm:grid-cols-6 gap-2">
-                      {(['muito-quente', 'quente', 'agradavel', 'fresquinho', 'frio', 'muito-frio'] as AmbientFeeling[]).map((feel) => {
-                        const isSelected = answers.feeling === feel;
-                        const dataEmoji: Record<AmbientFeeling, { emoji: string; text: string; bg: string; textCol: string; borderCol: string }> = {
-                          'muito-quente': { emoji: '🥵', text: 'Muito quente', bg: 'bg-amber-50', textCol: 'text-amber-800', borderCol: 'border-amber-400' },
-                          'quente': { emoji: '☀️', text: 'Quente', bg: 'bg-[#FFF9E6]', textCol: 'text-amber-800', borderCol: 'border-amber-300' },
-                          'agradavel': { emoji: '😊', text: 'Agradável', bg: 'bg-[#EEFAF2]', textCol: 'text-emerald-800', borderCol: 'border-[#A3E2B8]' },
-                          'fresquinho': { emoji: '☁️', text: 'Fresquinho', bg: 'bg-[#F1F8FA]', textCol: 'text-blue-800', borderCol: 'border-blue-300' },
-                          'frio': { emoji: '❄️', text: 'Frio', bg: 'bg-[#EDF4F9]', textCol: 'text-blue-900', borderCol: 'border-blue-400' },
-                          'muito-frio': { emoji: '🥶', text: 'Muito frio', bg: 'bg-[#F2EEFA]', textCol: 'text-purple-900', borderCol: 'border-purple-300' }
-                        };
-                        const setup = dataEmoji[feel];
-
+                    {/* Premium Outline iOS Buttons Grid */}
+                    <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
+                      {([
+                        { value: 'muito-quente', label: 'Muito quente', icon: <Flame className="w-4 h-4 transition-transform duration-300" />, activeClass: 'bg-[#FFF3EE] border-[#F4C7B8] text-[#CB7C69] shadow-[0_4px_16px_rgba(244,199,184,0.3)] ring-1 ring-[#F4C7B8]/40' },
+                        { value: 'quente', label: 'Quente', icon: <Sun className="w-4 h-4 transition-transform duration-300" />, activeClass: 'bg-[#FFF9E6] border-[#FADCA0] text-[#B5823D] shadow-[0_4px_16px_rgba(250,220,160,0.25)] ring-1 ring-[#FADCA0]/30' },
+                        { value: 'agradavel', label: 'Agradável', icon: <CloudSun className="w-4 h-4 transition-transform duration-300" />, activeClass: 'bg-[#F2F5EE] border-[#BFC8B2] text-[#697453] shadow-[0_4px_16px_rgba(191,200,178,0.3)] ring-1 ring-[#BFC8B2]/40' },
+                        { value: 'fresquinho', label: 'Fresquinho', icon: <Cloud className="w-4 h-4 transition-transform duration-300" />, activeClass: 'bg-[#EDF4F9] border-[#A1BDD1] text-[#41729C] shadow-[0_4px_16px_rgba(161,189,209,0.25)] ring-1 ring-[#A1BDD1]/30' },
+                        { value: 'frio', label: 'Frio', icon: <Thermometer className="w-4 h-4 transition-transform duration-300" />, activeClass: 'bg-[#ECF1F7] border-[#9BC4E0] text-[#2C5272] shadow-[0_4px_16px_rgba(155,196,224,0.25)] ring-1 ring-[#9BC4E0]/30' },
+                        { value: 'muito-frio', label: 'Muito frio', icon: <Snowflake className="w-4 h-4 transition-transform duration-300" />, activeClass: 'bg-[#F3EEF9] border-[#DCCFE8] text-[#5B437C] shadow-[0_4px_16px_rgba(220,207,232,0.3)] ring-1 ring-[#DCCFE8]/40' }
+                      ] as const).map((item) => {
+                        const isSelected = answers.feeling === item.value;
                         return (
-                          <button
-                            key={feel}
+                          <motion.button
+                            key={item.value}
                             type="button"
-                            id={`feel-btn-${feel}`}
-                            onClick={() => setAnswers(prev => ({ ...prev, feeling: feel }))}
-                            className={`py-3 px-1 rounded-2xl border-2 text-center transition-all cursor-pointer flex flex-col items-center justify-center gap-1.5 relative ${
+                            id={`feel-btn-${item.value}`}
+                            whileHover={{ scale: 1.04 }}
+                            whileTap={{ scale: 0.96 }}
+                            onClick={() => setAnswers(prev => ({ ...prev, feeling: item.value }))}
+                            className={`py-2 px-2 rounded-xl border-1.5 transition-all cursor-pointer flex items-center justify-center gap-1.5 relative ${
                               isSelected
-                                ? `${setup.bg} ${setup.borderCol} ${setup.textCol} shadow-sm font-bold scale-102`
-                                : 'bg-white border-[#EDE5DB] text-[#5F5A55] hover:bg-[#F8F4EE] hover:border-slate-300'
+                                ? `${item.activeClass} font-bold scale-[1.03]`
+                                : 'bg-white/80 border-[#EDE5DB]/70 text-[#5F5A55] hover:bg-[#F8F4EE] hover:border-slate-350 shadow-[0_1px_4px_rgba(95,90,85,0.01)]'
                             }`}
                           >
-                            <span className="text-2xl select-none leading-none">{setup.emoji}</span>
-                            <span className="text-[10px] leading-tight select-none font-bold font-sans">{setup.text}</span>
+                            <span className={`${isSelected ? 'scale-110 text-current' : 'opacity-70'}`}>
+                              {item.icon}
+                            </span>
+                            <span className="text-[10.5px] leading-tight select-none font-sans font-bold">
+                              {item.label}
+                            </span>
                             
-                            {/* Checkmark indicator badge at top-right exactly like mockup */}
+                            {/* Selected micro circle */}
                             {isSelected && (
-                              <div className="absolute -top-1.5 -right-1.5 w-4.5 h-4.5 rounded-full bg-emerald-500 border-2 border-white flex items-center justify-center shadow-3xs">
+                              <div className="absolute -top-1 -right-1 w-4.5 h-4.5 rounded-full bg-[#E29A88] border-2 border-white flex items-center justify-center shadow-3xs">
                                 <Check className="w-2.5 h-2.5 text-white stroke-[3.5]" />
                               </div>
                             )}
-                          </button>
+                          </motion.button>
                         );
                       })}
                     </div>
                   </div>
 
-                  {/* SEÇÃO 2: QUAL O MOMENTO (Horizontal Row layout like picture) */}
-                  <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between py-3 border-b border-[#FAF2EC] gap-3">
-                    <div className="flex items-center gap-2">
-                      <div className="w-7 h-7 rounded-full bg-[#FAF2EC] flex items-center justify-center text-[#E29A88]">
-                        <Sun className="w-4 h-4" />
-                      </div>
-                      <span className="text-xs font-bold text-[#4B4642]">Qual o momento?</span>
-                    </div>
+                  {/* BLOCO 2: Qual o momento? */}
+                  <div className="bg-white/70 hover:bg-white/95 backdrop-blur-[6px] rounded-[1.75rem] border border-[#EDE5DB]/30 p-4 shadow-3xs hover:shadow-2xs transition-all duration-300 space-y-3">
+                    <label className="text-[10px] font-black text-[#5F5A55]/70 uppercase tracking-wider block">
+                      Qual o momento?
+                    </label>
 
-                    <div className="flex items-center gap-2">
-                      {(['dia', 'noite'] as PeriodOfDay[]).map((p) => {
-                        const isSelected = answers.period === p;
-                        const labelsEmoji: Record<PeriodOfDay, { text: string; icon: React.ReactNode }> = {
-                          'dia': { text: 'Dia', icon: <Sun className="w-3.5 h-3.5 mr-1" /> },
-                          'noite': { text: 'Noite', icon: <Moon className="w-3.5 h-3.5 mr-1" /> }
-                        };
+                    <div className="grid grid-cols-2 gap-3">
+                      {([
+                        { value: 'dia', label: 'Dia', icon: <Sun className="w-4 h-4 text-[#B5823D]" />, activeClass: 'bg-[#FFF9E6] border-[#FADCA0] text-[#B5823D] shadow-[0_4px_16px_rgba(250,220,160,0.25)] ring-1 ring-[#FADCA0]/30' },
+                        { value: 'noite', label: 'Noite', icon: <Moon className="w-4 h-4 text-[#5B437C]" />, activeClass: 'bg-[#F3EEF9] border-[#DCCFE8] text-[#5B437C] shadow-[0_4px_16px_rgba(220,207,232,0.3)] ring-1 ring-[#DCCFE8]/40' }
+                      ] as const).map((item) => {
+                        const isSelected = answers.period === item.value;
                         return (
-                          <button
-                            key={p}
+                          <motion.button
+                            key={item.value}
                             type="button"
-                            id={`period-btn-${p}`}
-                            onClick={() => setAnswers(prev => ({ ...prev, period: p }))}
-                            className={`py-2 px-4 rounded-xl border-2 text-[11px] font-bold transition-all cursor-pointer flex items-center justify-center ${
+                            id={`period-btn-${item.value}`}
+                            whileHover={{ scale: 1.04 }}
+                            whileTap={{ scale: 0.96 }}
+                            onClick={() => setAnswers(prev => ({ ...prev, period: item.value }))}
+                            className={`py-2.5 px-3 rounded-xl border-1.5 transition-all cursor-pointer flex items-center justify-center gap-2.5 relative ${
                               isSelected
-                                ? 'bg-[#FAF2EC] border-[#E29A88] text-[#B96552] font-semibold'
-                                : 'bg-white border-[#EDE5DB] text-slate-700 hover:bg-[#F8F4EE]'
+                                ? `${item.activeClass} font-bold scale-[1.03]`
+                                : 'bg-white/80 border-[#EDE5DB]/70 text-[#5F5A55] hover:bg-[#F8F4EE] shadow-[0_1px_4px_rgba(95,90,85,0.01)]'
                             }`}
                           >
-                            {labelsEmoji[p].icon}
-                            <span>{labelsEmoji[p].text}</span>
-                          </button>
+                            <span className={`${isSelected ? 'scale-110' : 'opacity-70'}`}>
+                              {item.icon}
+                            </span>
+                            <span className="text-xs font-bold font-sans">{item.label}</span>
+                            {isSelected && (
+                              <div className="absolute -top-1 -right-1 w-4.5 h-4.5 rounded-full bg-[#E29A88] border-2 border-white flex items-center justify-center shadow-3xs">
+                                <Check className="w-2.5 h-2.5 text-white stroke-[3.5]" />
+                              </div>
+                            )}
+                          </motion.button>
                         );
                       })}
                     </div>
                   </div>
 
-                  {/* SEÇÃO 3: O BEBÊ ESTARÁ */}
-                  <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between py-3 border-b border-[#FAF2EC] gap-3">
-                    <div className="flex items-center gap-2">
-                      <div className="w-7 h-7 rounded-full bg-[#FAF2EC] flex items-center justify-center text-[#E29A88]">
-                        <Baby className="w-4 h-4" />
-                      </div>
-                      <span className="text-xs font-bold text-[#4B4642] whitespace-nowrap">O bebê estará...</span>
-                    </div>
+                  {/* BLOCO 3: O bebê estará: */}
+                  <div className="bg-white/70 hover:bg-white/95 backdrop-blur-[6px] rounded-[1.75rem] border border-[#EDE5DB]/30 p-4 shadow-3xs hover:shadow-2xs transition-all duration-300 space-y-3">
+                    <label className="text-[10px] font-black text-[#5F5A55]/70 uppercase tracking-wider block">
+                      O bebê estará:
+                    </label>
 
-                    <div className="grid grid-cols-2 md:flex md:items-center md:flex-wrap gap-1.5 justify-end">
-                      {(['acordado', 'dormindo', 'colo-sling', 'passeando'] as BabyState[]).map((st) => {
-                        const isSelected = answers.state === st;
-                        const stateLayout: Record<BabyState, { name: string; icon: string }> = {
-                          'acordado': { name: 'Acordado', icon: '😊' },
-                          'dormindo': { name: 'Dormindo', icon: '😴' },
-                          'colo-sling': { name: 'No colo/sling', icon: '🤱' },
-                          'passeando': { name: 'Passeando', icon: '🛒' }
-                        };
+                    <div className="grid grid-cols-2 gap-2.5">
+                      {([
+                        { value: 'acordado', label: 'Acordado', icon: <Smile className="w-4 h-4 text-[#8CB69F]" /> },
+                        { value: 'dormindo', label: 'Dormindo', icon: <Moon className="w-4 h-4 text-[#5B437C]" /> },
+                        { value: 'colo-sling', label: 'Colo ou sling', icon: <Heart className="w-4 h-4 text-[#E29A88]" /> },
+                        { value: 'passeando', label: 'Passeando', icon: <Compass className="w-4 h-4 text-[#41729C]" /> }
+                      ] as const).map((item) => {
+                        const isSelected = answers.state === item.value;
                         return (
-                          <button
-                            key={st}
+                          <motion.button
+                            key={item.value}
                             type="button"
-                            id={`state-btn-${st}`}
-                            onClick={() => setAnswers(prev => ({ ...prev, state: st }))}
-                            className={`py-2 px-2 rounded-xl border-2 text-[10px] font-bold transition-all cursor-pointer text-center flex flex-col items-center justify-center gap-0.5 min-w-[76px] ${
+                            id={`state-btn-${item.value}`}
+                            whileHover={{ scale: 1.03 }}
+                            whileTap={{ scale: 0.97 }}
+                            onClick={() => setAnswers(prev => ({ ...prev, state: item.value }))}
+                            className={`py-2.5 px-3 rounded-xl border-1.5 transition-all cursor-pointer flex items-center gap-2.5 text-left relative ${
                               isSelected
-                                ? 'bg-[#FAF2EC] border-[#E29A88] text-[#B96552]'
-                                : 'bg-white border-[#EDE5DB] text-slate-700 hover:bg-[#F8F4EE]'
+                                ? 'bg-[#FFF3EE] border-[#F4C7B8] text-[#CB7C69] shadow-[0_4px_16px_rgba(244,199,184,0.3)] ring-1 ring-[#F4C7B8]/40 font-bold scale-[1.03]'
+                                : 'bg-white/80 border-[#EDE5DB]/70 text-[#5F5A55] hover:bg-[#F8F4EE] shadow-[0_1px_4px_rgba(95,90,85,0.01)]'
                             }`}
                           >
-                            <span className="text-md leading-none select-none">{stateLayout[st].icon}</span>
-                            <span className="leading-tight select-none font-sans font-semibold">{stateLayout[st].name}</span>
-                          </button>
+                            <span className={`${isSelected ? 'scale-110 text-current' : 'opacity-70'}`}>
+                              {item.icon}
+                            </span>
+                            <span className="text-xs font-bold font-sans">{item.label}</span>
+                            {isSelected && (
+                              <div className="absolute -top-1 -right-1 w-4.5 h-4.5 rounded-full bg-[#E29A88] border-2 border-white flex items-center justify-center shadow-3xs">
+                                <Check className="w-2.5 h-2.5 text-white stroke-[3.5]" />
+                              </div>
+                            )}
+                          </motion.button>
                         );
                       })}
                     </div>
                   </div>
 
-                  {/* SEÇÃO 4: IDADE DO BEBÊ */}
-                  <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between py-3 border-b border-[#FAF2EC] gap-3">
-                    <div className="flex items-center gap-2">
-                      <div className="w-7 h-7 rounded-full bg-[#FAF2EC] flex items-center justify-center text-[#E29A88]">
-                        <Sliders className="w-4 h-4" />
-                      </div>
-                      <span className="text-xs font-bold text-[#4B4642] whitespace-nowrap font-sans">Idade do bebê</span>
-                    </div>
+                  {/* BLOCO 4: Idade do bebê */}
+                  <div className="bg-white/70 hover:bg-white/95 backdrop-blur-[6px] rounded-[1.75rem] border border-[#EDE5DB]/30 p-4 shadow-3xs hover:shadow-2xs transition-all duration-300 space-y-3">
+                    <label className="text-[10px] font-black text-[#5F5A55]/70 uppercase tracking-wider block">
+                      Idade do bebê
+                    </label>
 
-                    <div className="grid grid-cols-2 md:flex md:items-center md:flex-wrap gap-1.5 justify-end">
-                      {(['recem-nascido', '1-6-meses', '6-12-meses', 'mais-de-1-ano'] as BabyAge[]).map((ag) => {
-                        const isSelected = answers.age === ag;
-                        const labelText: Record<BabyAge, { text: string; sub: string; icon: string }> = {
-                          'recem-nascido': { text: 'Recém-nas.', sub: '0 a 28 dias', icon: '👶' },
-                          '1-6-meses': { text: '1 a 6 meses', sub: 'Bebezinho', icon: '🍼' },
-                          '6-12-meses': { text: '6 a 12 m', sub: 'Engatinhando', icon: '👧' },
-                          'mais-de-1-ano': { text: 'Acima 1 ano', sub: 'Andando', icon: '🌟' }
-                        };
+                    <div className="grid grid-cols-2 gap-2.5">
+                      {([
+                        { value: 'recem-nascido', label: 'Recém-nascido', icon: <Baby className="w-4 h-4 text-[#E29A88]" /> },
+                        { value: '1-6-meses', label: '1 a 6 meses', icon: <Sparkles className="w-4 h-4 text-amber-500" /> },
+                        { value: '6-12-meses', label: '6 a 12 meses', icon: <Award className="w-4 h-4 text-[#8CB69F]" /> },
+                        { value: 'mais-de-1-ano', label: 'Acima de 1 ano', icon: <Star className="w-4 h-4 text-indigo-400" /> }
+                      ] as const).map((item) => {
+                        const isSelected = answers.age === item.value;
                         return (
-                          <button
-                            key={ag}
+                          <motion.button
+                            key={item.value}
                             type="button"
-                            id={`age-btn-${ag}`}
-                            onClick={() => setAnswers(prev => ({ ...prev, age: ag }))}
-                            className={`py-2 px-1 md:px-2.5 rounded-xl border-2 text-[10px] text-center leading-snug transition-all cursor-pointer flex flex-col items-center justify-center gap-0.5 min-w-[76px] ${
+                            id={`age-btn-${item.value}`}
+                            whileHover={{ scale: 1.03 }}
+                            whileTap={{ scale: 0.97 }}
+                            onClick={() => setAnswers(prev => ({ ...prev, age: item.value }))}
+                            className={`py-2.5 px-3 rounded-xl border-1.5 transition-all cursor-pointer flex items-center gap-2.5 text-left relative ${
                               isSelected
-                                ? 'bg-[#FAF2EC] border-[#E29A88] text-[#B96552] font-bold'
-                                : 'bg-white border-[#EDE5DB] text-slate-705 hover:bg-[#F8F4EE]'
+                                ? 'bg-[#F2F5EE] border-[#BFC8B2] text-[#697453] shadow-[0_4px_16px_rgba(191,200,178,0.3)] ring-1 ring-[#BFC8B2]/40 font-bold scale-[1.03]'
+                                : 'bg-white/80 border-[#EDE5DB]/70 text-[#5F5A55] hover:bg-[#F8F4EE] shadow-[0_1px_4px_rgba(95,90,85,0.01)]'
                             }`}
                           >
-                            <span className="text-md leading-none select-none">{labelText[ag].icon}</span>
-                            <span className="font-sans font-bold leading-none">{labelText[ag].text}</span>
-                            <span className="text-[7.5px] opacity-75 font-sans leading-none">{labelText[ag].sub}</span>
-                          </button>
+                            <span className={`${isSelected ? 'scale-110 text-current' : 'opacity-70'}`}>
+                              {item.icon}
+                            </span>
+                            <span className="text-xs font-bold font-sans">{item.label}</span>
+                            {isSelected && (
+                              <div className="absolute -top-1 -right-1 w-4.5 h-4.5 rounded-full bg-[#E29A88] border-2 border-white flex items-center justify-center shadow-3xs">
+                                <Check className="w-2.5 h-2.5 text-white stroke-[3.5]" />
+                              </div>
+                            )}
+                          </motion.button>
                         );
                       })}
                     </div>
                   </div>
 
-                  {/* SEÇÃO 5: AMBIENTE (Condition) */}
-                  <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between py-3 border-b border-[#FAF2EC] gap-3">
-                    <div className="flex items-center gap-2">
-                      <div className="w-7 h-7 rounded-full bg-[#FAF2EC] flex items-center justify-center text-[#E29A88]">
-                        <Home className="w-4 h-4" />
-                      </div>
-                      <span className="text-xs font-bold text-[#4B4642] whitespace-nowrap">Ambiente</span>
-                    </div>
+                  {/* BLOCO 5: Ambiente */}
+                  <div className="bg-white/70 hover:bg-white/95 backdrop-blur-[6px] rounded-[1.75rem] border border-[#EDE5DB]/30 p-4 shadow-3xs hover:shadow-2xs transition-all duration-300 space-y-3">
+                    <label className="text-[10px] font-black text-[#5F5A55]/70 uppercase tracking-wider block">
+                      Ambiente
+                    </label>
 
-                    <div className="grid grid-cols-2 md:flex md:items-center md:flex-wrap gap-1.5 justify-end">
-                      {(['fechado', 'ventilador', 'ar-condicionado', 'vento-frio', 'externo'] as EnvironmentCondition[]).map((cond) => {
-                        const isSelected = answers.condition === cond;
-                        const labelEmoji: Record<EnvironmentCondition, { text: string; icon: string }> = {
-                          'fechado': { text: 'Fechado', icon: '🏠' },
-                          'ventilador': { text: 'Ventilador', icon: '🌀' },
-                          'ar-condicionado': { text: 'Ar-cond.', icon: '❄️' },
-                          'vento-frio': { text: 'Vento frio', icon: '💨' },
-                          'externo': { text: 'Área ext.', icon: '🌳' }
-                        };
+                    <div className="grid grid-cols-2 gap-2.5">
+                      {([
+                        { value: 'fechado', label: 'Ambiente fechado', icon: <Home className="w-4 h-4 text-[#8CB69F]" /> },
+                        { value: 'ventilador', label: 'Ventilador', icon: <Wind className="w-4 h-4 text-[#41729C]" /> },
+                        { value: 'ar-condicionado', label: 'Ar-condicionado', icon: <Snowflake className="w-4 h-4 text-sky-400" /> },
+                        { value: 'vento-frio', label: 'Vento frio', icon: <Wind className="w-4 h-4 text-slate-500" /> },
+                        { value: 'externo', label: 'Área externa', icon: <Compass className="w-4 h-4 text-emerald-600" />, span: true }
+                      ] as const).map((item) => {
+                        const isSelected = answers.condition === item.value;
                         return (
-                          <button
-                            key={cond}
+                          <motion.button
+                            key={item.value}
                             type="button"
-                            id={`cond-btn-${cond}`}
-                            onClick={() => setAnswers(prev => ({ ...prev, condition: cond }))}
-                            className={`py-2 px-1 rounded-xl border-2 text-[10px] text-center transition-all cursor-pointer flex flex-col items-center justify-center gap-0.5 min-w-[72px] ${
+                            id={`cond-btn-${item.value}`}
+                            whileHover={{ scale: 1.03 }}
+                            whileTap={{ scale: 0.97 }}
+                            onClick={() => setAnswers(prev => ({ ...prev, condition: item.value }))}
+                            className={`py-2.5 px-3 rounded-xl border-1.5 transition-all cursor-pointer flex items-center gap-2.5 text-left relative ${
+                              ('span' in item && item.span) ? 'col-span-2 justify-center py-2.5' : 'py-2.5'
+                            } ${
                               isSelected
-                                ? 'bg-[#FAF2EC] border-[#E29A88] text-[#B96552] font-bold'
-                                : 'bg-white border-[#EDE5DB] text-[#5F5A55] hover:bg-[#F8F4EE]'
+                                ? 'bg-[#EDF4F9] border-[#A1BDD1] text-[#41729C] shadow-[0_4px_16px_rgba(161,189,209,0.25)] ring-1 ring-[#A1BDD1]/30 font-bold scale-[1.03]'
+                                : 'bg-white/80 border-[#EDE5DB]/70 text-[#5F5A55] hover:bg-[#F8F4EE] shadow-[0_1px_4px_rgba(95,90,85,0.01)]'
                             }`}
                           >
-                            <span className="text-md leading-none select-none">{labelEmoji[cond].icon}</span>
-                            <span className="font-sans font-semibold leading-tight">{labelEmoji[cond].text}</span>
-                          </button>
+                            <span className={`${isSelected ? 'scale-110 text-current' : 'opacity-70'}`}>
+                              {item.icon}
+                            </span>
+                            <span className="text-xs font-bold font-sans">{item.label}</span>
+                            {isSelected && (
+                              <div className="absolute -top-1 -right-1 w-4.5 h-4.5 rounded-full bg-[#E29A88] border-2 border-white flex items-center justify-center shadow-3xs">
+                                <Check className="w-2.5 h-2.5 text-white stroke-[3.5]" />
+                              </div>
+                            )}
+                          </motion.button>
                         );
                       })}
                     </div>
                   </div>
 
-                  {/* SEÇÃO OPCIONAL: TEMPERATURA APROXIMADA */}
-                  <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between py-3 border-b border-[#FAF2EC] gap-3">
-                    <div className="flex items-center gap-2">
-                      <div className="w-7 h-7 rounded-full bg-[#FAF2EC] flex items-center justify-center text-[#E29A88]">
-                        <Thermometer className="w-4 h-4" />
-                      </div>
-                      <div>
-                        <span className="text-xs font-bold text-[#4B4642] block leading-none">Temperatura aproximada</span>
-                        <span className="text-[8.5px] text-slate-400 font-semibold">(opcional)</span>
-                      </div>
+                  {/* OPÇÃO DE TEMPERATURA APROXIMADA: Interactive rounded iOS +/- adjuster */}
+                  <div className="bg-white/70 hover:bg-white/95 backdrop-blur-[6px] rounded-[1.75rem] border border-[#EDE5DB]/30 p-4 shadow-3xs hover:shadow-2xs transition-all duration-300 space-y-3">
+                    <div className="flex items-center justify-between">
+                      <span className="text-[10px] font-black text-[#5F5A55]/70 uppercase tracking-wider block">
+                        Temperatura aproximada
+                      </span>
+                      <span className="text-[9px] text-[#8CB69F] font-bold bg-[#F2F5EE]/70 px-2.5 py-0.5 rounded-full">Toque para ajustar</span>
                     </div>
 
-                    <div className="flex items-center gap-2 max-w-[170px] w-full">
-                      <div className="relative flex-1">
-                        <input
-                          type="text"
-                          pattern="[0-9]*"
-                          placeholder="Ex: 20°C"
-                          value={tempInputValue}
-                          onChange={(e) => setTempInputValue(e.target.value.replace(/[^0-9.-]/g, ''))}
-                          className="w-full bg-[#FAFBF9] border border-[#EDE5DB] rounded-xl py-2 pl-3.5 pr-8 text-xs font-semibold text-slate-800 font-mono focus:outline-none focus:ring-2 focus:ring-[#FAF2EC]/50 focus:border-[#E29A88]"
-                        />
-                        <span className="absolute right-3 top-1/2 -translate-y-1/2 text-[10px] text-slate-400 font-bold">°C</span>
+                    <div className="flex items-center justify-between bg-white border border-[#EDE5DB]/60 rounded-2xl p-2 max-w-[280px] mx-auto shadow-4xs">
+                      <motion.button
+                        type="button"
+                        whileHover={{ scale: 1.08 }}
+                        whileTap={{ scale: 0.92 }}
+                        onClick={() => {
+                          const current = Number(tempInputValue) || 22;
+                          if (current > 5) setTempInputValue(String(current - 1));
+                        }}
+                        className="w-10 h-10 rounded-xl bg-[#FAF8F5] text-[#5F5A55] border border-[#EDE5DB]/50 flex items-center justify-center hover:bg-[#F3EDE4] transition-colors cursor-pointer select-none"
+                      >
+                        <Minus className="w-4 h-4 text-[#5F5A55] stroke-[3]" />
+                      </motion.button>
+
+                      <div className="flex flex-col items-center justify-center min-w-[100px] select-none">
+                        <span className="text-xl font-black font-sans text-[#5F5A55] leading-none flex items-baseline gap-0.5">
+                          {tempInputValue || '22'}
+                          <span className="text-sm font-extrabold text-[#E29A88]">°C</span>
+                        </span>
+                        <span className="text-[8.5px] font-bold text-slate-400 mt-1 uppercase tracking-wider">Ajuste fino</span>
                       </div>
-                      {tempInputValue && (
-                        <button
-                          type="button"
-                          onClick={() => setTempInputValue('')}
-                          className="text-[9px] font-bold px-2.5 py-1.5 bg-slate-100 text-slate-600 rounded-lg hover:bg-slate-200/80 cursor-pointer"
-                        >
-                          X
-                        </button>
-                      )}
+
+                      <motion.button
+                        type="button"
+                        whileHover={{ scale: 1.08 }}
+                        whileTap={{ scale: 0.92 }}
+                        onClick={() => {
+                          const current = Number(tempInputValue) || 22;
+                          if (current < 45) setTempInputValue(String(current + 1));
+                        }}
+                        className="w-10 h-10 rounded-xl bg-[#FAF8F5] text-[#5F5A55] border border-[#EDE5DB]/50 flex items-center justify-center hover:bg-[#F3EDE4] transition-colors cursor-pointer select-none"
+                      >
+                        <Plus className="w-4 h-4 text-[#5F5A55] stroke-[3]" />
+                      </motion.button>
                     </div>
                   </div>
 
-                  {/* BIG SUBMIT ACTION BUTTON AT THE BOTTOM OF THE CARD */}
+                  {/* BOTÃO PRINCIPAL: Grande, Centralizado, Cor Principal da Marca */}
                   <div className="pt-2">
                     <motion.button
                       id="btn-get-recommendation"
                       onClick={handleGetRecommendation}
-                      whileHover={{ scale: 1.01 }}
-                      whileTap={{ scale: 0.99 }}
-                      className="w-full py-4.5 bg-gradient-to-r from-[#F4BFA8] to-[#E29A88] text-white font-semibold rounded-2xl shadow-sm cursor-pointer flex items-center justify-center gap-2 text-sm transition-all uppercase tracking-wider text-center"
+                      whileHover={{ scale: 1.02 }}
+                      whileTap={{ scale: 0.98 }}
+                      className="w-full py-4.5 bg-[#E29A88] hover:bg-[#D58876] text-white font-bold rounded-[1.5rem] shadow-[0_8px_24px_rgba(226,154,140,0.35)] cursor-pointer flex items-center justify-center gap-2 text-sm transition-all tracking-wide text-center uppercase"
                     >
-                      <Sparkles className="w-4.5 h-4.5 text-white animate-pulse" />
-                      <span className="font-display font-medium text-white tracking-widest text-xs">Ver Recomendação Ideal</span>
-                      <ChevronRight className="w-4 h-4 stroke-[2.5]" />
+                      <Sparkles className="w-5 h-5 text-white animate-pulse" />
+                      <span className="font-display font-extrabold text-white tracking-widest text-xs">Ver recomendação</span>
                     </motion.button>
                   </div>
 
                 </div>
 
-                {/* TRUST BADGES ROW EXACTLY MATCHING VISUAL PICTURE FOOTER DETAILS */}
+                {/* TRUST BADGES ROW */}
                 <div className="grid grid-cols-3 gap-2 py-4 bg-[#FFF9E6]/20 border border-[#EDE5DB]/50 rounded-[1.5rem] px-3 sm:px-4 text-center select-none">
                   <div className="flex flex-col items-center justify-center p-2.5 space-y-1 border-r border-[#EDE5DB]/60">
                     <CheckCircle className="w-5 h-5 text-emerald-500 shrink-0" />
