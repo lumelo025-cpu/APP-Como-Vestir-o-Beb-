@@ -295,10 +295,21 @@ export default function App() {
   return (
     <div className="min-h-screen bg-[#FAF5EE] text-[#4B4642] flex flex-col items-center justify-start pb-28 pt-4 px-4 sm:px-6 relative overflow-x-hidden antialiased">
       
-      {/* Decorative Warm Elements to Match Cozy Visual Aesthetic */}
-      <div className="absolute top-0 inset-x-0 h-[380px] bg-gradient-to-b from-[#F9F0E6] via-[#FAF5EE] to-transparent pointer-events-none z-0" />
-      <div className="absolute top-0 right-0 w-96 h-96 bg-gradient-to-bl from-[#F7E0D5]/50 via-[#E4EDE7]/30 to-transparent rounded-full blur-3xl pointer-events-none z-0" />
-      <div className="absolute top-24 left-10 w-24 h-24 rounded-full bg-[#FAF0E6]/70 blur-xl pointer-events-none" />
+      {/* Absolute Full Screen BG Graphic matching the mockup precisely */}
+      {activeTab === 'inicio' && screen === 'welcome' && (
+        <div className="w-full max-w-xl absolute top-0 left-1/2 -translate-x-1/2 h-[380px] sm:h-[415px] pointer-events-none overflow-hidden z-0 select-none">
+          <img 
+            src={babyHeroImg} 
+            alt="ClimaBaby BG" 
+            className="absolute top-12 right-[-4%] h-[320px] sm:h-[350px] w-[58%] sm:w-[52%] object-contain object-right-top opacity-[1.05]"
+            referrerPolicy="no-referrer"
+          />
+          {/* Bottom fade blending seamlessly into the #FAF5EE content bg */}
+          <div className="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-[#FAF5EE] via-[#FAF5EE]/90 to-transparent pointer-events-none" />
+          {/* Leftside edge fade blending nicely for perfect text contrast on the left column */}
+          <div className="absolute top-0 right-[57%] sm:right-[51%] w-24 h-full bg-gradient-to-l from-[#FAF5EE]/0 via-[#FAF5EE]/95 to-[#FAF5EE] pointer-events-none" />
+        </div>
+      )}
 
       {/* Playful & Cozy Header with PWA install shortcuts */}
       <header className="w-full max-w-xl flex items-center justify-between py-1.5 mb-5 z-20 relative px-1">
@@ -322,18 +333,18 @@ export default function App() {
         {/* Brand Hanger-Heart Wordmark Logo precisely matches ClimaBaby custom colors & bare image placement */}
         <motion.div 
           onClick={() => { setActiveTab('inicio'); setScreen('welcome'); }}
-          className="cursor-pointer flex items-center gap-1.5"
+          className="cursor-pointer flex items-center gap-2"
           whileHover={{ scale: 1.02 }}
           whileTap={{ scale: 0.98 }}
         >
           <img 
             src={menuClothesLogoImg} 
             alt="Logo ClimaBaby" 
-            className="h-10 w-auto object-contain shrink-0"
+            className="h-11 w-auto object-contain shrink-0"
             referrerPolicy="no-referrer"
           />
-          <div className="flex items-center font-display tracking-tight text-[24px]">
-            <span className="font-semibold text-[#8EB79F]">Clima</span>
+          <div className="flex items-center font-logo tracking-tight text-[32px] leading-none select-none">
+            <span className="font-medium text-[#8EB79F]">Clima</span>
             <span className="font-medium text-[#E49F8C]">Baby</span>
           </div>
         </motion.div>
@@ -400,88 +411,45 @@ export default function App() {
               >
                 
                 {/* HERO BLOCK WITH GEOMETRIC BEAUTY AND GENERATED PHOTO */}
-                <div className="flex flex-row items-center justify-between gap-2.5 py-4 relative overflow-visible bg-transparent rounded-3xl">
+                <div className="flex flex-row items-center justify-between gap-2.5 pt-4 pb-12 min-h-[230px] sm:min-h-[270px] relative overflow-visible bg-transparent rounded-3xl">
                   
                   {/* Left Headings Column */}
-                  <div className="space-y-4 flex-1 max-w-[56%] z-10 text-left">
-                    <h2 className="text-[34px] sm:text-[38px] font-bold text-[#4B4642] tracking-normal leading-[1.12] font-display">
+                  <div className="space-y-5 flex-1 max-w-[56%] sm:max-w-[52%] z-10 text-left">
+                    <h2 className="text-[35px] sm:text-[39px] font-extrabold text-[#4B4642] tracking-tight leading-[1.10] font-display">
                       Seu bebê <br />
-                      <span className="text-[#8EB79F] font-semibold text-[32px] sm:text-[36px] tracking-normal inline-block">merece o</span> <br />
-                      <span className="text-[#E49F8C] font-semibold text-[32px] sm:text-[36px] tracking-normal inline-flex items-center gap-1">
+                      <span className="text-[#8EB79F] font-bold text-[31px] sm:text-[35px] tracking-tight inline-block">merece o</span> <br />
+                      <span className="text-[#E29A88] font-bold text-[31px] sm:text-[35px] tracking-tight inline-flex items-center relative">
                         conforto ideal.
-                        {/* Custom floating heart sticker precisely like the peach heart in model image */}
-                        <svg className="w-5 h-5 text-[#E49F8C] fill-current transform rotate-[15deg] shrink-0 inline-block ml-0.5" viewBox="0 0 24 24">
-                          <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
-                        </svg>
+                        {/* Custom peach heart sticker placed as in reference image */}
+                        <span className="absolute -right-6 top-1/2 -translate-y-1/2 transform scale-110 rotate-[12deg] select-none pointer-events-none opacity-90 pl-1">
+                          <svg className="w-5 h-5 text-[#FCBEB1] fill-current" viewBox="0 0 24 24">
+                            <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
+                          </svg>
+                        </span>
                       </span>
                     </h2>
                     
-                    <p className="text-[13px] sm:text-[14px] text-[#6E6760] font-normal leading-relaxed">
-                      Responda em poucos segundos e descubra a roupa <span className="font-bold text-[#4B4642]">ideal</span> para cada momento do dia.
+                    <p className="text-[13px] sm:text-[14px] text-[#716C66] font-normal leading-relaxed">
+                      Responda em poucos segundos e descubra a roupa ideal para cada momento do dia.
                     </p>
  
-                    <div className="pt-1">
-                      <span className="inline-flex items-center gap-2 px-3.5 py-2.5 bg-[#FAF4ED] text-[#716962] text-[11px] font-semibold rounded-2xl border border-[#EDE5DB]/50 shadow-[0_1px_4px_rgba(75,70,66,0.02)]">
-                        {/* Elegant Green Shield Check precisely matching the mockup */}
-                        <svg className="w-4.5 h-4.5 text-[#8EB79F] shrink-0 stroke-[2.2]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                          <path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
-                        </svg>
-                        <span>Recomendações seguras baseadas em especialistas</span>
-                      </span>
-                    </div>
-                  </div>
- 
-                  {/* Right circular baby portrait with exact mockup doodles */}
-                  <div className="relative shrink-0 w-[148px] h-[148px] sm:w-[175px] sm:h-[175px] mr-1.5 z-10">
-                    {/* Decorative Background Doodles exactly from the reference picture */}
-                    
-                    {/* 1. Custom Sun Doodle in top-left */}
-                    <div className="absolute -top-4 -left-3 select-none flex items-center justify-center pointer-events-none z-20">
-                      <div className="relative w-10 h-10">
-                        {/* Sun core */}
-                        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-4.5 h-4.5 rounded-full bg-[#FFD1A9]/90 border border-[#FCD2B3]" />
-                        {/* Ray dashes */}
-                        <span className="absolute top-1 left-1.5 w-1 h-2 bg-[#FFD1A9] rounded-full rotate-[-45deg]" />
-                        <span className="absolute top-0.5 left-1/2 -translate-x-1/2 w-1 h-2 bg-[#FFD1A9] rounded-full" />
-                        <span className="absolute top-1 right-1.5 w-1 h-2 bg-[#FFD1A9] rounded-full rotate-[45deg]" />
-                        <span className="absolute top-1/2 -translate-y-1/2 right-0.5 w-2 h-1 bg-[#FFD1A9] rounded-full" />
-                        <span className="absolute bottom-1 right-1.5 w-1 h-2 bg-[#FFD1A9] rounded-full rotate-[135deg]" />
-                        <span className="absolute bottom-0.5 left-1/2 -translate-x-1/2 w-1 h-2 bg-[#FFD1A9] rounded-full" />
-                        <span className="absolute bottom-1 left-2 w-1 h-2 bg-[#FFD1A9] rounded-full rotate-[225deg]" />
-                        <span className="absolute top-1/2 -translate-y-1/2 left-0.5 w-2 h-1 bg-[#FFD1A9] rounded-full" />
+                    <div className="pt-1.5">
+                      <div className="inline-flex items-center gap-3 px-3.5 py-2.5 bg-[#FAF4ED] text-[#716962] rounded-2xl border border-[#EDE5DB]/40 shadow-[0_2px_12px_rgba(75,70,66,0.015)] select-none">
+                        {/* Soft green outlines check shield container */}
+                        <div className="w-10 h-10 rounded-xl bg-white border border-[#EDE5DB]/50 flex items-center justify-center shrink-0 shadow-[0_1px_4px_rgba(75,70,66,0.01)]">
+                          <svg className="w-[22px] h-[22px] text-[#8EB79F] shrink-0 stroke-[2.2]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                          </svg>
+                        </div>
+                        <div className="flex flex-col text-left">
+                          <span className="text-[11px] font-bold text-[#5C5650] leading-none">Recomendações seguras</span>
+                          <span className="text-[10px] text-[#8B847C] font-semibold leading-none mt-1">baseadas em especialistas</span>
+                        </div>
                       </div>
-                    </div>
- 
-                    {/* 2. Soft lavender heart */}
-                    <div className="absolute -top-3.5 left-[42%] select-none pointer-events-none z-20">
-                      <svg className="w-4 h-4 text-[#C9BFD6] fill-current opacity-85 transform rotate-[-10deg]" viewBox="0 0 24 24">
-                        <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
-                      </svg>
-                    </div>
- 
-                    {/* 3. Soft Green Cloud doodle exactly on top right */}
-                    <div className="absolute -top-5 -right-1.5 select-none pointer-events-none z-20">
-                      <div className="relative w-11 h-7 bg-[#8EB79F]/35 border border-[#8EB79F]/15 rounded-full blur-[0.4px]">
-                        <div className="absolute -top-1.5 left-2 w-5 h-5 bg-[#8EB79F]/35 rounded-full" />
-                        <div className="absolute -top-1 left-5.5 w-4.5 h-4.5 bg-[#8EB79F]/35 rounded-full" />
-                      </div>
-                    </div>
- 
-                    {/* Soft background peach-pink framing halo circle */}
-                    <div className="absolute inset-1.5 bg-[#FAE7DF]/75 rounded-full pointer-events-none border border-[#FBE3D9]" />
-                    
-                    {/* Main Organic Soft Portrait Mask precisamente como na imagem */}
-                    <div className="w-[92%] h-[92%] absolute top-[4%] left-[4%] rounded-full overflow-hidden border-[3px] border-white shadow-[0_4px_16px_rgba(75,70,66,0.06)] bg-white">
-                      <img 
-                        src={babyHeroImg} 
-                        alt="Bebê dormindo confortavelmente" 
-                        className="w-full h-full object-cover scale-[1.05]" 
-                        referrerPolicy="no-referrer"
-                      />
                     </div>
                   </div>
                 </div>
-
+ 
                 {/* FORM CONTAINER - PREMIUM ROUNDED WHITE BENTO-CARD LAYOUT */}
                 <div className="bg-white rounded-[2rem] border border-[#EDE5DB] shadow-[0_8px_30px_rgba(75,70,66,0.03)] p-5 sm:p-7 space-y-6">
                   
@@ -1389,18 +1357,19 @@ export default function App() {
             >
               <div className="p-5 flex-1 flex flex-col overflow-y-auto">
                 <div className="flex justify-between items-center pb-4 border-b border-slate-100 mb-5">
-                  <div className="flex items-center gap-2">
-                    <div className="w-7 h-7 rounded-full overflow-hidden shrink-0">
-                      <img 
-                        src={menuClothesLogoImg} 
-                        alt="Logo ClimaBaby" 
-                        className="w-full h-full object-cover"
-                        referrerPolicy="no-referrer"
-                      />
-                    </div>
+                  <div className="flex items-center gap-1.5">
+                    <img 
+                      src={menuClothesLogoImg} 
+                      alt="Logo ClimaBaby" 
+                      className="h-8 w-auto object-contain shrink-0"
+                      referrerPolicy="no-referrer"
+                    />
                     <div>
-                      <h4 className="font-bold text-xs text-slate-900 leading-none">ClimaBaby</h4>
-                      <span className="text-[8px] text-slate-400 font-extrabold block uppercase tracking-wider mt-0.5">Consultoria Especializada</span>
+                      <div className="font-logo font-medium text-[18px] leading-none select-none flex items-center">
+                        <span className="text-[#8EB79F]">Clima</span>
+                        <span className="text-[#E49F8C]">Baby</span>
+                      </div>
+                      <span className="text-[8px] text-slate-400 font-extrabold block uppercase tracking-wider mt-1">Consultoria Especializada</span>
                     </div>
                   </div>
                   <button
