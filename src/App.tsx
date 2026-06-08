@@ -512,23 +512,26 @@ export default function App() {
                   </div>
                 </div>
 
-                {/* COMPACT DE-CLUTTERED BENEFIT CHIPS (Ajuste 5, 7) */}
-                <div className="flex flex-wrap items-center justify-center gap-1.5 max-w-[480px] sm:max-w-md mx-auto px-1 select-none">
-                  <div className="flex items-center gap-1.5 bg-[#FAF7F2] border border-[#EDE5DB]/70 px-2.5 py-1 rounded-full shadow-[0_1px_4px_rgba(95,90,85,0.01)] hover:scale-[1.02] transition-transform duration-200">
-                    <span className="text-[10.5px]" role="img" aria-label="Ambiente">🌡️</span>
-                    <span className="text-[9.5px] font-bold text-[#5F5A55]/80">Ambiente real</span>
+                {/* COMPACT DE-CLUTTERED INFORMATIONAL ROW (NO SHADOWS, NO BORDERS, NO CONTAINERS) */}
+                <div className="flex flex-wrap items-center justify-center gap-x-2 gap-y-1 max-w-[480px] sm:max-w-md mx-auto px-4 select-none py-1.5 text-center">
+                  <div className="inline-flex items-center gap-1 text-[10px] sm:text-[10.5px] font-semibold text-[#5F5A55]/65">
+                    <span role="img" aria-label="Ambiente">✨</span>
+                    <span>Ambiente real</span>
                   </div>
-                  <div className="flex items-center gap-1.5 bg-[#FAF7F2] border border-[#EDE5DB]/70 px-2.5 py-1 rounded-full shadow-[0_1px_4px_rgba(95,90,85,0.01)] hover:scale-[1.02] transition-transform duration-200">
-                    <span className="text-[10.5px]" role="img" aria-label="Sono">😴</span>
-                    <span className="text-[9.5px] font-bold text-[#5F5A55]/80">Sono</span>
+                  <span className="text-[#EDE5DB] text-[9px] px-0.5">•</span>
+                  <div className="inline-flex items-center gap-1 text-[10px] sm:text-[10.5px] font-semibold text-[#5F5A55]/65">
+                    <span role="img" aria-label="Sono">😴</span>
+                    <span>Sono</span>
                   </div>
-                  <div className="flex items-center gap-1.5 bg-[#FAF7F2] border border-[#EDE5DB]/70 px-2.5 py-1 rounded-full shadow-[0_1px_4px_rgba(95,90,85,0.01)] hover:scale-[1.02] transition-transform duration-200">
-                    <span className="text-[10.5px]" role="img" aria-label="Colo">🤱</span>
-                    <span className="text-[9.5px] font-bold text-[#5F5A55]/80">Colo e sling</span>
+                  <span className="text-[#EDE5DB] text-[9px] px-0.5">•</span>
+                  <div className="inline-flex items-center gap-1 text-[10px] sm:text-[10.5px] font-semibold text-[#5F5A55]/65">
+                    <span role="img" aria-label="Colo">🤱</span>
+                    <span>Colo e sling</span>
                   </div>
-                  <div className="flex items-center gap-1.5 bg-[#FAF7F2] border border-[#EDE5DB]/70 px-2.5 py-1 rounded-full shadow-[0_1px_4px_rgba(95,90,85,0.01)] hover:scale-[1.02] transition-transform duration-200">
-                    <span className="text-[10.5px]" role="img" aria-label="Seguro">💛</span>
-                    <span className="text-[9.5px] font-bold text-[#5F5A55]/80">Segurança</span>
+                  <span className="text-[#EDE5DB] text-[9px] px-0.5">•</span>
+                  <div className="inline-flex items-center gap-1 text-[10px] sm:text-[10.5px] font-semibold text-[#5F5A55]/65">
+                    <span role="img" aria-label="Seguro">💛</span>
+                    <span>Segurança</span>
                   </div>
                 </div>
  
@@ -986,9 +989,12 @@ export default function App() {
                           } else if (idx === 1) {
                             layerColor = 'bg-[#FAF2EC] text-[#B96552] border-[#F2DCD0]';
                             layerTag = '2ª Camada: Meio (Culote)';
-                          } else {
+                          } else if (idx === 2) {
                             layerColor = 'bg-[#EEFAF2] text-emerald-800 border-emerald-150';
                             layerTag = '3ª Camada: Calor (Macacão)';
+                          } else {
+                            layerColor = 'bg-[#F3EEF9] text-[#5B437C] border-[#DCCFE8]';
+                            layerTag = '4ª Camada: Sono (Saco)';
                           }
                           return (
                             <div key={idx} className={`text-[9px] font-bold py-1 px-2.5 rounded-lg border border-dashed flex justify-between items-center ${layerColor}`}>

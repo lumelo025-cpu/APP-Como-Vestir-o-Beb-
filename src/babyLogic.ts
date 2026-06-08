@@ -42,8 +42,25 @@ export function calculateClothing(answers: QuestionnaireAnswers): Recommendation
   let interpretationText = '';
   let severity: RecommendationResult['severity'] = 'mild';
 
-  // Base environmental feeling
-  switch (feeling) {
+  // Base environmental feeling (Refined to prioritize numerical exact value input)
+  let effectiveFeeling = feeling;
+  if (temperature !== null) {
+    if (temperature > 26) {
+      effectiveFeeling = 'muito-quente';
+    } else if (temperature >= 24) {
+      effectiveFeeling = 'quente';
+    } else if (temperature >= 20) {
+      effectiveFeeling = 'agradavel';
+    } else if (temperature >= 17) {
+      effectiveFeeling = 'fresquinho';
+    } else if (temperature >= 14) {
+      effectiveFeeling = 'frio';
+    } else {
+      effectiveFeeling = 'muito-frio';
+    }
+  }
+
+  switch (effectiveFeeling) {
     case 'muito-quente':
       categoryLabel = '🥵 Ambiente Muito Quente';
       interpretationText = 'O calor está bem forte hoje por aí!';
@@ -77,23 +94,23 @@ export function calculateClothing(answers: QuestionnaireAnswers): Recommendation
   }
 
   // Adjust if there is AC or Wind (they make the environment feel cooler)
-  let adjustedFeeling = feeling;
+  let adjustedFeeling = effectiveFeeling;
   if (isAC) {
-    if (feeling === 'muito-quente' || feeling === 'quente') {
+    if (effectiveFeeling === 'muito-quente' || effectiveFeeling === 'quente') {
       adjustedFeeling = 'agradavel';
-    } else if (feeling === 'agradavel') {
+    } else if (effectiveFeeling === 'agradavel') {
       adjustedFeeling = 'fresquinho';
     } else {
       adjustedFeeling = 'frio';
     }
   } else if (isWind) {
-    if (feeling === 'muito-quente') {
+    if (effectiveFeeling === 'muito-quente') {
       adjustedFeeling = 'quente';
-    } else if (feeling === 'quente') {
+    } else if (effectiveFeeling === 'quente') {
       adjustedFeeling = 'agradavel';
-    } else if (feeling === 'agradavel') {
+    } else if (effectiveFeeling === 'agradavel') {
       adjustedFeeling = 'fresquinho';
-    } else if (feeling === 'fresquinho') {
+    } else if (effectiveFeeling === 'fresquinho') {
       adjustedFeeling = 'frio';
     } else {
       adjustedFeeling = 'muito-frio';
@@ -109,121 +126,144 @@ export function calculateClothing(answers: QuestionnaireAnswers): Recommendation
   let layersDescription = '';
 
   // CORE CONSULTANCY GRID OF LAYERS & COMPOSITION
-  if (adjustedFeeling === 'muito-quente') {
-    layerCount = 1;
-    layersDescription = 'Apenas uma única camada extremamente leve e fresca para evitar brotoejas e superaquecimento.';
-    
-    if (isSleeping) {
-      outfitSuggestions.push('Apenas Body de Manga Curta leve');
+  if (isSleeping) {
+    if (adjustedFeeling === 'muito-quente') {
+      layerCount = 1;
+      layersDescription = 'Apenas uma única camada extremamente leve e respirável para o sono seguro no calor.';
+      outfitSuggestions.push('Body de Manga Curta em tecido bem leve');
       visualItems.push('body-manga-curta');
+      recommendedFabrics.push('Algodão 100% leve, gaze ou cambraia');
+      accessories.push('Pés totalmente descalços. Evite meias ou luvas no calor extremo.');
+    } else if (adjustedFeeling === 'quente') {
+      layerCount = 1;
+      layersDescription = 'Camada única e confortável, ideal para transpiração eficiente.';
+      if (isNewborn) {
+        outfitSuggestions.push('Body de Manga Longa fininho (por ser recém-nascido)');
+        visualItems.push('body-manga-longa');
+      } else {
+        outfitSuggestions.push('Body de Manga Curta bem fluido');
+        visualItems.push('body-manga-curta');
+      }
+      recommendedFabrics.push('Algodão Pima ou Suedine respirável');
+      accessories.push('Não necessita meias para evitar reter calor corporal.');
+    } else if (adjustedFeeling === 'agradavel') {
+      layerCount = 3;
+      layersDescription = 'Três camadas suaves que unem toque macio na pele à proteção do saco de dormir leve.';
+      if (isNewborn) {
+        outfitSuggestions.push('Body de Manga Longa de base');
+        outfitSuggestions.push('Calça confortável de algodão');
+        visualItems.push('body-manga-longa', 'calca');
+      } else {
+        outfitSuggestions.push('Body de Manga Curta leve');
+        outfitSuggestions.push('Calça (mijão) de algodão');
+        visualItems.push('body-manga-curta', 'calca');
+      }
+      outfitSuggestions.push('Saco de dormir leve (cobertura fina e respirável, 0.5 a 1.0 TOG)');
+      visualItems.push('saco-dormir-leve');
+      recommendedFabrics.push('Algodão Suedine clássico, Malha canelada e tecidos respiráveis de 1.0 TOG máximo');
+      accessories.push('Meias leves se sentir os pezinhos frios.');
+    } else if (adjustedFeeling === 'fresquinho') {
+      layerCount = 3;
+      layersDescription = 'Três camadas aconchegantes com isolamento intermediário para noites de meia-estação.';
+      outfitSuggestions.push('Body de Manga Longa de base');
+      outfitSuggestions.push('Calça culote confortável');
+      outfitSuggestions.push('Saco de dormir soft quentinho (isolamento moderado, ~1.5 TOG)');
+      visualItems.push('body-manga-longa', 'calca', 'saco-dormir-soft');
+      recommendedFabrics.push('Algodão Interlock ou suedine encorpado para as bases e Soft escovado médio para o saco');
+      accessories.push('Meias quentinhas de algodão');
+    } else if (adjustedFeeling === 'frio') {
+      // Categoria Especial: Frio Confortável (14°C - 16°C)
+      layerCount = 4;
+      layersDescription = 'Quatro camadas coordenadas: base protetora, barreira macia de soft e saco de dormir plush de inverno.';
+      outfitSuggestions.push('Body de Manga Longa de toque macio');
+      outfitSuggestions.push('Calça confortável (mijão) como calça base');
+      outfitSuggestions.push('Macacão Soft ou Peluciado aconchegante');
+      outfitSuggestions.push('Saco de dormir plush com mangas de inverno (isolamento pesado, 2.5 TOG)');
+      visualItems.push('body-manga-longa', 'calca', 'macacao-soft', 'saco-dormir-plush');
+      recommendedFabrics.push('Soft escovado, plush macio e algodão de alta retenção térmica');
+      accessories.push('Meias aconchegantes de plush');
     } else {
+      // Categoria Especial: Frio Rigoroso / Muito Frio (<= 13°C)
+      layerCount = 4;
+      layersDescription = 'Quatro camadas térmicas: máxima proteção sob inverno intenso com macacão plush e saco com mangas.';
+      outfitSuggestions.push('Body de Manga Longa reforçado');
+      outfitSuggestions.push('Calça confortável (mijão) por baixo');
+      outfitSuggestions.push('Macacão Plush denso super aconchegante');
+      outfitSuggestions.push('Saco de dormir plush de inverno com mangas acolchoado (alta retenção térmica, 2.5 a 3.5 TOG)');
+      visualItems.push('body-manga-longa', 'calca', 'macacao-plush', 'saco-dormir-plush');
+      recommendedFabrics.push('Plush denso aveludado, soft térmico espesso e algodão escovado na pele');
+      accessories.push('Meias quentinhas e grossas');
+    }
+  } else {
+    // Current non-sleeping logic
+    if (adjustedFeeling === 'muito-quente') {
+      layerCount = 1;
+      layersDescription = 'Apenas uma única camada extremamente leve e fresca para evitar brotoejas e superaquecimento.';
       outfitSuggestions.push('Body de Manga Curta bem fininho');
       visualItems.push('body-manga-curta');
-    }
-    recommendedFabrics.push('Algodão 100% leve, gaze ou cambraia');
-    accessories.push('Nenhum acessório hoje. Deixe os pezinhos descalços!');
-
-  } else if (adjustedFeeling === 'quente') {
-    layerCount = 1;
-    layersDescription = 'Uma camada simples, focando na transpiração natural e conforto.';
-
-    if (isNewborn) {
-      outfitSuggestions.push('Body de Manga Longa fininho (por ser recém-nascido)');
-      visualItems.push('body-manga-longa');
-    } else {
-      outfitSuggestions.push('Body de Manga Curta confortável');
-      visualItems.push('body-manga-curta');
-    }
-    recommendedFabrics.push('Algodão Suedine bem macio');
-    accessories.push('Pezinhos livres de meias para regular o calor naturalmente.');
-
-  } else if (adjustedFeeling === 'agradavel') {
-    layerCount = 2;
-    layersDescription = 'Duas camadas básicas e leves para manter o corpinho seguro e em temperatura ideal.';
-
-    if (isNewborn) {
-      outfitSuggestions.push('Body de Manga Longa + Calça confortável');
-      visualItems.push('body-manga-longa', 'calca');
-    } else {
-      outfitSuggestions.push('Body de Manga Curta + Calça (culote/mijão)');
-      visualItems.push('body-manga-curta', 'calca');
-    }
-
-    if (isSleeping) {
-      outfitSuggestions.push('Saco de dormir leve opcional substituindo cobertores');
-      visualItems.push('saco-dormir-leve');
-    }
-
-    recommendedFabrics.push('Algodão Suedine tradicional ou Malha canelada');
-    accessories.push('Meias leves se sentir as extremidades geladinhas.');
-
-  } else if (adjustedFeeling === 'fresquinho') {
-    layerCount = 2;
-    layersDescription = 'Duas camadas aconchegantes com proteção integral para braços e pernas.';
-
-    outfitSuggestions.push('Body de Manga Longa de base');
-    outfitSuggestions.push('Calça confortável de algodão');
-    visualItems.push('body-manga-longa', 'calca');
-
-    if (isSleeping) {
-      outfitSuggestions.push('Saco de dormir soft quentinho');
-      visualItems.push('saco-dormir-soft');
-    } else {
+      recommendedFabrics.push('Algodão 100% leve, gaze ou cambraia');
+      accessories.push('Nenhum acessório hoje. Deixe os pezinhos descalços!');
+    } else if (adjustedFeeling === 'quente') {
+      layerCount = 1;
+      layersDescription = 'Uma camada simples, focando na transpiração natural e conforto.';
+      if (isNewborn) {
+        outfitSuggestions.push('Body de Manga Longa fininho (por ser recém-nascido)');
+        visualItems.push('body-manga-longa');
+      } else {
+        outfitSuggestions.push('Body de Manga Curta confortável');
+        visualItems.push('body-manga-curta');
+      }
+      recommendedFabrics.push('Algodão Suedine bem macio');
+      accessories.push('Pezinhos livres de meias para regular o calor naturalmente.');
+    } else if (adjustedFeeling === 'agradavel') {
+      layerCount = 2;
+      layersDescription = 'Duas camadas básicas e leves para manter o corpinho seguro e em temperatura ideal.';
+      if (isNewborn) {
+        outfitSuggestions.push('Body de Manga Longa + Calça confortável');
+        visualItems.push('body-manga-longa', 'calca');
+      } else {
+        outfitSuggestions.push('Body de Manga Curta + Calça (culote/mijão)');
+        visualItems.push('body-manga-curta', 'calca');
+      }
+      recommendedFabrics.push('Algodão Suedine tradicional ou Malha canelada');
+      accessories.push('Meias leves se sentir as extremidades geladinhas.');
+    } else if (adjustedFeeling === 'fresquinho') {
+      layerCount = 2;
+      layersDescription = 'Duas camadas aconchegantes com proteção integral para braços e pernas.';
+      outfitSuggestions.push('Body de Manga Longa de base');
+      outfitSuggestions.push('Calça confortável de algodão');
       outfitSuggestions.push('Macacão de algodão leve por cima');
-      visualItems.push('macacao-algodao');
-    }
-
-    recommendedFabrics.push('Algodão Interlock ou suedine encorpado');
-    accessories.push('Meias confortáveis de algodão');
-
-  } else if (adjustedFeeling === 'frio') {
-    layerCount = 3;
-    layersDescription = 'Três camadas protetoras de frio para cobrir o peito e reter o calor de forma segura.';
-
-    outfitSuggestions.push('Body de Manga Longa');
-    outfitSuggestions.push('Calça (mijão) macia por baixo');
-    visualItems.push('body-manga-longa', 'calca');
-
-    if (isSleeping) {
-      outfitSuggestions.push('Saco de dormir plush ou soft quentinho');
-      visualItems.push('saco-dormir-soft');
-    } else {
+      visualItems.push('body-manga-longa', 'calca', 'macacao-algodao');
+      recommendedFabrics.push('Algodão Interlock ou suedine encorpado');
+      accessories.push('Meias confortáveis de algodão');
+    } else if (adjustedFeeling === 'frio') {
+      layerCount = 3;
+      layersDescription = 'Três camadas protetoras de frio para cobrir o peito e reter o calor de forma segura.';
+      outfitSuggestions.push('Body de Manga Longa');
+      outfitSuggestions.push('Calça (mijão) macia por baixo');
       outfitSuggestions.push('Macacão de algodão plush ou soft quentinho');
-      visualItems.push('macacao-soft');
-    }
-
-    recommendedFabrics.push('Plush de toque sedoso e Soft escovado');
-    accessories.push('Meias quentinhas');
-
-    if (isPasseando || (isNewborn && isWind)) {
-      accessories.push('Touca macia protetora');
-      visualItems.push('touca');
-    }
-
-  } else {
-    // muito-frio
-    layerCount = 3;
-    layersDescription = 'Três camadas térmicas cheias de aconchego para dias de inverno rigoroso.';
-
-    outfitSuggestions.push('Body de Manga Longa quentinho');
-    outfitSuggestions.push('Calça (mijão) confortável');
-    visualItems.push('body-manga-longa', 'calca');
-
-    if (isSleeping) {
-      outfitSuggestions.push('Saco de dormir plush bem quentinho com mangas');
-      visualItems.push('saco-dormir-plush');
+      visualItems.push('body-manga-longa', 'calca', 'macacao-soft');
+      recommendedFabrics.push('Plush de toque sedoso e Soft escovado');
+      accessories.push('Meias quentinhas');
+      if (isPasseando || (isNewborn && isWind)) {
+        accessories.push('Touca macia protetora');
+        visualItems.push('touca');
+      }
     } else {
+      // muito-frio
+      layerCount = 3;
+      layersDescription = 'Três camadas térmicas cheias de aconchego para dias de inverno rigoroso.';
+      outfitSuggestions.push('Body de Manga Longa quentinho');
+      outfitSuggestions.push('Calça (mijão) confortável');
       outfitSuggestions.push('Macacão Plush reforçado');
-      visualItems.push('macacao-plush');
-    }
-
-    recommendedFabrics.push('Plush denso, soft térmico e algodão escovado');
-    accessories.push('Meias bem quentinhas grossas');
-
-    if (isPasseando || isNewborn || isWind) {
-      accessories.push('Touca de plush cobrindo as orelhinhas');
-      accessories.push('Luvas macias como item de preferência');
-      visualItems.push('touca', 'luvas');
+      visualItems.push('body-manga-longa', 'calca', 'macacao-plush');
+      recommendedFabrics.push('Plush denso, soft térmico e algodão escovado');
+      accessories.push('Meias bem quentinhas grossas');
+      if (isPasseando || isNewborn || isWind) {
+        accessories.push('Touca de plush cobrindo as orelhinhas');
+        accessories.push('Luvas macias como item de preferência');
+        visualItems.push('touca', 'luvas');
+      }
     }
   }
 
@@ -276,6 +316,15 @@ export function calculateClothing(answers: QuestionnaireAnswers): Recommendation
   }
 
   cozyParagraphs.push(consultSummary);
+
+  if (isSleeping) {
+    cozyParagraphs.push(
+      'Entenda a diferença das camadas para o sono:\n' +
+      '• 🧸 Saco LEVE: Feito de algodão suave (0.5 a 1.0 TOG) - Ideal para clima ameno ou ar-condicionado suave.\n' +
+      '• 🧸 Saco SOFT: Aquecimento intermediário (~1.5 TOG) - Excelente para noites frescas de meia-estação.\n' +
+      '• 🧸 Saco PLUSH COM MANGAS: Proteção térmica completa forrada (2.5 a 3.5 TOG) - Essencial para noites frias e muito frias (temperaturas abaixo de 13°C) dispensando totalmente o uso de cobertores com ampla segurança.'
+    );
+  }
 
   return {
     temperatureCategory: categoryLabel,
