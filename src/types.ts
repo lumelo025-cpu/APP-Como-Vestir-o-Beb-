@@ -22,6 +22,14 @@ export interface QuestionnaireAnswers {
   temperature: number | null;
 }
 
+export interface LayerDetail {
+  id: 'base' | 'aquecimento' | 'sono';
+  name: string;      // e.g., "🧸 CAMADA BASE"
+  items: string;     // e.g., "Body manga longa + calça"
+  funcao: string;    // Function description
+  color: string;     // Custom styling color classes
+}
+
 export interface RecommendationResult {
   temperatureCategory: string; // e.g. "🌥️ Ambiente Fresquinho", "❄️ Ambiente Bem Frio"
   temperatureDescription: string; // Short cozy label
@@ -34,4 +42,5 @@ export interface RecommendationResult {
   cozyParagraphs: string[]; // The beautiful, warm, human-like voice responses
   severity: 'extreme-cold' | 'cold' | 'mild' | 'warm' | 'hot' | 'extreme-hot';
   visualItems: string[]; // List of clothing IDs to render visuals
+  layerDetails: LayerDetail[]; // Highly structured human-like mom layering
 }

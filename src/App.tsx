@@ -964,42 +964,43 @@ export default function App() {
                   </div>
 
                   {/* RECOMMENDED LAYERS STACK COZY BADGE */}
-                  <div className="bg-gradient-to-tr from-[#FAF2EC] via-white to-[#FDFBF7] border border-[#F2ECE5] rounded-2xl p-4.5 shadow-3xs relative overflow-hidden">
-                    <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-                      <div className="space-y-1 flex-1">
+                  <div className="bg-gradient-to-tr from-[#FAF2EC] via-white to-[#FDFBF7] border border-[#F2ECE5] rounded-3xl p-5 shadow-3xs relative overflow-hidden">
+                    <div className="flex flex-col lg:flex-row justify-between gap-5">
+                      <div className="space-y-2 flex-1">
                         <span className="text-[9px] font-extrabold text-[#B96552] block uppercase tracking-wider font-sans leading-none">
                           Método de Camadas ClimaBaby
                         </span>
-                        <h4 className="text-md font-bold text-slate-800 font-display">
-                          {result.layerCount} {result.layerCount === 1 ? 'Camada Essencial' : 'Camadas de Roupas'}
+                        <h4 className="text-lg font-bold text-slate-800 font-display">
+                          {result.layerCount} {result.layerCount === 1 ? 'Camada de Proteção' : 'Camadas de Proteção'}
                         </h4>
-                        <p className="text-[11px] text-slate-600 font-medium leading-relaxed font-sans">
+                        <p className="text-xs text-slate-600 font-medium leading-relaxed font-sans">
                           {result.layersDescription}
                         </p>
+                        
+                        <div className="hidden lg:block bg-amber-50/40 p-3 rounded-xl border border-dashed border-amber-200/50 text-[10px] text-slate-500 font-medium leading-normal mt-2.5">
+                          💡 <strong>Orientação Educativa:</strong> Esta combinação foi estruturada para manter a termo-regulação do bebê de forma segura e acolhedora, tratando <em>Body + Calça</em> conjuntamente como uma única <strong>Camada Base</strong> essencial.
+                        </div>
                       </div>
 
                       {/* Vertical stacked visual lines of safety layers */}
-                      <div className="flex flex-col gap-1 w-full md:w-44 shrink-0 font-sans">
-                        {Array.from({ length: result.layerCount }).map((_, idx) => {
-                          let layerColor = 'bg-slate-50 text-slate-600 border-slate-200';
-                          let layerTag = '';
-                          if (idx === 0) {
-                            layerColor = 'bg-[#EDF4F9] text-blue-700 border-blue-105';
-                            layerTag = '1ª Camada: Pele (Body)';
-                          } else if (idx === 1) {
-                            layerColor = 'bg-[#FAF2EC] text-[#B96552] border-[#F2DCD0]';
-                            layerTag = '2ª Camada: Meio (Culote)';
-                          } else if (idx === 2) {
-                            layerColor = 'bg-[#EEFAF2] text-emerald-800 border-emerald-150';
-                            layerTag = '3ª Camada: Calor (Macacão)';
-                          } else {
-                            layerColor = 'bg-[#F3EEF9] text-[#5B437C] border-[#DCCFE8]';
-                            layerTag = '4ª Camada: Sono (Saco)';
+                      <div className="flex flex-col gap-2.5 w-full lg:w-80 shrink-0 font-sans">
+                        {(result.layerDetails || [
+                          {
+                            id: 'base',
+                            name: '🧸 CAMADA BASE',
+                            items: 'Body manga longa + calça',
+                            funcao: 'Contato direto com a pele, oferecendo conforto e ajudando a manter a temperatura corporal.',
+                            color: 'bg-[#EDF4F9] text-blue-750 border-blue-200'
                           }
+                        ]).map((layer, idx) => {
                           return (
-                            <div key={idx} className={`text-[9px] font-bold py-1 px-2.5 rounded-lg border border-dashed flex justify-between items-center ${layerColor}`}>
-                              <span>{layerTag}</span>
-                              <span className="text-[7px] bg-white px-1 py-0.2 rounded border border-current font-extrabold">OK</span>
+                            <div key={idx} className={`p-3 rounded-xl border border-dashed flex flex-col gap-1 ${layer.color}`}>
+                              <div className="flex justify-between items-center">
+                                <span className="text-[9px] font-extrabold tracking-wider uppercase leading-none">{layer.name}</span>
+                                <span className="text-[7px] bg-white px-1.5 py-0.2 rounded border border-current font-extrabold shadow-3xs">ATVA</span>
+                              </div>
+                              <span className="text-[11px] font-bold text-slate-800 leading-snug mt-0.5">{layer.items}</span>
+                              <p className="text-[9.5px] text-slate-600 leading-normal font-medium mt-0.5">{layer.funcao}</p>
                             </div>
                           );
                         })}
