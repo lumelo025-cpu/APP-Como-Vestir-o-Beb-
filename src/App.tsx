@@ -52,8 +52,8 @@ import {
 import { calculateClothing } from './babyLogic.ts';
 
 // Import local premium asset paths
-import babyHeroImg from './assets/images/baby_sleeping_hero_1780707097305.png';
-import menuClothesLogoImg from './assets/images/menu_clothes_logo_1779899134603.png';
+const babyHeroImg = 'https://site.maecompleta.com/wp-content/uploads/2026/06/ChatGPT-Image-5-de-jun.-de-2026-23_06_49.png';
+const menuClothesLogoImg = 'https://site.maecompleta.com/wp-content/uploads/2026/06/Design-sem-nome-36.png';
 
 // Database of clothes matching Portuguese logical codes
 const CLOTHING_DATABASE: Record<string, { name: string; desc: string; url: string; heatingLevel: string }> = {
@@ -414,19 +414,15 @@ export default function App() {
                   <div className="absolute right-[-4%] top-0 bottom-0 w-[58%] pointer-events-none select-none z-10 overflow-hidden">
                     
                     {/* The baby image - aligned right, borderless, organic float transition, enlarged ~15% (Ajuste 2) */}
-                    <div className="absolute -right-3 top-1/2 -translate-y-1/2 w-[115%] h-[140%] max-h-[210px] overflow-hidden transform rotate-[-1deg]">
+                    <div className="absolute -right-1 top-1/2 -translate-y-1/2 w-[105%] h-[115%] max-h-[160px] overflow-hidden rounded-2xl border-2 border-white/80 shadow-3xs">
                       <img 
                         src={babyHeroImg} 
                         alt="Bebê dormindo" 
-                        className="w-full h-full object-cover object-center transform scale-[1.08]"
+                        className="w-full h-full object-cover object-center"
                         referrerPolicy="no-referrer"
                       />
-                      {/* Left soft wash transparency layer to dissolve the image into the layout gradient seamlessly (Ajuste 3) */}
-                      <div className="absolute inset-y-0 left-0 w-24 bg-gradient-to-r from-[#F8F4EE] via-[#F8F4EE]/90 to-transparent pointer-events-none" />
-                      <div className="absolute inset-x-0 top-0 h-10 bg-gradient-to-b from-[#F8F4EE] to-transparent pointer-events-none" />
-                      <div className="absolute inset-x-0 bottom-0 h-10 bg-gradient-to-t from-[#F8F4EE] to-transparent pointer-events-none" />
                       {/* Ethereal light peach overlay */}
-                      <div className="absolute inset-0 bg-gradient-to-t from-[#F4C7B8]/15 via-transparent to-transparent pointer-events-none" />
+                      <div className="absolute inset-x-0 top-0 h-4 bg-gradient-to-b from-white/10 to-transparent pointer-events-none" />
                     </div>
 
                     {/* Highly discreet, premium floating graphic shapes (Ajuste 6) */}
