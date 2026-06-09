@@ -211,3 +211,17 @@ h1, h2, h3, h4 {
 .animate-spin-slow {
   animation: none;
 }
+
+/* Container Mobile Safe Areas Support */
+.main-app-container {
+  padding-top: 16px; /* Default desktop padding */
+  padding-top: calc(env(safe-area-inset-top, 0px) + 16px);
+}
+
+@media (max-width: 767px) {
+  .main-app-container {
+    /* Mobile safe area top + 16px base padding + 16px extra visual spacing below (in requested 12px-20px range) */
+    padding-top: calc(env(safe-area-inset-top, 0px) + 32px) !important;
+  }
+}
+

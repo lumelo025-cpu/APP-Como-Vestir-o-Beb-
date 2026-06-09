@@ -302,7 +302,7 @@ export default function App() {
   };
 
   return (
-    <div className="min-h-screen bg-[#F8F4EE] text-[#5F5A55] flex flex-col items-center justify-start pb-28 pt-4 px-4 sm:px-6 relative overflow-x-hidden antialiased">
+    <div className="min-h-screen bg-[#F8F4EE] text-[#5F5A55] flex flex-col items-center justify-start pb-28 px-4 sm:px-6 relative overflow-x-hidden antialiased main-app-container">
       
       {/* TOPO: Compact Premium App Header Layout */}
       <header className="w-full max-w-xl flex items-center justify-between py-2 mb-4 z-20 relative px-1">
