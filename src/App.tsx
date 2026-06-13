@@ -1070,39 +1070,123 @@ export default function App() {
                     </div>
                   </div>
 
-                  {/* SAFE SLEEP CRITICAL BOX */}
-                  <div className="bg-gradient-to-br from-purple-50 via-white to-[#FDFBF7] border border-purple-150 rounded-2xl p-4">
-                    <div className="flex items-start gap-3">
-                      <div className="w-8 h-8 rounded-xl bg-[#F3EEF9] flex items-center justify-center text-[#967CBA] shrink-0 mt-0.5">
-                        <Moon className="w-4.5 h-4.5" />
-                      </div>
-                      <div className="space-y-1 flex-1">
-                        <span className="text-[8px] font-extrabold bg-[#E6DCF1] text-purple-800 px-2.5 py-0.5 rounded-full uppercase tracking-wider font-sans inline-block leading-none">
-                          Alerta Crítico de Sono Seguro
-                        </span>
-                        <h5 className="text-[11px] font-bold text-slate-800 font-sans leading-snug">
-                          Evite cobertores soltos e toucas durante o sono
-                        </h5>
-                        <p className="text-[10px] text-slate-600 leading-relaxed font-sans">
-                          Para evitar riscos de asfixia e superaquecimento acidental, nunca use cobertores soltos ou toucas enquanto o bebê dorme no berço sem supervisão. Prefira sempre um saco de dormir macio de tamanho apropriado!
-                        </p>
-                      </div>
-                    </div>
+                  {/* COZY COMFORT ADJUSTMENT OBSERVATION CARD */}
+                  <div className="bg-[#FFFDF9] border border-slate-150 rounded-xl p-4 space-y-1.5 text-left">
+                    <span className="text-[9px] font-extrabold text-[#B96552] uppercase tracking-wider block font-sans">
+                      🧦 Ajustes de conforto (opcional)
+                    </span>
+                    <p className="text-[11px] text-[#4B4642] leading-relaxed font-sans font-medium">
+                      Cada bebê sente a temperatura de uma forma diferente. Caso necessário, pequenos ajustes como meias podem ser adicionados conforme a resposta do bebê.
+                    </p>
                   </div>
 
-                  {/* CRITICAL IMPORTANT VITAL WARNING NEWS */}
-                  <div className="bg-slate-50 border border-slate-150 rounded-xl p-4 space-y-2 text-left">
-                    <span className="text-[10px] font-bold text-slate-800 flex items-center gap-1.5 uppercase font-sans">
-                      <AlertTriangle className="w-3.5 h-3.5 text-[#E29A88]" /> Notas importantes de proteção
+                  {/* DYNAMIC ORIENTATION CARD: 💛 Orientação ClimaBaby */}
+                  <div className="bg-[#FAF2EC]/50 border border-[#F2DCD0] rounded-2xl p-5 space-y-4 text-left">
+                    <span className="text-[10px] font-extrabold bg-[#E29A88] text-white px-3 py-1 rounded-full uppercase tracking-wider font-sans inline-block leading-none">
+                      💛 Orientação ClimaBaby
                     </span>
-                    <ul className="space-y-1.5">
-                      {result.importantAlerts.map((alert, idx) => (
-                        <li key={idx} className="text-[10.5px] text-slate-600 leading-relaxed flex items-start gap-1 pb-1 border-b border-dashed border-slate-100 last:border-none font-sans">
-                          <span className="text-[#E29A88] shrink-0 mt-0.5">⚠️</span>
-                          <span>{alert}</span>
-                        </li>
-                      ))}
-                    </ul>
+                    
+                    {answers.state === 'dormindo' ? (
+                      <div className="space-y-3">
+                        <div className="flex items-center gap-2">
+                          <span className="text-md">😴</span>
+                          <h4 className="text-[11.5px] font-bold text-slate-800 font-sans leading-tight">
+                            Sono seguro ClimaBaby
+                          </h4>
+                        </div>
+                        <p className="text-[11px] text-slate-700 font-bold font-sans leading-none block">
+                          Mantenha seu bebê aquecido com segurança.
+                        </p>
+                        <ul className="space-y-2 pl-0.5">
+                          <li className="text-[11px] text-slate-604 leading-relaxed flex items-start gap-2 font-sans font-medium">
+                            <span className="text-[#E29A88] shrink-0 mt-0.5">•</span>
+                            <span>Evite cobertores, mantas ou lençóis soltos dentro do berço sem supervisão.</span>
+                          </li>
+                          <li className="text-[11px] text-slate-604 leading-relaxed flex items-start gap-2 font-sans font-medium">
+                            <span className="text-[#E29A88] shrink-0 mt-0.5">•</span>
+                            <span>Não utilize toucas ou gorros durante o sono, pois podem aumentar o risco de superaquecimento e também apresentar risco de obstrução das vias respiratórias.</span>
+                          </li>
+                          <li className="text-[11px] text-slate-604 leading-relaxed flex items-start gap-2 font-sans font-medium">
+                            <span className="text-[#E29A88] shrink-0 mt-0.5">•</span>
+                            <span>Prefira um saco de dormir adequado à temperatura do ambiente, pois ele mantém o bebê aquecido sem a necessidade de cobertores soltos.</span>
+                          </li>
+                        </ul>
+                        <div className="pt-2.5 border-t border-dashed border-[#F2DCD0] text-[10.5px] text-[#B96552] leading-relaxed font-semibold font-sans">
+                          💛 Lembre-se: mãos e pezinhos frios nem sempre significam que o bebê está com frio. Observe principalmente a temperatura da nuca e do peitinho.
+                        </div>
+                      </div>
+                    ) : (answers.feeling === 'frio' || answers.feeling === 'muito-frio') ? (
+                      <div className="space-y-3">
+                        <div className="flex items-center gap-2">
+                          <span className="text-md">❄️</span>
+                          <h4 className="text-[11.5px] font-bold text-slate-800 font-sans leading-tight">
+                            Cuidados nos dias frios
+                          </h4>
+                        </div>
+                        <p className="text-[11px] text-slate-700 font-bold font-sans leading-none block">
+                          Proteção sem excesso de roupas.
+                        </p>
+                        <ul className="space-y-2 pl-0.5">
+                          <li className="text-[11px] text-slate-604 leading-relaxed flex items-start gap-2 font-sans font-medium">
+                            <span className="text-[#E29A88] shrink-0 mt-0.5">•</span>
+                            <span>Ao sair para ambientes externos, proteja o bebê do vento e do frio intenso.</span>
+                          </li>
+                          <li className="text-[11px] text-slate-604 leading-relaxed flex items-start gap-2 font-sans font-medium">
+                            <span className="text-[#E29A88] shrink-0 mt-0.5">•</span>
+                            <span>Ao retornar para locais aquecidos, retire camadas extras e reavalie o conforto térmico para evitar superaquecimento.</span>
+                          </li>
+                        </ul>
+                        <div className="pt-2.5 border-t border-dashed border-[#F2DCD0] text-[10.5px] text-[#B96552] leading-relaxed font-semibold font-sans">
+                          💛 Verifique sempre a nuca e o peitinho para avaliar a temperatura do bebê. Mãos e pés frios nem sempre significam que ele está com frio.
+                        </div>
+                      </div>
+                    ) : (answers.feeling === 'quente' || answers.feeling === 'muito-quente') ? (
+                      <div className="space-y-3">
+                        <div className="flex items-center gap-2">
+                          <span className="text-md">☀️</span>
+                          <h4 className="text-[11.5px] font-bold text-slate-800 font-sans leading-tight">
+                            Conforto nos dias quentes
+                          </h4>
+                        </div>
+                        <p className="text-[11px] text-slate-700 font-bold font-sans leading-none block">
+                          Menos roupas também é cuidado.
+                        </p>
+                        <ul className="space-y-2 pl-0.5">
+                          <li className="text-[11px] text-slate-604 leading-relaxed flex items-start gap-2 font-sans font-medium">
+                            <span className="text-[#E29A88] shrink-0 mt-0.5">•</span>
+                            <span>Prefira tecidos leves e respiráveis, como algodão, permitindo melhor ventilação da pele.</span>
+                          </li>
+                          <li className="text-[11px] text-slate-604 leading-relaxed flex items-start gap-2 font-sans font-medium">
+                            <span className="text-[#E29A88] shrink-0 mt-0.5">•</span>
+                            <span>Observe sinais de calor excessivo como suor, pele avermelhada, irritação ou desconforto.</span>
+                          </li>
+                        </ul>
+                        <div className="pt-2.5 border-t border-dashed border-[#F2DCD0] text-[10.5px] text-[#B96552] leading-relaxed font-semibold font-sans">
+                          💛 Em ambientes quentes, evite adicionar camadas desnecessárias apenas porque as mãos ou os pés parecem frios.
+                        </div>
+                      </div>
+                    ) : (
+                      <div className="space-y-3">
+                        <div className="flex items-center gap-2">
+                          <span className="text-md">🧸</span>
+                          <h4 className="text-[11.5px] font-bold text-slate-800 font-sans leading-tight">
+                            Conforto no dia a dia
+                          </h4>
+                        </div>
+                        <p className="text-[11px] text-slate-700 font-bold font-sans leading-none block">
+                          Cada bebê pode sentir a temperatura de uma forma diferente.
+                        </p>
+                        <ul className="space-y-2 pl-0.5">
+                          <li className="text-[11px] text-slate-604 leading-relaxed flex items-start gap-2 font-sans font-medium">
+                            <span className="text-[#E29A88] shrink-0 mt-0.5">•</span>
+                            <span>A recomendação do ClimaBaby é um guia para ajudar na escolha das roupas, mas observar os sinais do seu bebê é sempre o mais importante.</span>
+                          </li>
+                        </ul>
+                        <div className="pt-2.5 border-t border-dashed border-[#F2DCD0] text-[10.5px] text-[#B96552] leading-relaxed font-semibold font-sans">
+                          💛 Um bebê confortável costuma ter a nuca e o peitinho com temperatura agradável, sem suor excessivo ou sensação de frio.
+                        </div>
+                      </div>
+                    )}
                   </div>
 
                   {/* Bottom Recalculation Buttons */}
