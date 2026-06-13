@@ -400,12 +400,12 @@ export default function App() {
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -12 }}
                 transition={{ duration: 0.22, ease: [0.16, 1, 0.3, 1] }}
-                className="space-y-4"
+                className="space-y-2.5"
                 id="screen-welcome"
               >
                 
                 {/* NEW INTEGRATED LANDING HERO (SEAMLESSLY DE-CARDED, BLENDS INTO PAGE BACKGROUND - Ajuste 1) */}
-                <div className="w-full relative overflow-hidden py-4 sm:py-6 mb-1.5 flex flex-col justify-center min-h-[135px] sm:min-h-[145px] select-none">
+                <div className="w-full relative overflow-hidden py-3 sm:py-4 mb-0 flex flex-col justify-center min-h-[135px] sm:min-h-[145px] select-none">
                   
                   {/* Floating ambient glow wash behind the text and baby - Soft ethereal background (Ajuste 1, 3) */}
                   <div className="absolute right-[-10%] top-1/2 -translate-y-1/2 w-[85%] h-[150%] rounded-full bg-gradient-to-br from-[#FFFDF9] via-[#FAF6F0] to-[#F4C7B8]/30 blur-[28px] opacity-90 -z-10 pointer-events-none" />
@@ -476,61 +476,19 @@ export default function App() {
                       Como vestir seu bebê hoje? 💛
                     </h2>
                     <p className="text-[10px] sm:text-[11px] text-[#5F5A55]/85 font-medium leading-relaxed">
-                      Descubra a combinação ideal para cada momento em poucos segundos.
+                      Descubra a roupa ideal em menos de 30 segundos.
                     </p>
                   </div>
 
                 </div>
-
-                {/* INDICADOR DE PROGRESSO DISCRETO E PREMIUM */}
-                <div className="flex items-center justify-center gap-2 py-1 bg-white/40 border border-[#EDE5DB]/30 rounded-full max-w-[340px] mx-auto shadow-3xs">
-                  <span className="text-[8.5px] font-extrabold text-[#5F5A55]/50 tracking-wider uppercase">Passos:</span>
-                  <div className="flex items-center gap-2 text-[9px] font-bold text-[#5F5A55]/60">
-                    <span className="flex items-center gap-1 text-[#E29A88] shrink-0">
-                      <span className="w-1.5 h-1.5 rounded-full bg-[#E29A88]" /> Ambiente
-                    </span>
-                    <span className="text-gray-300">|</span>
-                    <span className="flex items-center gap-1 text-[#E29A88] shrink-0">
-                      <span className="w-1.5 h-1.5 rounded-full bg-[#E29A88]" /> Momento
-                    </span>
-                    <span className="text-gray-300">|</span>
-                    <span className="flex items-center gap-1 text-[#E29A88] shrink-0">
-                      <span className="w-1.5 h-1.5 rounded-full bg-[#E29A88]" /> Bebê
-                    </span>
-                    <span className="text-gray-300">|</span>
-                    <span className="flex items-center gap-1 text-[#E29A88] shrink-0">
-                      <span className="w-1.5 h-1.5 rounded-full bg-[#E29A88]" /> Idade
-                    </span>
-                    <span className="text-gray-300">|</span>
-                    <span className="flex items-center gap-1 text-[#5F5A55]/40 shrink-0">
-                      <span className="w-1.5 h-1.5 rounded-full bg-[#EDE5DB]" /> Local
-                    </span>
-                  </div>
-                </div>
-
-                {/* COMPACT DE-CLUTTERED INFORMATIONAL ROW (NO SHADOWS, NO BORDERS, NO CONTAINERS) */}
-                <div className="flex flex-wrap items-center justify-center gap-x-2 gap-y-1 max-w-[480px] sm:max-w-md mx-auto px-4 select-none py-1.5 text-center">
-                  <div className="inline-flex items-center gap-1 text-[10px] sm:text-[10.5px] font-semibold text-[#5F5A55]/65">
-                    <span role="img" aria-label="Ambiente">✨</span>
-                    <span>Ambiente real</span>
-                  </div>
-                  <span className="text-[#EDE5DB] text-[9px] px-0.5">•</span>
-                  <div className="inline-flex items-center gap-1 text-[10px] sm:text-[10.5px] font-semibold text-[#5F5A55]/65">
-                    <span role="img" aria-label="Sono">😴</span>
-                    <span>Sono</span>
-                  </div>
-                  <span className="text-[#EDE5DB] text-[9px] px-0.5">•</span>
-                  <div className="inline-flex items-center gap-1 text-[10px] sm:text-[10.5px] font-semibold text-[#5F5A55]/65">
-                    <span role="img" aria-label="Colo">🤱</span>
-                    <span>Colo e sling</span>
-                  </div>
-                  <span className="text-[#EDE5DB] text-[9px] px-0.5">•</span>
-                  <div className="inline-flex items-center gap-1 text-[10px] sm:text-[10.5px] font-semibold text-[#5F5A55]/65">
-                    <span role="img" aria-label="Seguro">💛</span>
-                    <span>Segurança</span>
-                  </div>
-                </div>
  
+                {/* INSTRUCTIONAL CALL TO ACTION (FONTE DE TÍTULO, COR SECUNDÁRIA, CENTRALIZADO, BASTANTE RESPIRO ACIMA E ABAIXO) */}
+                <div className="text-center py-6 sm:py-8 px-4 select-none">
+                  <h3 className="font-logo font-bold text-sm sm:text-[15px] text-[#CB7C69] leading-relaxed max-w-xs sm:max-w-md mx-auto">
+                    Escolha as opções abaixo e descubra a combinação ideal de roupas para o seu bebê.
+                  </h3>
+                </div>
+
                 {/* FORM AREA: INDEPENDENT STYLISH WIDGET CARDS FOR NATIVE APP FEEL */}
                 <div className="space-y-3">
                   
