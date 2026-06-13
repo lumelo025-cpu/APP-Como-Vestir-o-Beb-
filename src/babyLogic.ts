@@ -390,11 +390,6 @@ export function calculateClothing(answers: QuestionnaireAnswers): Recommendation
     } else if (adjustedFeeling === 'frio') {
       layersDescription = 'Aconchego extra para que o bebê permaneça bem protegido e confortável ao longo das horas frias.';
       recommendedFabrics.push('Algodão leve e respirável', 'Tecido macio e confortável');
-      
-      if (isPasseando || (isNewborn && isWind)) {
-        accessories.push('Touca macia protetora');
-        visualItems.push('touca');
-      }
 
       outfitSuggestions.push('Body manga longa', 'Calça', 'Macacão soft');
       visualItems.push('body-manga-longa', 'calca', 'macacao-soft');
@@ -419,8 +414,8 @@ export function calculateClothing(answers: QuestionnaireAnswers): Recommendation
       recommendedFabrics.push('Algodão leve e respirável', 'Tecido macio e confortável');
       
       if (isPasseando || isNewborn || isWind) {
-        accessories.push('Touca cobrindo as orelhinhas', 'Luvas macias infantis');
-        visualItems.push('touca', 'luvas');
+        accessories.push('Luvas macias infantis');
+        visualItems.push('luvas');
       }
 
       outfitSuggestions.push('Body manga longa', 'Calça', 'Macacão plush');
@@ -499,14 +494,6 @@ export function calculateClothing(answers: QuestionnaireAnswers): Recommendation
   }
 
   cozyParagraphs.push(consultSummary);
-
-  if (isSleeping) {
-    cozyParagraphs.push(
-      'Entenda de forma simples as categorias de sacos de dormir:\n' +
-      '• 😴 Saco de dormir leve (com ou sem mangas): Uma camada leve de proteção para o sono, feita com tecidos leves e respiráveis (pode ser tanto com mangas quanto sem mangas, adaptando-se ao que você já tem em casa). Pode ser utilizado em noites de temperatura agradável ou ambientes com ar-condicionado.\n' +
-      '• ❄️ Saco de dormir quentinho com mangas: Indicado para noites frias, com tecidos mais aconchegantes, oferecendo maior proteção térmica durante o sono e evitando o uso de cobertores soltos.'
-    );
-  }
 
   return {
     temperatureCategory: categoryLabel,
