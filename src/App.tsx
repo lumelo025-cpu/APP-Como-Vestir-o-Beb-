@@ -58,61 +58,61 @@ const menuClothesLogoImg = 'https://site.maecompleta.com/wp-content/uploads/2026
 // Database of clothes matching Portuguese logical codes
 const CLOTHING_DATABASE: Record<string, { name: string; desc: string; url: string; heatingLevel: string }> = {
   'body-manga-longa': {
-    name: 'Body Manga Longa',
+    name: 'Body manga longa',
     desc: 'Algodão macio encostado na pele para aquecer os bracinhos.',
     url: 'https://site.maecompleta.com/wp-content/uploads/2026/05/Captura-de-tela-2026-05-27-114453.png',
     heatingLevel: 'Médio'
   },
   'body-manga-curta': {
-    name: 'Body Manga Curta',
+    name: 'Body manga curta',
     desc: 'Peça essencial leve, perfeitamente arejada para dias quentes.',
     url: 'https://site.maecompleta.com/wp-content/uploads/2026/05/Captura-de-tela-2026-05-27-114507.png',
     heatingLevel: 'Leve'
   },
   'calca': {
-    name: 'Calça Culote (Mijão)',
+    name: 'Calça',
     desc: 'Algodão macio para cobrir e dar total mobilidade às perninhas.',
     url: 'https://site.maecompleta.com/wp-content/uploads/2026/05/Captura-de-tela-2026-05-27-114519.png',
     heatingLevel: 'Leve'
   },
   'macacao-algodao': {
-    name: 'Macacão de Algodão (leve)',
+    name: 'Macacão de algodão',
     desc: 'Macacão leve de algodão ideal para temperaturas agradáveis ou amenas.',
     url: 'https://site.maecompleta.com/wp-content/uploads/2026/05/Captura-de-tela-2026-05-27-114531.png',
     heatingLevel: 'Leve'
   },
   'macacao-soft': {
-    name: 'Macacão Soft/Peluciado',
+    name: 'Macacão soft',
     desc: 'Ideal para dias frescos e de meia-estação.',
     url: 'https://site.maecompleta.com/wp-content/uploads/2026/05/Captura-de-tela-2026-05-27-115407.png',
     heatingLevel: 'Médio'
   },
   'macacao-plush': {
-    name: 'Macacão Plush',
+    name: 'Macacão plush',
     desc: 'Aconchegante camada aveludada para combater o frio intenso.',
     url: 'https://site.maecompleta.com/wp-content/uploads/2026/05/Captura-de-tela-2026-05-27-114550.png',
     heatingLevel: 'Alto'
   },
   'saco-dormir-leve': {
-    name: 'Saco de dormir leve',
+    name: 'Saco de dormir leve sem mangas',
     desc: 'Mantém o bebê coberto a noite toda com frescor ideal.',
     url: 'https://site.maecompleta.com/wp-content/uploads/2026/05/Captura-de-tela-2026-05-27-115515.png',
     heatingLevel: 'Leve'
   },
   'saco-dormir-soft': {
-    name: 'Saco de dormir soft',
+    name: 'Saco de dormir meia estação',
     desc: 'Protege o bebê contra friagens moderadas durante o sono.',
     url: 'https://site.maecompleta.com/wp-content/uploads/2026/05/Captura-de-tela-2026-05-27-115422.png',
     heatingLevel: 'Médio'
   },
   'saco-dormir-plush': {
-    name: 'Saco de dormir plush com mangas',
+    name: 'Saco de dormir de inverno com mangas',
     desc: 'Proteção térmica total e segura para o bebê nos dias mais frios.',
     url: 'https://site.maecompleta.com/wp-content/uploads/2026/05/Captura-de-tela-2026-05-27-115437.png',
     heatingLevel: 'Muito Alto'
   },
   'meias': {
-    name: 'Meias de Bebê',
+    name: 'Meias',
     desc: 'Proteção suave e macia para evitar os pezinhos gelados.',
     url: 'https://site.maecompleta.com/wp-content/uploads/2026/05/Captura-de-tela-2026-05-27-114627.png',
     heatingLevel: 'Leve'
@@ -1022,6 +1022,13 @@ export default function App() {
                     </div>
                   )}
 
+                  {/* SPECIAL OBSERVATION FOR NEWBORNS */}
+                  {answers.age === 'recem-nascido' && (
+                    <div className="bg-[#FAF2EC] border border-[#F2DCD0] rounded-xl p-3 text-xs text-[#B96552] leading-relaxed font-sans font-medium">
+                      👶 <strong>Atenção especial aos recém-nascidos:</strong> Os bebês pequenos ainda estão desenvolvendo a capacidade de regular a própria temperatura corporal. Observe a nuca e o peitinho com mais frequência e ajuste as roupas conforme o conforto do bebê.
+                    </div>
+                  )}
+
                   {/* ESSENTIAL SUMMARY FROM MOM CONSULTANT */}
                   <div className="bg-[#FAF2EC]/50 rounded-2xl p-4.5 border border-[#F2DCD0] relative">
                     <span className="absolute -top-2.5 left-4 px-3 py-0.5 bg-[#E29A88] text-white text-[8px] font-bold uppercase tracking-widest rounded-lg shadow-3xs font-sans">
@@ -1073,10 +1080,10 @@ export default function App() {
                   {/* COZY COMFORT ADJUSTMENT OBSERVATION CARD */}
                   <div className="bg-[#FFFDF9] border border-slate-150 rounded-xl p-4 space-y-1.5 text-left">
                     <span className="text-[9px] font-extrabold text-[#B96552] uppercase tracking-wider block font-sans">
-                      🧦 Ajustes de conforto (opcional)
+                      🧦 Meias (opcional)
                     </span>
                     <p className="text-[11px] text-[#4B4642] leading-relaxed font-sans font-medium">
-                      Cada bebê sente a temperatura de uma forma diferente. Caso necessário, pequenos ajustes como meias podem ser adicionados conforme a resposta do bebê.
+                      Podem ser utilizadas em ambientes mais frios conforme o conforto do bebê. Mãos e pezinhos frios isoladamente não significam que o bebê está com frio. Observe principalmente a temperatura da nuca e do peitinho.
                     </p>
                   </div>
 
@@ -1115,7 +1122,7 @@ export default function App() {
                           💛 Lembre-se: mãos e pezinhos frios nem sempre significam que o bebê está com frio. Observe principalmente a temperatura da nuca e do peitinho.
                         </div>
                       </div>
-                    ) : (answers.feeling === 'frio' || answers.feeling === 'muito-frio') ? (
+                    ) : (result?.adjustedFeeling === 'frio' || result?.adjustedFeeling === 'muito-frio') ? (
                       <div className="space-y-3">
                         <div className="flex items-center gap-2">
                           <span className="text-md">❄️</span>
@@ -1140,7 +1147,7 @@ export default function App() {
                           💛 Verifique sempre a nuca e o peitinho para avaliar a temperatura do bebê. Mãos e pés frios nem sempre significam que ele está com frio.
                         </div>
                       </div>
-                    ) : (answers.feeling === 'quente' || answers.feeling === 'muito-quente') ? (
+                    ) : (result?.adjustedFeeling === 'quente' || result?.adjustedFeeling === 'muito-quente') ? (
                       <div className="space-y-3">
                         <div className="flex items-center gap-2">
                           <span className="text-md">☀️</span>

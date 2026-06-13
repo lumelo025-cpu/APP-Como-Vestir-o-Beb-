@@ -41,6 +41,7 @@ export interface RecommendationResult {
   importantAlerts: string[]; // List of vital alerts
   cozyParagraphs: string[]; // The beautiful, warm, human-like voice responses
   severity: 'extreme-cold' | 'cold' | 'mild' | 'warm' | 'hot' | 'extreme-hot';
+  adjustedFeeling: AmbientFeeling;
   visualItems: string[]; // List of clothing IDs to render visuals
   layerDetails: LayerDetail[]; // Highly structured human-like mom layering
 }
