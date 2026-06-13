@@ -94,20 +94,20 @@ const CLOTHING_DATABASE: Record<string, { name: string; desc: string; url: strin
     heatingLevel: 'Alto'
   },
   'saco-dormir-leve': {
-    name: 'Saco de dormir leve sem mangas',
-    desc: 'Mantém o bebê coberto a noite toda com frescor ideal.',
+    name: 'Saco de dormir leve (com ou sem mangas)',
+    desc: 'Uma camada leve de proteção para o sono, podendo ser com ou sem mangas. Feito com tecidos leves e respiráveis, é ideal para noites de temperatura agradável ou ambientes com ar-condicionado.',
     url: 'https://site.maecompleta.com/wp-content/uploads/2026/05/Captura-de-tela-2026-05-27-115515.png',
     heatingLevel: 'Leve'
   },
   'saco-dormir-soft': {
-    name: 'Saco de dormir meia estação',
-    desc: 'Protege o bebê contra friagens moderadas durante o sono.',
+    name: 'Saco de dormir quentinho com mangas',
+    desc: 'Indicado para noites frias, com tecidos mais aconchegantes, oferecendo maior proteção térmica durante o sono e evitando o uso de cobertores soltos.',
     url: 'https://site.maecompleta.com/wp-content/uploads/2026/05/Captura-de-tela-2026-05-27-115422.png',
     heatingLevel: 'Médio'
   },
   'saco-dormir-plush': {
-    name: 'Saco de dormir de inverno com mangas',
-    desc: 'Proteção térmica total e segura para o bebê nos dias mais frios.',
+    name: 'Saco de dormir quentinho com mangas',
+    desc: 'Indicado para noites frias, com tecidos mais aconchegantes, oferecendo maior proteção térmica durante o sono e evitando o uso de cobertores soltos.',
     url: 'https://site.maecompleta.com/wp-content/uploads/2026/05/Captura-de-tela-2026-05-27-115437.png',
     heatingLevel: 'Muito Alto'
   },

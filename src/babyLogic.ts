@@ -138,7 +138,7 @@ export function calculateClothing(answers: QuestionnaireAnswers): Recommendation
 
     if (sleepTemp > 26) {
       layersDescription = 'Roupas extremamente leves para noites de calor intenso acima de 26°C, mantendo um frescor excelente para um sono seguro.';
-      outfitSuggestions.push('Body manga curta', 'Saco de dormir leve sem mangas');
+      outfitSuggestions.push('Body manga curta', 'Saco de dormir leve (com ou sem mangas)');
       visualItems.push('body-manga-curta');
       recommendedFabrics.push('Algodão leve e respirável', 'Tecido macio e confortável');
       
@@ -151,7 +151,7 @@ export function calculateClothing(answers: QuestionnaireAnswers): Recommendation
       });
     } else if (sleepTemp >= 23) {
       layersDescription = 'Sugerido com foco em proteção térmica equilibrada em noites de calor entre 23°C e 25°C.';
-      outfitSuggestions.push('Body manga curta', 'Calça', 'Saco de dormir leve sem mangas');
+      outfitSuggestions.push('Body manga curta', 'Calça', 'Saco de dormir leve (com ou sem mangas)');
       visualItems.push('body-manga-curta', 'calca', 'saco-dormir-leve');
       recommendedFabrics.push('Algodão leve e respirável', 'Tecido macio e confortável');
 
@@ -166,13 +166,13 @@ export function calculateClothing(answers: QuestionnaireAnswers): Recommendation
       layerDetails.push({
         id: 'sono',
         name: '🟪 Camada de Sono Seguro',
-        items: 'Saco de dormir leve sem mangas',
-        funcao: 'Garante que o bebê fique coberto e protegido a noite inteira, sem risco de cobrir o rostinho.',
+        items: 'Saco de dormir leve (com ou sem mangas)',
+        funcao: 'Garante que o bebê fique coberto e protegido a noite inteira, podendo ser com ou sem mangas.',
         color: 'bg-[#F3EEF9]/70 text-[#6B21A8] border-[#E9D5FF]'
       });
     } else if (sleepTemp >= 20) {
       layersDescription = 'Recomendação ideal focada em proteção térmica segura para noites amenas na faixa de 20°C a 22°C.';
-      outfitSuggestions.push('Body manga longa', 'Calça', 'Saco de dormir leve sem mangas');
+      outfitSuggestions.push('Body manga longa', 'Calça', 'Saco de dormir leve (com ou sem mangas)');
       visualItems.push('body-manga-longa', 'calca', 'saco-dormir-leve');
       recommendedFabrics.push('Algodão leve e respirável', 'Tecido macio e confortável');
 
@@ -187,13 +187,13 @@ export function calculateClothing(answers: QuestionnaireAnswers): Recommendation
       layerDetails.push({
         id: 'sono',
         name: '🟪 Camada de Sono Seguro',
-        items: 'Saco de dormir leve sem mangas',
-        funcao: 'Auxilia na segurança mantendo o corpinho em temperatura estável.',
+        items: 'Saco de dormir leve (com ou sem mangas)',
+        funcao: 'Auxilia na segurança mantendo o corpinho em temperatura estável, podendo ser com ou sem mangas.',
         color: 'bg-[#F3EEF9]/70 text-[#6B21A8] border-[#E9D5FF]'
       });
     } else if (sleepTemp >= 17) {
       layersDescription = 'Aconchego excelente para noites frescas de meia-estação entre 17°C e 19°C.';
-      outfitSuggestions.push('Body manga longa', 'Calça', 'Saco de dormir meia estação');
+      outfitSuggestions.push('Body manga longa', 'Calça', 'Saco de dormir quentinho com mangas');
       visualItems.push('body-manga-longa', 'calca', 'saco-dormir-soft');
       recommendedFabrics.push('Algodão leve e respirável', 'Tecido macio e confortável');
 
@@ -208,13 +208,13 @@ export function calculateClothing(answers: QuestionnaireAnswers): Recommendation
       layerDetails.push({
         id: 'sono',
         name: '🟪 Camada de Sono Seguro',
-        items: 'Saco de dormir meia estação',
+        items: 'Saco de dormir quentinho com mangas',
         funcao: 'Garante o conforto ideal mantendo a cobertura constante a noite toda.',
         color: 'bg-[#F3EEF9]/70 text-[#6B21A8] border-[#E9D5FF]'
       });
     } else if (sleepTemp >= 15) {
       layersDescription = 'Combinação extra acolhedora com três camadas planejadas para noites frias de inverno entre 15°C e 16°C.';
-      outfitSuggestions.push('Body manga longa', 'Calça', 'Macacão soft', 'Saco de dormir de inverno com mangas');
+      outfitSuggestions.push('Body manga longa', 'Calça', 'Macacão soft', 'Saco de dormir quentinho com mangas');
       visualItems.push('body-manga-longa', 'calca', 'macacao-soft', 'saco-dormir-soft');
       recommendedFabrics.push('Algodão leve e respirável', 'Tecido macio e confortável');
 
@@ -237,13 +237,13 @@ export function calculateClothing(answers: QuestionnaireAnswers): Recommendation
       layerDetails.push({
         id: 'sono',
         name: '🟪 Camada de Sono Seguro',
-        items: 'Saco de dormir de inverno com mangas',
+        items: 'Saco de dormir quentinho com mangas',
         funcao: 'Proteção extra mantendo o aconchego no berço.',
         color: 'bg-[#F3EEF9]/70 text-[#6B21A8] border-[#E9D5FF]'
       });
     } else if (sleepTemp >= 12) {
       layersDescription = 'Camadas muito acolhedoras recomendadas para noites frias de inverno na faixa de 12°C a 14°C.';
-      outfitSuggestions.push('Body manga longa', 'Calça', 'Macacão plush', 'Saco de dormir de inverno com mangas');
+      outfitSuggestions.push('Body manga longa', 'Calça', 'Macacão plush', 'Saco de dormir quentinho com mangas');
       visualItems.push('body-manga-longa', 'calca', 'macacao-plush', 'saco-dormir-plush');
       recommendedFabrics.push('Algodão leve e respirável', 'Tecido macio e confortável');
 
@@ -266,13 +266,13 @@ export function calculateClothing(answers: QuestionnaireAnswers): Recommendation
       layerDetails.push({
         id: 'sono',
         name: '🟪 Camada de Sono Seguro',
-        items: 'Saco de dormir de inverno com mangas',
+        items: 'Saco de dormir quentinho com mangas',
         funcao: 'Segurança absoluta e isolamento acolhedor sem risco do bebê se descobrir.',
         color: 'bg-[#F3EEF9]/70 text-[#6B21A8] border-[#E9D5FF]'
       });
     } else {
       layersDescription = 'Máxima proteção térmica em camadas de feto para noites rigorosas de frio intenso em temperaturas Até 11°C (8°C a 11°C).';
-      outfitSuggestions.push('Body manga longa', 'Calça', 'Macacão plush', 'Saco de dormir de inverno com mangas');
+      outfitSuggestions.push('Body manga longa', 'Calça', 'Macacão plush', 'Saco de dormir quentinho com mangas');
       visualItems.push('body-manga-longa', 'calca', 'macacao-plush', 'saco-dormir-plush');
       recommendedFabrics.push('Algodão leve e respirável', 'Tecido macio e confortável');
 
@@ -295,7 +295,7 @@ export function calculateClothing(answers: QuestionnaireAnswers): Recommendation
       layerDetails.push({
         id: 'sono',
         name: '🟪 Camada de Sono Seguro',
-        items: 'Saco de dormir de inverno com mangas',
+        items: 'Saco de dormir quentinho com mangas',
         funcao: 'Proteção sob máxima segurança e conforto livre de cobertas.',
         color: 'bg-[#F3EEF9]/70 text-[#6B21A8] border-[#E9D5FF]'
       });
@@ -461,7 +461,7 @@ export function calculateClothing(answers: QuestionnaireAnswers): Recommendation
   const importantAlerts = [
     'Segurança Prática do Sono: Nunca coloque toucas ou gorros enquanto seu bebê dorme sem supervisão. A cabeça é o local por onde eles regulam o próprio calor e há risco de asfixia mecânica.',
     'Nunca utilize cobertores ou lençóis soltos no berço para bebês sem supervisão direta. Há risco de cobrir acidentalmente o rostinho.',
-    'Excelente Alternativa Segura: Para os momentos de soninho, use sempre um saco de dormir de inverno com mangas de acordo com o frio atual, eliminando a necessidade de cobertor.'
+    'Excelente Alternativa Segura: Para os momentos de soninho, use sempre um saco de dormir de acordo com o frio atual, eliminando a necessidade de cobertor.'
   ];
 
   if (isSleeping) {
@@ -479,7 +479,7 @@ export function calculateClothing(answers: QuestionnaireAnswers): Recommendation
 
   let consultSummary = '';
   if (isSleeping) {
-    consultSummary = `Para a hora do soninho seguro de ${ageGroupText}, preparamos um look focado no conforto e na segurança. Como o bebê não deve dormir de touca nem usar cobertor solto sem supervisão, a melhor alternativa é adotar um bom saco de dormir de inverno com mangas! Ele envolve o bebê como um abraço seguro a noite inteira 💛`;
+    consultSummary = `Para a hora do soninho seguro de ${ageGroupText}, preparamos um look focado no conforto e na segurança. Como o bebê não deve dormir de touca nem usar cobertor solto sem supervisão, a melhor alternativa é adotar um bom saco de dormir! Ele envolve o bebê como um abraço seguro a noite inteira 💛`;
   } else if (isColoSling) {
     consultSummary = `Você escolheu colo ou sling para ${ageGroupText}! Como o contato direto com o seu corpo gera muito aconchego natural e aquece bastante o bebê, reduzimos uma camada da recomendação oficial. Fique atenta para aproveitar bem esse chamego aconchegante!`;
   } else if (isPasseando) {
@@ -502,10 +502,9 @@ export function calculateClothing(answers: QuestionnaireAnswers): Recommendation
 
   if (isSleeping) {
     cozyParagraphs.push(
-      'Entenda a diferença das camadas para o sono:\n' +
-      '• 🧸 Saco de dormir leve sem mangas: Feito de algodão leve e respirável - Ideal para clima ameno ou ar-condicionado suave.\n' +
-      '• 🧸 Saco de dormir meia estação: Aquecimento intermediário - Excelente para noites frescas.\n' +
-      '• 🧸 Saco de dormir de inverno com mangas: Proteção térmica completa forrada - Essencial para noites frias e muito frias (temperaturas de até 11°C) dispensando totalmente o uso de cobertores com ampla segurança.'
+      'Entenda de forma simples as categorias de sacos de dormir:\n' +
+      '• 😴 Saco de dormir leve (com ou sem mangas): Uma camada leve de proteção para o sono, feita com tecidos leves e respiráveis (pode ser tanto com mangas quanto sem mangas, adaptando-se ao que você já tem em casa). Pode ser utilizado em noites de temperatura agradável ou ambientes com ar-condicionado.\n' +
+      '• ❄️ Saco de dormir quentinho com mangas: Indicado para noites frias, com tecidos mais aconchegantes, oferecendo maior proteção térmica durante o sono e evitando o uso de cobertores soltos.'
     );
   }
 
