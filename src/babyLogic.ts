@@ -37,6 +37,9 @@ export function calculateClothing(answers: QuestionnaireAnswers): Recommendation
   const isWind = condition === 'vento-frio';
   const isNight = period === 'noite';
 
+  // Rule 3: bebés maiores (6-12 meses e acima de 1 ano)
+  const isBiggerBaby = age === '6-12-meses' || age === 'mais-de-1-ano';
+
   // Translate Feeling to Category and Tone
   let categoryLabel = '';
   let interpretationText = '';
@@ -304,14 +307,14 @@ export function calculateClothing(answers: QuestionnaireAnswers): Recommendation
     // Non-sleeping logic (Bebê Acordado / Atividade)
     if (adjustedFeeling === 'muito-quente') {
       layersDescription = 'Uma combinação fresquinha para manter o bebê super confortável no dia a dia em dias de calor.';
-      outfitSuggestions.push('Body manga curta');
-      visualItems.push('body-manga-curta');
+      outfitSuggestions.push('Body manga curta OU Macacão curto de algodão');
+      visualItems.push('body-manga-curta', 'macacao-curto');
       recommendedFabrics.push('Algodão leve e respirável', 'Tecido macio e confortável');
 
       layerDetails.push({
         id: 'base',
         name: '🟦 Camada Base',
-        items: 'Body manga curta',
+        items: 'Body manga curta OU Macacão curto de algodão',
         funcao: 'Proporciona leveza máxima tocando suavemente as costas e o peitinho do bebê.',
         color: 'bg-[#EDF4F9]/70 text-blue-800 border-blue-200'
       });
@@ -330,12 +333,12 @@ export function calculateClothing(answers: QuestionnaireAnswers): Recommendation
           color: 'bg-[#EDF4F9]/70 text-blue-800 border-blue-200'
         });
       } else {
-        outfitSuggestions.push('Body manga curta');
-        visualItems.push('body-manga-curta');
+        outfitSuggestions.push('Body manga curta OU Macacão curto de algodão');
+        visualItems.push('body-manga-curta', 'macacao-curto');
         layerDetails.push({
           id: 'base',
           name: '🟦 Camada Base',
-          items: 'Body manga curta',
+          items: 'Body manga curta OU Macacão curto de algodão',
           funcao: 'Toque fresco de algodão ideal para dar liberdade e bem-estar.',
           color: 'bg-[#EDF4F9]/70 text-blue-800 border-blue-200'
         });
@@ -355,60 +358,114 @@ export function calculateClothing(answers: QuestionnaireAnswers): Recommendation
           color: 'bg-[#EDF4F9]/70 text-blue-800 border-blue-200'
         });
       } else {
-        outfitSuggestions.push('Body manga curta', 'Calça');
-        visualItems.push('body-manga-curta', 'calca');
-        layerDetails.push({
-          id: 'base',
-          name: '🟦 Camada Base',
-          items: 'Body manga curta + Calça',
-          funcao: 'Garante o conforto e mobilidade completa do bebê para brincar e se mover.',
-          color: 'bg-[#EDF4F9]/70 text-blue-800 border-blue-200'
-        });
+        if (temperature !== null && temperature >= 23) {
+          outfitSuggestions.push('Body manga curta OU Macacão curto de algodão', 'Calça');
+          visualItems.push('body-manga-curta', 'macacao-curto', 'calca');
+          layerDetails.push({
+            id: 'base',
+            name: '🟦 Camada Base',
+            items: 'Body manga curta OU Macacão curto de algodão + Calça',
+            funcao: 'Garante o conforto e mobilidade completa do bebê para brincar e se mover.',
+            color: 'bg-[#EDF4F9]/70 text-blue-800 border-blue-200'
+          });
+        } else {
+          outfitSuggestions.push('Body manga curta', 'Calça');
+          visualItems.push('body-manga-curta', 'calca');
+          layerDetails.push({
+            id: 'base',
+            name: '🟦 Camada Base',
+            items: 'Body manga curta + Calça',
+            funcao: 'Garante o conforto e mobilidade completa do bebê para brincar e se mover.',
+            color: 'bg-[#EDF4F9]/70 text-blue-800 border-blue-200'
+          });
+        }
       }
     } else if (adjustedFeeling === 'fresquinho') {
       layersDescription = 'Combinação confortável e aconchegante, ideal para proteger o bebê com total suavidade em momentos fresquinhos.';
       recommendedFabrics.push('Algodão leve e respirável', 'Tecido macio e confortável');
 
-      outfitSuggestions.push('Body manga longa', 'Calça', 'Macacão de algodão');
-      visualItems.push('body-manga-longa', 'calca', 'macacao-algodao');
+      if (isBiggerBaby) {
+        outfitSuggestions.push('Body manga longa', 'Calça', 'Macacão de algodão quentinho OU Casaquinho leve');
+        visualItems.push('body-manga-longa', 'calca', 'macacao-algodao', 'casaquinho-leve');
 
-      layerDetails.push({
-        id: 'base',
-        name: '🟦 Camada Base',
-        items: 'Body manga longa + Calça',
-        funcao: 'Proteção carinhosa de primeiro contato no corpinho para reter a temperatura com delicadeza.',
-        color: 'bg-[#EDF4F9]/70 text-blue-800 border-blue-200'
-      });
+        layerDetails.push({
+          id: 'base',
+          name: '🟦 Camada Base',
+          items: 'Body manga longa + Calça',
+          funcao: 'Proteção carinhosa de primeiro contato no corpinho para reter a temperatura com delicadeza.',
+          color: 'bg-[#EDF4F9]/70 text-blue-800 border-blue-200'
+        });
 
-      layerDetails.push({
-        id: 'aquecimento',
-        name: '🟧 Camada de Aquecimento',
-        items: 'Macacão de algodão',
-        funcao: 'Adiciona um toque extra confortável sobre a roupa de baixo.',
-        color: 'bg-[#FAF2EC]/70 text-[#C2410C] border-[#FED7AA]'
-      });
+        layerDetails.push({
+          id: 'aquecimento',
+          name: '🟧 Camada de Aquecimento',
+          items: 'Macacão de algodão quentinho OU Casaquinho leve',
+          funcao: 'Adiciona um toque extra confortável sobre a roupa de baixo para bebês maiores.',
+          color: 'bg-[#FAF2EC]/70 text-[#C2410C] border-[#FED7AA]'
+        });
+      } else {
+        outfitSuggestions.push('Body manga longa', 'Calça', 'Macacão de algodão');
+        visualItems.push('body-manga-longa', 'calca', 'macacao-algodao');
+
+        layerDetails.push({
+          id: 'base',
+          name: '🟦 Camada Base',
+          items: 'Body manga longa + Calça',
+          funcao: 'Proteção carinhosa de primeiro contato no corpinho para reter a temperatura com delicadeza.',
+          color: 'bg-[#EDF4F9]/70 text-blue-800 border-blue-200'
+        });
+
+        layerDetails.push({
+          id: 'aquecimento',
+          name: '🟧 Camada de Aquecimento',
+          items: 'Macacão de algodão',
+          funcao: 'Adiciona um toque extra confortável sobre a roupa de baixo.',
+          color: 'bg-[#FAF2EC]/70 text-[#C2410C] border-[#FED7AA]'
+        });
+      }
     } else if (adjustedFeeling === 'frio') {
       layersDescription = 'Aconchego extra para que o bebê permaneça bem protegido e confortável ao longo das horas frias.';
       recommendedFabrics.push('Algodão leve e respirável', 'Tecido macio e confortável');
 
-      outfitSuggestions.push('Body manga longa', 'Calça', 'Macacão soft');
-      visualItems.push('body-manga-longa', 'calca', 'macacao-soft');
+      if (isBiggerBaby) {
+        outfitSuggestions.push('Body manga longa', 'Calça', 'Macacão soft/peluciado OU Casaquinho quente');
+        visualItems.push('body-manga-longa', 'calca', 'macacao-soft', 'casaquinho-quente');
 
-      layerDetails.push({
-        id: 'base',
-        name: '🟦 Camada Base',
-        items: 'Body manga longa + Calça',
-        funcao: 'Primeira pele macia e aconchegante que mantém o bebê agasalhado.',
-        color: 'bg-[#EDF4F9]/70 text-blue-800 border-blue-200'
-      });
+        layerDetails.push({
+          id: 'base',
+          name: '🟦 Camada Base',
+          items: 'Body manga longa + Calça',
+          funcao: 'Primeira pele macia e aconchegante que mantém o bebê agasalhado.',
+          color: 'bg-[#EDF4F9]/70 text-blue-800 border-blue-200'
+        });
 
-      layerDetails.push({
-        id: 'aquecimento',
-        name: '🟧 Camada de Aquecimento',
-        items: 'Macacão soft',
-        funcao: 'Proteção muito fofinha perfeita para o dia a dia nos momentos mais frios.',
-        color: 'bg-[#FAF2EC]/70 text-[#C2410C] border-[#FED7AA]'
-      });
+        layerDetails.push({
+          id: 'aquecimento',
+          name: '🟧 Camada de Aquecimento',
+          items: 'Macacão soft/peluciado OU Casaquinho quente',
+          funcao: 'Proteção muito fofinha perfeita para o dia a dia nos momentos mais frios para bebês maiores.',
+          color: 'bg-[#FAF2EC]/70 text-[#C2410C] border-[#FED7AA]'
+        });
+      } else {
+        outfitSuggestions.push('Body manga longa', 'Calça', 'Macacão soft');
+        visualItems.push('body-manga-longa', 'calca', 'macacao-soft');
+
+        layerDetails.push({
+          id: 'base',
+          name: '🟦 Camada Base',
+          items: 'Body manga longa + Calça',
+          funcao: 'Primeira pele macia e aconchegante que mantém o bebê agasalhado.',
+          color: 'bg-[#EDF4F9]/70 text-blue-800 border-blue-200'
+        });
+
+        layerDetails.push({
+          id: 'aquecimento',
+          name: '🟧 Camada de Aquecimento',
+          items: 'Macacão soft',
+          funcao: 'Proteção muito fofinha perfeita para o dia a dia nos momentos mais frios.',
+          color: 'bg-[#FAF2EC]/70 text-[#C2410C] border-[#FED7AA]'
+        });
+      }
     } else {
       layersDescription = 'Máximo aconchego e proteção térmica para dias frios e gelados, garantindo que ele permaneça bem quentinho e feliz.';
       recommendedFabrics.push('Algodão leve e respirável', 'Tecido macio e confortável');
@@ -451,6 +508,10 @@ export function calculateClothing(answers: QuestionnaireAnswers): Recommendation
 
   // Active layerCount is exactly the number of distinct structural layers!
   layerCount = layerDetails.length;
+
+  const isAwake = !isSleeping;
+  const isFrioOuMuitoFrio = adjustedFeeling === 'frio' || adjustedFeeling === 'muito-frio';
+  const showTouca = isAwake && isFrioOuMuitoFrio && (isPasseando || isWind || condition === 'externo');
 
   // ALERTS & RECOMMENDATIONS WRITTEN IN WARM MOM-TO-MOM TONE
   const importantAlerts = [
@@ -507,6 +568,7 @@ export function calculateClothing(answers: QuestionnaireAnswers): Recommendation
     cozyParagraphs,
     severity,
     adjustedFeeling,
+    showTouca,
     visualItems,
     layerDetails
   };

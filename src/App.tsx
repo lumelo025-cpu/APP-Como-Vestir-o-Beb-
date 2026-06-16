@@ -128,7 +128,124 @@ const CLOTHING_DATABASE: Record<string, { name: string; desc: string; url: strin
     desc: 'Ideal para manter as mãozinhas quentes e seguras nas frentes frias.',
     url: 'https://site.maecompleta.com/wp-content/uploads/2026/05/Captura-de-tela-2026-05-27-114650.png',
     heatingLevel: 'Leve'
+  },
+  'macacao-curto': {
+    name: 'Macacão curto de algodão (verão)',
+    desc: 'Sugerido como uma alternativa fresca ao body de manga curta em dias quentes.',
+    url: 'https://site.maecompleta.com/wp-content/uploads/2026/06/Captura-de-tela-2026-06-16-155826.png',
+    heatingLevel: 'Leve'
+  },
+  'casaquinho-leve': {
+    name: 'Casaquinho leve',
+    desc: 'Camada leve de sobreposição, perfeita para bebês maiores em clima de meia-estação.',
+    url: 'https://site.maecompleta.com/wp-content/uploads/2026/06/Captura-de-tela-2026-06-16-155756.png',
+    heatingLevel: 'Leve'
+  },
+  'casaquinho-quente': {
+    name: 'Casaquinho quente',
+    desc: 'Aconchegante casaquinho quentinho para reter o calor em dias frios.',
+    url: 'https://site.maecompleta.com/wp-content/uploads/2026/06/Captura-de-tela-2026-06-16-155810.png',
+    heatingLevel: 'Médio'
   }
+};
+
+const renderHighlightedText = (text: string) => {
+  if (text.includes(' OU ')) {
+    const parts = text.split(' OU ');
+    return (
+      <span className="inline-flex items-center flex-wrap gap-1 md:gap-1.5">
+        {parts.map((part, i) => (
+          <React.Fragment key={i}>
+            {i > 0 && (
+              <span className="mx-0.5 px-2 py-0.5 bg-[#FFF0ED] text-[#E29A88] text-[9px] font-extrabold rounded-md border border-[#FADCD5] shadow-xs select-none inline-block">
+                OU
+              </span>
+            )}
+            <span>{part}</span>
+          </React.Fragment>
+        ))}
+      </span>
+    );
+  }
+  return <span>{text}</span>;
+};
+
+const ALTERNATIVE_PAIRS = [
+  {
+    items: ['body-manga-curta', 'macacao-curto'],
+    title: 'Visual leve para dias quentes (Escolha uma opção)',
+    names: {
+      'body-manga-curta': 'Opção 1',
+      'macacao-curto': 'Opção 2'
+    }
+  },
+  {
+    items: ['macacao-algodao', 'casaquinho-leve'],
+    title: 'Camada de Aquecimento Leve (Escolha uma opção)',
+    names: {
+      'macacao-algodao': 'Opção 1',
+      'casaquinho-leve': 'Opção 2'
+    }
+  },
+  {
+    items: ['macacao-soft', 'casaquinho-quente'],
+    title: 'Camada de Aquecimento Quente (Escolha uma opção)',
+    names: {
+      'macacao-soft': 'Opção 1',
+      'casaquinho-quente': 'Opção 2'
+    }
+  }
+];
+
+const renderClothCard = (itemId: string, customClasses?: string) => {
+  const cloth = CLOTHING_DATABASE[itemId];
+  if (!cloth) return null;
+
+  let levelColor = 'bg-emerald-50 text-emerald-700 border-emerald-100';
+  if (cloth.heatingLevel === 'Médio') {
+    levelColor = 'bg-amber-50 text-amber-700 border-amber-100';
+  } else if (cloth.heatingLevel === 'Alto' || cloth.heatingLevel === 'Muito Alto') {
+    levelColor = 'bg-rose-50 text-rose-700 border-rose-100';
+  }
+
+  return (
+    <motion.div
+      whileHover={{ y: -1.5 }}
+      className={`border rounded-2xl overflow-hidden flex flex-col justify-between shadow-3xs transition-all p-1.5 h-full ${customClasses ? customClasses : 'border-slate-100 bg-[#FFFDF9] hover:border-[#E29A88]'}`}
+    >
+      <div className="aspect-square bg-white rounded-xl p-2.5 flex items-center justify-center relative border border-slate-50">
+        <img
+          src={cloth.url}
+          alt={cloth.name}
+          referrerPolicy="no-referrer"
+          className="w-full h-full object-contain mix-blend-multiply"
+          onError={(e) => {
+            e.currentTarget.style.display = 'none';
+            try {
+              const fb = e.currentTarget.nextElementSibling as HTMLDivElement;
+              if (fb) fb.style.display = 'flex';
+            } catch {}
+          }}
+        />
+        <div style={{ display: 'none' }} className="absolute inset-0 bg-slate-50 flex-col items-center justify-center text-center p-2 rounded-xl">
+          <Shirt className="w-5 h-5 text-slate-300 mb-1" />
+          <span className="text-[8px] text-slate-400 font-bold uppercase font-sans">Visual</span>
+        </div>
+      </div>
+
+      <div className="p-2 space-y-1 flex-1 flex flex-col justify-between">
+        <div>
+          <span className="text-[10px] font-bold text-slate-800 block truncate leading-none font-sans">{cloth.name}</span>
+          <span className="text-[8.5px] text-slate-400 leading-tight block line-clamp-2 mt-0.5 font-sans">{cloth.desc}</span>
+        </div>
+
+        <div className="pt-1.5 mt-1 border-t border-slate-50 flex items-center justify-between text-[7.5px] font-bold uppercase text-slate-400 font-sans">
+          <span>Aquece</span>
+          <span className={`px-1 py-0.2 rounded text-[7px] border font-bold ${levelColor}`}>{cloth.heatingLevel}</span>
+        </div>
+      </div>
+    </motion.div>
+  );
 };
 
 export default function App() {
@@ -955,64 +1072,98 @@ export default function App() {
                   </div>
 
                   {/* CLOTHING OUTFIT ITEMS PHOTO VISUAL SHOWCASE */}
-                  <div className="space-y-3">
+                  <div className="space-y-4">
                     <span className="text-xs font-bold text-slate-800 block font-display">
                       👕 Peças Escolhidas para o Look
                     </span>
 
-                    <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
-                      {result.visualItems.map((itemId) => {
-                        const cloth = CLOTHING_DATABASE[itemId];
-                        if (!cloth) return null;
+                    {(() => {
+                      const activePair = ALTERNATIVE_PAIRS.find(p => 
+                        p.items.every(item => result.visualItems.includes(item))
+                      );
 
-                        let levelColor = 'bg-emerald-50 text-emerald-700 border-emerald-100';
-                        if (cloth.heatingLevel === 'Médio') {
-                          levelColor = 'bg-amber-50 text-amber-700 border-amber-100';
-                        } else if (cloth.heatingLevel === 'Alto' || cloth.heatingLevel === 'Muito Alto') {
-                          levelColor = 'bg-rose-50 text-rose-700 border-rose-100';
-                        }
+                      const processed = new Set<string>();
+                      const pairsToRender: typeof ALTERNATIVE_PAIRS = [];
+                      if (activePair) {
+                        pairsToRender.push(activePair);
+                        activePair.items.forEach(item => processed.add(item));
+                      }
 
-                        return (
-                          <motion.div
-                            key={itemId}
-                            whileHover={{ y: -1.5 }}
-                            className="bg-[#FFFDF9] border border-slate-100 hover:border-[#E29A88] rounded-2xl overflow-hidden flex flex-col justify-between shadow-3xs transition-all p-1"
-                          >
-                            <div className="aspect-square bg-white rounded-xl p-2.5 flex items-center justify-center relative border border-slate-50">
-                              <img
-                                src={cloth.url}
-                                alt={cloth.name}
-                                referrerPolicy="no-referrer"
-                                className="w-full h-full object-contain mix-blend-multiply"
-                                onError={(e) => {
-                                  e.currentTarget.style.display = 'none';
-                                  try {
-                                    const fb = e.currentTarget.nextElementSibling as HTMLDivElement;
-                                    if (fb) fb.style.display = 'flex';
-                                  } catch {}
-                                }}
-                              />
-                              <div style={{ display: 'none' }} className="absolute inset-0 bg-slate-50 flex-col items-center justify-center text-center p-2 rounded-xl">
-                                <Shirt className="w-5 h-5 text-slate-300 mb-1" />
-                                <span className="text-[8px] text-slate-400 font-bold uppercase font-sans">Visual</span>
+                      const singlesToRender = result.visualItems.filter(item => !processed.has(item));
+
+                      return (
+                        <div className="space-y-4">
+                          {/* Render Alternative Pair if any */}
+                          {pairsToRender.map((pair, pIdx) => {
+                            const cloth1 = CLOTHING_DATABASE[pair.items[0]];
+                            const cloth2 = CLOTHING_DATABASE[pair.items[1]];
+                            if (!cloth1 || !cloth2) return null;
+
+                            return (
+                              <div key={pIdx} className="border border-[#F2DCD0] bg-[#FFFBF9]/30 rounded-3xl p-4 md:p-5 space-y-3 shadow-3xs">
+                                <div className="flex items-center gap-1.5 pb-2.5 border-b border-[#FAF2EC]">
+                                  <span className="text-[9px] font-extrabold text-[#E29A88] uppercase tracking-wider bg-[#FFF0ED] px-2 py-0.5 rounded-md border border-[#FADCD5] shadow-3xs select-none">
+                                    💡 Escolha uma das opções
+                                  </span>
+                                  <span className="text-[10.5px] font-bold text-[#6D635B] font-sans">
+                                    {pair.title}
+                                  </span>
+                                </div>
+
+                                <div className="relative flex flex-col md:flex-row gap-4 items-stretch pt-2">
+                                  {/* Item 1 */}
+                                  <div className="relative flex-1 flex flex-col justify-between group">
+                                    <div className="absolute -top-2 left-3.5 z-10 bg-[#3B82F6] text-white text-[8px] font-black tracking-wider uppercase px-2 py-0.5 rounded-md shadow-xs font-sans">
+                                      Opção A
+                                    </div>
+                                    <div className="pt-2 h-full">
+                                      {renderClothCard(pair.items[0], "border-blue-100 hover:border-blue-300 bg-white shadow-3xs")}
+                                    </div>
+                                  </div>
+
+                                  {/* Decorative Floating "OU" Divider */}
+                                  <div className="flex items-center justify-center relative py-2 md:py-0 shrink-0 select-none">
+                                    <div className="hidden md:block absolute h-full w-[1px] bg-slate-200" />
+                                    <div className="block md:hidden absolute w-full h-[1px] bg-slate-200" />
+                                    <div className="relative z-10 w-8 h-8 rounded-full bg-[#FFF0ED] text-[#E29A88] font-extrabold text-[10px] border-2 border-[#E29A88] shadow-xs flex items-center justify-center bg-linear-to-b from-white to-[#FFF0ED]">
+                                      OU
+                                    </div>
+                                  </div>
+
+                                  {/* Item 2 */}
+                                  <div className="relative flex-1 flex flex-col justify-between group">
+                                    <div className="absolute -top-2 left-3.5 z-10 bg-[#F59E0B] text-white text-[8px] font-black tracking-wider uppercase px-2 py-0.5 rounded-md shadow-xs font-sans">
+                                      Opção B
+                                    </div>
+                                    <div className="pt-2 h-full">
+                                      {renderClothCard(pair.items[1], "border-amber-100 hover:border-amber-300 bg-white shadow-3xs")}
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            );
+                          })}
+
+                          {/* Render remaining Single Items */}
+                          {singlesToRender.length > 0 && (
+                            <div className="space-y-2.5">
+                              {pairsToRender.length > 0 && (
+                                <span className="text-[10px] font-extrabold text-slate-500 uppercase tracking-wider block font-sans">
+                                  ➕ Peças adicionais (vestir junto com a opção escolhida acima):
+                                </span>
+                              )}
+                              <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+                                {singlesToRender.map((itemId) => (
+                                  <div key={itemId}>
+                                    {renderClothCard(itemId)}
+                                  </div>
+                                ))}
                               </div>
                             </div>
-
-                            <div className="p-2 space-y-1 flex-1 flex flex-col justify-between">
-                              <div>
-                                <span className="text-[10px] font-bold text-slate-800 block truncate leading-none font-sans">{cloth.name}</span>
-                                <span className="text-[8.5px] text-slate-400 leading-tight block line-clamp-2 mt-0.5 font-sans">{cloth.desc}</span>
-                              </div>
-
-                              <div className="pt-1.5 mt-1 border-t border-slate-50 flex items-center justify-between text-[7.5px] font-bold uppercase text-slate-400 font-sans">
-                                <span>Aquece</span>
-                                <span className={`px-1 py-0.2 rounded text-[7px] border font-bold ${levelColor}`}>{cloth.heatingLevel}</span>
-                              </div>
-                            </div>
-                          </motion.div>
-                        );
-                      })}
-                    </div>
+                          )}
+                        </div>
+                      );
+                    })()}
                   </div>
 
                   {/* COLO AND SLING NOTE CARDS */}
@@ -1053,7 +1204,7 @@ export default function App() {
                         {result.outfitSuggestions.map((item, idx) => (
                           <li key={idx} className="text-[11px] text-[#4B4642] flex items-start gap-1.5 leading-relaxed font-bold font-sans">
                             <span className="text-[#E29A88] shrink-0">🌸</span>
-                            <span>{item}</span>
+                            {renderHighlightedText(item)}
                           </li>
                         ))}
                       </ul>
@@ -1078,13 +1229,31 @@ export default function App() {
                   </div>
 
                   {/* COZY COMFORT ADJUSTMENT OBSERVATION CARD */}
-                  <div className="bg-[#FFFDF9] border border-slate-150 rounded-xl p-4 space-y-1.5 text-left">
-                    <span className="text-[9px] font-extrabold text-[#B96552] uppercase tracking-wider block font-sans">
-                      🧦 Meias (opcional)
+                  <div className="bg-[#FFFDF9] border border-slate-150 rounded-xl p-4 space-y-3.5 text-left">
+                    <span className="text-[10px] font-extrabold text-[#B96552] uppercase tracking-wider block font-sans">
+                      🧸 Ajustes de conforto (opcional)
                     </span>
-                    <p className="text-[11px] text-[#4B4642] leading-relaxed font-sans font-medium">
-                      Podem ser utilizadas em ambientes mais frios conforme o conforto do bebê. Mãos e pezinhos frios isoladamente não significam que o bebê está com frio. Observe principalmente a temperatura da nuca e do peitinho.
-                    </p>
+                    <div className="space-y-3.5">
+                      <div className="space-y-1">
+                        <span className="text-[10.5px] font-bold text-[#4B4642] block font-sans">
+                          🧦 Meias (opcional)
+                        </span>
+                        <p className="text-[11px] text-[#5F5A55] leading-relaxed font-sans font-medium">
+                          Podem ser utilizadas em ambientes mais frios conforme o conforto do bebê. Mãos e pezinhos frios isoladamente não significam que o bebê está com frio. Observe principalmente a temperatura da nuca e do peitinho.
+                        </p>
+                      </div>
+
+                      {result?.showTouca && (
+                        <div className="space-y-1 border-t border-dashed border-slate-150 pt-3">
+                          <span className="text-[10.5px] font-bold text-[#4B4642] block font-sans">
+                            🧢 Touca (opcional)
+                          </span>
+                          <p className="text-[11px] text-[#5F5A55] leading-relaxed font-sans font-medium">
+                            Em dias frios, passeios ao ar livre ou quando houver vento, uma touca macia pode ajudar a proteger as orelhinhas e reduzir a perda de calor. Retire ao voltar para ambientes aquecidos e nunca utilize toucas durante o sono.
+                          </p>
+                        </div>
+                      )}
+                    </div>
                   </div>
 
                   {/* DYNAMIC ORIENTATION CARD: 💛 Orientação ClimaBaby */}
