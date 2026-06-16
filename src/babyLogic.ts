@@ -513,6 +513,15 @@ export function calculateClothing(answers: QuestionnaireAnswers): Recommendation
   const isFrioOuMuitoFrio = adjustedFeeling === 'frio' || adjustedFeeling === 'muito-frio';
   const showTouca = isAwake && isFrioOuMuitoFrio && (isPasseando || isWind || condition === 'externo');
 
+  if (showTouca) {
+    if (!visualItems.includes('touca')) {
+      visualItems.push('touca');
+    }
+    if (!accessories.includes('Touca protetora para orelhinhas')) {
+      accessories.push('Touca protetora para orelhinhas');
+    }
+  }
+
   // ALERTS & RECOMMENDATIONS WRITTEN IN WARM MOM-TO-MOM TONE
   const importantAlerts = [
     'Segurança Prática do Sono: Nunca coloque toucas ou gorros enquanto seu bebê dorme sem supervisão. A cabeça é o local por onde eles regulam o próprio calor e há risco de asfixia mecânica.',
